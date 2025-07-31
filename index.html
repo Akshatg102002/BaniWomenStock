@@ -630,7 +630,6 @@
                         <h1 class="text-4xl font-bold mb-2">
                             <i class="fas fa-warehouse mr-3"></i>Material Record System
                         </h1>
-                        <p class="text-gray-300">Advanced inventory management dashboard</p>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="user-profile">
@@ -756,7 +755,7 @@
             <div class="glass-morphism rounded-2xl p-8 fade-in">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <h2 class="text-3xl font-bold text-white">
-                        <i class="fas fa-table mr-3"></i>Material Stock Summary
+                        <i class="fas fa-table mr-3"></i>Stock 
                     </h2>
                     <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                         <!-- Date Filter -->
@@ -874,7 +873,7 @@
         const mainDashboard = document.getElementById('mainDashboard');
         const loginForm = document.getElementById('loginForm');
         const demoLoginBtn = document.getElementById('demoLoginBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutBtn = document.getElementById('logoutBtn'); // Now correctly referenced
         const userDisplayName = document.getElementById('userDisplayName');
         const userIdDisplay = document.getElementById('userIdDisplay');
         const userAvatar = document.getElementById('userAvatar');
@@ -1441,8 +1440,7 @@
                 const option = document.createElement('option');
                 option.value = optionValue;
                 option.textContent = optionValue;
-                // Note: 'select' is not defined here, should be 'challanSelectDropdown'
-                challanSelectDropdown.appendChild(option);
+                challanSelectDropdown.appendChild(option); // Corrected: Use challanSelectDropdown
             });
             challanSelectDropdown.value = 'Select Challan...';
 
@@ -1640,6 +1638,11 @@
                 login();
             });
         }
+        // Attach logout event listener
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', logout);
+        }
+
 
         // Initialize Firebase when the DOM content is loaded
         document.addEventListener('DOMContentLoaded', initializeFirebase);
