@@ -580,7 +580,7 @@
     </script>
 
     <!-- Login Screen -->
-    <div id="loginScreen" class="min-h-screen flex items-center justify-center">
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center hidden">
         <div class="login-container glass-morphism rounded-2xl fade-in">
             <div class="text-center mb-8">
                 <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4" style="margin: 0 auto;">
@@ -756,7 +756,7 @@
             <div class="glass-morphism rounded-2xl p-8 fade-in">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <h2 class="text-3xl font-bold text-white">
-                        <i class="fas fa-table mr-3"></i>Stock
+                        <i class="fas fa-table mr-3"></i>Material Stock Summary
                     </h2>
                     <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                         <!-- Date Filter -->
@@ -861,7 +861,7 @@
             'admin': { password: 'admin123', name: 'Administrator', id: 'admin_001' },
             'user': { password: 'user123', name: 'Standard User', id: 'user_001' },
             'demo': { password: 'demo', name: 'Demo User', id: 'demo_001' },
-            'Manish': { password: 'Manish@Bani999', name: 'Manish', id: 'manish_user_id' } // New user
+            'Manish': { password: 'Manish@Bani999', name: 'Manish', id: 'manish_user_id' }
         };
 
         let currentUser = null; // Stores the currently logged-in user's local profile
@@ -878,6 +878,9 @@
         const userDisplayName = document.getElementById('userDisplayName');
         const userIdDisplay = document.getElementById('userIdDisplay');
         const userAvatar = document.getElementById('userAvatar');
+        const usernameInput = document.getElementById('username'); // Added for login
+        const passwordInput = document.getElementById('password'); // Added for login
+        const loginMessage = document.getElementById('loginMessage'); // Added for login
 
         const inputBtn = document.getElementById('inputBtn');
         const outputBtn = document.getElementById('outputBtn');
@@ -907,11 +910,11 @@
         const challanSelectContainer = document.getElementById('challanSelectContainer');
 
         // Dynamic form field references (will be assigned when elements are created)
-        let skuInputText = null; // For Input mode (text input)
-        let vendorInputText = null; // For Input mode (text input)
-        let vendorSelectDropdown = null; // For Output mode (dropdown)
-        let skuSelectDropdown = null; // For Output mode (dropdown)
-        let challanSelectDropdown = null; // For Output mode (dropdown)
+        let skuInputText = null;
+        let vendorInputText = null;
+        let vendorSelectDropdown = null;
+        let skuSelectDropdown = null;
+        let challanSelectDropdown = null;
 
 
         // Statistics elements
@@ -919,15 +922,14 @@
         const totalOutputDisplay = document.getElementById('totalOutput');
         const currentStockDisplay = document.getElementById('currentStock');
 
-        // --- Firebase Initialization (without Auth) ---
+        // --- Firebase Initialization ---
         const initializeFirebase = async () => {
             try {
-                // Ensure __firebase_config is defined globally from the script tag above
                 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 
                 if (!firebaseConfig.projectId) {
                     console.error("Firebase 'projectId' not provided in __firebase_config.");
-                    showMessage('Firebase configuration error: Project ID missing.', 'error');
+                    showMessage('Firebase configuration error: Project ID missing.', 'error', 'loginMessage');
                     showLogin();
                     return;
                 }
@@ -942,30 +944,34 @@
                 if (savedUser) {
                     try {
                         currentUser = JSON.parse(savedUser);
-                        userId = currentUser.id; // Set userId from the loaded currentUser
+                        userId = currentUser.id;
                         console.log("Loaded user from localStorage:", currentUser);
-                        showDashboard(); // This will call setupRealtimeListener and addDemoData
+                        showDashboard();
                     } catch (error) {
                         console.error('Error parsing saved user from localStorage:', error);
-                        localStorage.removeItem('currentUser');
+                        localStorage.removeItem('currentUser'); // Clear invalid data
                         showLogin();
                     }
                 } else {
                     console.log("No user found in localStorage. Showing login screen.");
-                    showLogin(); // Show login if no user saved
+                    showLogin();
                 }
 
             } catch (error) {
                 console.error("Error initializing Firebase Firestore:", error);
-                showMessage('Error initializing application. Please try again.', 'error');
-                userIdDisplay.textContent = 'Error';
+                showMessage('Error initializing application. Please try again.', 'error', 'loginMessage');
+                if (userIdDisplay) userIdDisplay.textContent = 'Error';
                 showLogin();
             }
         };
 
-        // Authentication functions (manual login)
+        // Authentication functions
         const showMessage = (message, type, elementId = 'messageBox') => {
             const element = document.getElementById(elementId);
+            if (!element) {
+                console.warn(`Message box element '${elementId}' not found. Message: ${message}`);
+                return;
+            }
             element.textContent = message;
             element.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'}`;
             element.classList.remove('hidden');
@@ -974,10 +980,13 @@
             }, 5000);
         };
 
-        const login = (username, password) => {
+        const login = () => {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
             if (users[username] && users[username].password === password) {
                 currentUser = { username, ...users[username] };
-                userId = currentUser.id; // Set the global userId for Firestore operations
+                userId = currentUser.id;
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 console.log("Login successful. currentUser:", currentUser, "userId:", userId);
                 showDashboard();
@@ -985,38 +994,45 @@
                 return true;
             }
             console.log("Login failed for username:", username);
+            alert('Invalid username or password.'); // Using alert as requested
             return false;
         };
 
         const logout = () => {
             currentUser = null;
-            userId = null; // Clear userId on logout
+            userId = null;
             localStorage.removeItem('currentUser');
-            showLogin();
+            showMessage('Logged out successfully!', 'success', 'loginMessage');
+            showLogin(); // Go back to login screen
         };
 
         const showLogin = () => {
-            loginScreen.classList.remove('hidden');
-            mainDashboard.classList.add('hidden');
-            document.getElementById('loginMessage').classList.add('hidden'); // Clear any previous messages
+            if (loginScreen) loginScreen.classList.remove('hidden');
+            if (mainDashboard) mainDashboard.classList.add('hidden');
+            if (loginMessage) loginMessage.classList.add('hidden'); // Clear any previous messages
+            if (loginForm) loginForm.reset(); // Clear form fields
         };
 
         const showDashboard = () => {
-            loginScreen.classList.add('hidden');
-            mainDashboard.classList.remove('hidden');
+            console.log("Entering showDashboard function. Current user:", currentUser);
 
-            userDisplayName.textContent = currentUser.name;
-            userIdDisplay.textContent = currentUser.id;
-            userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+            if (loginScreen) loginScreen.classList.add('hidden');
+            if (mainDashboard) mainDashboard.classList.remove('hidden');
 
-            // Ensure userId is set before attempting to set up listener or add demo data
+            console.log("After class changes - loginScreen hidden:", loginScreen.classList.contains('hidden'));
+            console.log("After class changes - mainDashboard hidden:", mainDashboard.classList.contains('hidden'));
+
+            if (userDisplayName) userDisplayName.textContent = currentUser.name;
+            if (userIdDisplay) userIdDisplay.textContent = currentUser.id;
+            if (userAvatar) userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+
             if (userId && db) {
                 setupRealtimeListener();
-                addDemoData();
+                addDemoData(); // This will only add data if collection is empty
             } else {
-                console.error("Cannot setup dashboard: userId or db is not ready.");
-                showMessage("Dashboard data could not be loaded. Please re-login.", "error");
-                showLogin(); // Force re-login if somehow in this state
+                console.error("Cannot setup dashboard: userId or db is not ready. Data might not load.");
+                showMessage("Dashboard data could not be loaded. Please re-login.", "error", 'messageBox');
+                showLogin(); // Revert to login if essential components are missing
             }
         };
 
@@ -1029,11 +1045,17 @@
             rateInput.value = '';
 
             // Ensure these are updated if they exist
-            if (document.getElementById('sku')) document.getElementById('sku').value = '';
-            if (document.getElementById('vendorName')) document.getElementById('vendorName').value = '';
-            if (document.getElementById('vendorSelect')) document.getElementById('vendorSelect').value = 'Select Vendor...';
-            if (document.getElementById('skuSelect')) document.getElementById('skuSelect').innerHTML = '<option value="Select SKU...">Select SKU...</option>';
-            if (document.getElementById('challanSelect')) document.getElementById('challanSelect').innerHTML = '<option value="Select Challan...">Select Challan...</option>';
+            const skuInput = document.getElementById('sku');
+            const vendorInput = document.getElementById('vendorName');
+            const vendorSelect = document.getElementById('vendorSelect');
+            const skuSelect = document.getElementById('skuSelect');
+            const challanSelect = document.getElementById('challanSelect');
+
+            if (skuInput) skuInput.value = '';
+            if (vendorInput) vendorInput.value = '';
+            if (vendorSelect) vendorSelect.value = 'Select Vendor...';
+            if (skuSelect) skuSelect.innerHTML = '<option value="Select SKU...">Select SKU...</option>';
+            if (challanSelect) challanSelect.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
             challanSelectContainer.style.display = 'none'; // Hide challan dropdown initially
         };
 
@@ -1053,27 +1075,25 @@
             currentStockDisplay.textContent = stockQty.toLocaleString();
         };
 
-        // This function calculates aggregated stock for the statistics cards and aggregated table
         const calculateAggregatedStock = (records) => {
             const tempAggregatedStock = {};
 
             records.forEach(record => {
-                const key = `${record.sku}-${record.color}`; // Unique key for SKU and Color
+                const key = `${record.sku}-${record.color}`;
                 if (!tempAggregatedStock[key]) {
                     tempAggregatedStock[key] = {
                         sku: record.sku,
                         color: record.color,
-                        vendorName: record.vendorName, // Will be updated by latest input
-                        latestRate: 0, // Will be updated by latest input
+                        vendorName: record.vendorName,
+                        latestRate: 0,
                         inputQty: 0,
                         outputQty: 0,
-                        timestamp: null // To track the latest record for rate/vendor
+                        timestamp: null
                     };
                 }
 
                 if (record.type === 'Input') {
                     tempAggregatedStock[key].inputQty += record.qty;
-                    // Update with latest input rate and vendor for this SKU-Color based on timestamp
                     if (!tempAggregatedStock[key].timestamp || new Date(record.timestamp) > new Date(tempAggregatedStock[key].timestamp)) {
                         tempAggregatedStock[key].latestRate = record.rate;
                         tempAggregatedStock[key].vendorName = record.vendorName;
@@ -1087,9 +1107,8 @@
             aggregatedStock = tempAggregatedStock;
         };
 
-        // Renders the AGGREGATED records table
         const renderAggregatedRecordsTable = (stockToDisplay) => {
-            aggregatedRecordsTableBody.innerHTML = ''; // Clear existing rows
+            aggregatedRecordsTableBody.innerHTML = '';
 
             if (Object.keys(stockToDisplay).length === 0) {
                 aggregatedRecordsTableBody.innerHTML = `
@@ -1104,14 +1123,12 @@
             }
 
             const sortedStock = Object.values(stockToDisplay).sort((a, b) => {
-                // Sort by SKU, then Color
                 if (a.sku < b.sku) return -1;
                 if (a.sku > b.sku) return 1;
                 if (a.color < b.color) return -1;
                 if (a.color > b.color) return 1;
                 return 0;
             });
-
 
             sortedStock.forEach(item => {
                 const remaining = item.inputQty - item.outputQty;
@@ -1129,9 +1146,8 @@
             });
         };
 
-        // Renders the TRANSACTION LOG table
         const renderTransactionTable = (recordsToDisplay) => {
-            transactionTableBody.innerHTML = ''; // Clear existing rows
+            transactionTableBody.innerHTML = '';
 
             if (recordsToDisplay.length === 0) {
                 transactionTableBody.innerHTML = `
@@ -1145,7 +1161,6 @@
                 return;
             }
 
-            // Sort by timestamp (latest first) for transaction log
             const sortedRecords = recordsToDisplay.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             sortedRecords.forEach(record => {
@@ -1178,8 +1193,7 @@
 
 
         const updateVendorFilterOptions = (records) => {
-            // Populate vendor filter with all vendors from all records (input/output)
-            const uniqueVendors = [...new Set(records.map(r => r.vendorName))].sort(); // Sort alphabetically
+            const uniqueVendors = [...new Set(records.map(r => r.vendorName))].sort();
             vendorFilter.innerHTML = '<option value="all">All Vendors</option>';
             uniqueVendors.forEach(vendor => {
                 const option = document.createElement('option');
@@ -1187,7 +1201,6 @@
                 option.textContent = vendor;
                 vendorFilter.appendChild(option);
             });
-            // Keep current filter selection
             const currentFilter = vendorFilter.value;
             if (uniqueVendors.includes(currentFilter)) {
                 vendorFilter.value = currentFilter;
@@ -1200,7 +1213,6 @@
             const start = startDateInput.value ? new Date(startDateInput.value).setHours(0,0,0,0) : null;
             const end = endDateInput.value ? new Date(endDateInput.value).setHours(23,59,59,999) : null;
 
-            // Filter raw records first for date and vendor/search
             let filteredRawRecords = allRecords.filter(record => {
                 const recordDate = new Date(record.date).setHours(0,0,0,0);
                 const matchesDate = (!start || recordDate >= start) && (!end || recordDate <= end);
@@ -1211,68 +1223,41 @@
                     record.vendorName.toLowerCase().includes(searchTerm) ||
                     record.color?.toLowerCase().includes(searchTerm) ||
                     record.type.toLowerCase().includes(searchTerm) ||
-                    record.date.includes(searchTerm) // Allows searching by date part
+                    record.date.includes(searchTerm)
                 );
                 return matchesDate && matchesVendor && matchesSearch;
             });
 
-            // Re-calculate aggregated stock based on filtered raw records for the summary table
             calculateAggregatedStock(filteredRawRecords);
-            renderAggregatedRecordsTable(aggregatedStock); // Render aggregated table
-
-            // Render the transaction log table with filtered raw records
+            renderAggregatedRecordsTable(aggregatedStock);
             renderTransactionTable(filteredRawRecords);
         };
 
 
         const deleteRecord = async (recordId) => {
-            // Using a custom confirmation dialog instead of alert/confirm
-            const confirmDelete = await new Promise(resolve => {
-                const modal = document.createElement('div');
-                modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
-                modal.innerHTML = `
-                    <div class="bg-gray-800 p-8 rounded-lg shadow-lg text-center w-80">
-                        <p class="text-lg font-semibold mb-4">Are you sure?</p>
-                        <p class="text-gray-300 mb-6">This record will be permanently deleted and stock levels will be affected.</p>
-                        <div class="flex justify-center gap-4">
-                            <button id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
-                            <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-
-                document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
-                    document.body.removeChild(modal);
-                    resolve(false);
-                });
-                document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-                    document.body.removeChild(modal);
-                    resolve(true);
-                });
-            });
-
+            // Use standard confirm dialog as requested
+            const confirmDelete = confirm('Are you sure you want to delete this record? This action cannot be undone.');
 
             if (confirmDelete) {
                 try {
                     if (!db || !userId) {
-                        showMessage('Database not ready or user not logged in.', 'error');
+                        showMessage('Database not ready or user not logged in.', 'error', 'messageBox');
                         return;
                     }
                     const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
                     const appId = firebaseConfig.appId || 'default-app-id';
                     const recordRef = doc(db, `artifacts/${appId}/users/${userId}/material_records`, recordId);
                     await deleteDoc(recordRef);
-                    showMessage('Record deleted successfully!', 'success');
+                    showMessage('Record deleted successfully!', 'success', 'messageBox');
+                    // onSnapshot listener will automatically re-render the tables
                 } catch (error) {
                     console.error('Error deleting record:', error);
-                    showMessage('Error deleting record', 'error');
+                    showMessage('Error deleting record', 'error', 'messageBox');
                 }
             }
         };
 
         const exportToCSV = () => {
-            // Exporting all individual records, not just aggregated stock
             const headers = ['Date', 'Challan No', 'SKU', 'Color', 'Quantity', 'Rate', 'Value', 'Vendor Name', 'Type'];
             const csvContent = [
                 headers.join(','),
@@ -1286,7 +1271,7 @@
                     (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2),
                     record.vendorName,
                     record.type
-                ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')) // Handle commas and quotes in data
+                ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
             ].join('\n');
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1301,29 +1286,28 @@
         const setupRealtimeListener = () => {
             if (!db || !userId) {
                 console.log("Firestore or User ID not ready for listener setup. Retrying in 500ms.");
-                setTimeout(setupRealtimeListener, 500); // Retry if not ready
+                setTimeout(setupRealtimeListener, 500);
                 return;
             }
 
             const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
             const appId = firebaseConfig.appId || 'default-app-id';
             const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
-            const q = query(recordsCollectionRef, orderBy('timestamp', 'desc')); // Order by timestamp for consistency
+            const q = query(recordsCollectionRef, orderBy('timestamp', 'desc'));
 
             onSnapshot(q, (snapshot) => {
-                allRecords = []; // Clear previous records
+                allRecords = [];
                 snapshot.forEach((doc) => {
                     allRecords.push({ id: doc.id, ...doc.data() });
                 });
-                // Recalculate and render everything based on the fresh data
-                calculateAggregatedStock(allRecords); // Pass allRecords to calculate
+                calculateAggregatedStock(allRecords);
                 updateStatistics();
-                updateVendorFilterOptions(allRecords); // Pass allRecords to update options
-                updateFormFieldsForEntryType(); // Re-render form for current type (especially for output dropdowns)
-                filterRecords(); // Apply current filters and render both tables
+                updateVendorFilterOptions(allRecords);
+                updateFormFieldsForEntryType(); // Re-render form fields (especially dropdowns) with fresh data
+                filterRecords(); // Apply current filters and re-render both tables
             }, (error) => {
                 console.error("Error fetching real-time updates:", error);
-                showMessage('Error fetching records. Please refresh the page.', 'error');
+                showMessage('Error fetching records. Please refresh the page.', 'error', 'messageBox');
             });
         };
 
@@ -1353,16 +1337,14 @@
         };
 
         const updateFormFieldsForEntryType = () => {
-            clearForm(); // Clear current input fields
+            clearForm(); // Clear current input fields and reset dropdowns
 
-            // Reset containers
             skuInputContainer.innerHTML = '';
             vendorNameInputContainer.innerHTML = '';
-            challanSelectContainer.style.display = 'none'; // Hide challan container by default
+            challanSelectContainer.style.display = 'none';
             challanSelectContainer.innerHTML = '';
 
             if (currentEntryType === 'Input') {
-                // Revert to text inputs for Input mode
                 skuInputContainer.innerHTML = `
                     <label for="sku" class="form-label">
                         <i class="fas fa-barcode mr-2"></i>SKU
@@ -1375,7 +1357,7 @@
                     </label>
                     <input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>
                 `;
-                // Re-assign references after innerHTML update
+                // Re-assign global references after innerHTML update
                 skuInputText = document.getElementById('sku');
                 vendorInputText = document.getElementById('vendorName');
                 vendorSelectDropdown = null;
@@ -1383,32 +1365,26 @@
                 challanSelectDropdown = null;
 
             } else { // Output mode
-                // Create vendor dropdown
                 const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].sort();
                 const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', ['Select Vendor...', ...uniqueInputVendors], handleVendorSelectChange, true);
                 vendorNameInputContainer.appendChild(vendorSelectDiv);
-                vendorSelectDropdown = document.getElementById('vendorSelect'); // Global reference
+                vendorSelectDropdown = document.getElementById('vendorSelect');
 
-                // Create SKU dropdown (initially empty or 'Select SKU...')
                 const skuSelectDiv = createSelectElement('skuSelect', 'SKU', ['Select SKU...'], handleSkuSelectChange, true);
                 skuInputContainer.appendChild(skuSelectDiv);
-                skuSelectDropdown = document.getElementById('skuSelect'); // Global reference
+                skuSelectDropdown = document.getElementById('skuSelect');
 
-                // Create Challan dropdown (initially empty or 'Select Challan...')
                 const challanSelectDiv = createSelectElement('challanSelect', 'Challan No', ['Select Challan...'], handleChallanSelectChange, true);
                 challanSelectContainer.appendChild(challanSelectDiv);
-                challanSelectDropdown = document.getElementById('challanSelect'); // Global reference
+                challanSelectDropdown = document.getElementById('challanSelect');
 
-                // Hide direct text input fields
                 skuInputText = null;
                 vendorInputText = null;
 
-                // Set initial state for dropdowns
                 if (uniqueInputVendors.length === 0) {
-                    showMessage('No input records found to select vendors/SKUs from for output.', 'error');
+                    showMessage('No input records found to select vendors/SKUs from for output.', 'error', 'messageBox');
                 }
             }
-            // Set today's date
             dateInput.value = new Date().toISOString().split('T')[0];
         };
 
@@ -1420,11 +1396,10 @@
                     allRecords
                         .filter(r => r.type === 'Input' && r.vendorName === selectedVendor)
                         .map(r => r.sku)
-                )].sort(); // Sort alphabetically
+                )].sort();
                 skuOptions.push(...uniqueSkusForVendor);
             }
 
-            // Clear and repopulate SKU dropdown
             skuSelectDropdown.innerHTML = '';
             skuOptions.forEach(optionValue => {
                 const option = document.createElement('option');
@@ -1432,18 +1407,16 @@
                 option.textContent = optionValue;
                 skuSelectDropdown.appendChild(option);
             });
-            skuSelectDropdown.value = 'Select SKU...'; // Reset SKU selection
+            skuSelectDropdown.value = 'Select SKU...';
 
-            // Clear and hide challan dropdown
             challanSelectDropdown.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
             challanSelectContainer.style.display = 'none';
 
-            // Clear other fields
             colorInput.value = '';
             qtyInput.value = '';
             rateInput.value = '';
             qtyInput.max = '';
-            challanNoInput.value = ''; // Clear challan text input
+            challanNoInput.value = '';
         };
 
         const handleSkuSelectChange = () => {
@@ -1456,29 +1429,28 @@
                     allRecords
                         .filter(r => r.type === 'Input' && r.vendorName === selectedVendor && r.sku === selectedSku)
                         .map(r => r.challanNo)
-                )].sort(); // Sort alphabetically
+                )].sort();
                 challanOptions.push(...uniqueChallansForSku);
-                challanSelectContainer.style.display = 'block'; // Show challan dropdown
+                challanSelectContainer.style.display = 'block';
             } else {
-                challanSelectContainer.style.display = 'none'; // Hide if no SKU/Vendor selected
+                challanSelectContainer.style.display = 'none';
             }
 
-            // Clear and repopulate Challan dropdown
             challanSelectDropdown.innerHTML = '';
             challanOptions.forEach(optionValue => {
                 const option = document.createElement('option');
                 option.value = optionValue;
                 option.textContent = optionValue;
+                // Note: 'select' is not defined here, should be 'challanSelectDropdown'
                 challanSelectDropdown.appendChild(option);
             });
-            challanSelectDropdown.value = 'Select Challan...'; // Reset Challan selection
+            challanSelectDropdown.value = 'Select Challan...';
 
-            // Clear other fields
             colorInput.value = '';
             qtyInput.value = '';
             rateInput.value = '';
             qtyInput.max = '';
-            challanNoInput.value = ''; // Clear challan text input
+            challanNoInput.value = '';
         };
 
         const handleChallanSelectChange = () => {
@@ -1487,17 +1459,15 @@
             const selectedChallan = challanSelectDropdown.value;
 
             if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...' && selectedChallan !== 'Select Challan...') {
-                // Find the specific input record for this combination
                 const relevantInputRecord = allRecords
                     .filter(r => r.type === 'Input' && r.sku === selectedSku && r.vendorName === selectedVendor && r.challanNo === selectedChallan)
-                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]; // Get the latest one if multiple inputs for same challan
+                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
 
                 if (relevantInputRecord) {
                     colorInput.value = relevantInputRecord.color || '';
                     rateInput.value = parseFloat(relevantInputRecord.rate).toFixed(2);
-                    challanNoInput.value = relevantInputRecord.challanNo; // Autofill Challan No text input
+                    challanNoInput.value = relevantInputRecord.challanNo;
 
-                    // Calculate remaining stock for this specific challan
                     let inputQtyForChallan = relevantInputRecord.qty;
                     let outputQtyFromThisChallan = allRecords
                         .filter(r => r.type === 'Output' && r.sku === selectedSku && r.color === relevantInputRecord.color && r.challanNo === selectedChallan)
@@ -1505,24 +1475,24 @@
 
                     const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
 
-                    qtyInput.value = availableQty > 0 ? availableQty : 0; // Autofill with available quantity
-                    qtyInput.max = availableQty; // Set max attribute for validation
-                    qtyInput.min = 1; // Ensure minimum is 1 for output
-                    showMessage(`Available stock from Challan ${selectedChallan} for ${selectedSku} (${relevantInputRecord.color}): ${availableQty}`, 'success');
+                    qtyInput.value = availableQty > 0 ? availableQty : 0;
+                    qtyInput.max = availableQty;
+                    qtyInput.min = 1;
+                    showMessage(`Available stock from Challan ${selectedChallan} for ${selectedSku} (${relevantInputRecord.color}): ${availableQty}`, 'success', 'messageBox');
                 } else {
                     colorInput.value = '';
                     qtyInput.value = '';
                     rateInput.value = '';
                     qtyInput.max = '';
-                    challanNoInput.value = ''; // Clear challan text input
-                    showMessage('No matching input record found for this Challan.', 'error');
+                    challanNoInput.value = '';
+                    showMessage('No matching input record found for this Challan.', 'error', 'messageBox');
                 }
             } else {
                 colorInput.value = '';
                 qtyInput.value = '';
                 rateInput.value = '';
                 qtyInput.max = '';
-                challanNoInput.value = ''; // Clear challan text input
+                challanNoInput.value = '';
             }
         };
 
@@ -1554,7 +1524,7 @@
             console.log("Form submit attempt. currentUser:", currentUser, "userId:", userId);
 
             if (!db || !userId) {
-                showMessage('Database is not initialized or user ID is missing. Please refresh and try again.', 'error');
+                showMessage('Database is not initialized or user ID is missing. Please refresh and try again.', 'error', 'messageBox');
                 console.error("Attempted to add record but db or userId is missing. db:", db, "userId:", userId);
                 return;
             }
@@ -1566,26 +1536,28 @@
             record.qty = parseInt(qtyInput.value);
             record.rate = parseFloat(rateInput.value);
             record.type = currentEntryType;
-            record.timestamp = new Date().toISOString(); // Add timestamp for ordering
+            record.timestamp = new Date().toISOString(); // Ensure timestamp is always added
 
             if (currentEntryType === 'Input') {
+                // Get elements directly to ensure they are current
                 const skuInput = document.getElementById('sku');
                 const vendorInput = document.getElementById('vendorName');
 
                 if (!skuInput || !vendorInput) {
-                    showMessage('SKU or Vendor Name input field not found. Please try switching input/output mode.', 'error');
+                    showMessage('SKU or Vendor Name input field not found. Please try switching input/output mode.', 'error', 'messageBox');
                     console.error("Input fields (SKU or Vendor) are null during form submission.");
                     return;
                 }
                 record.sku = skuInput.value.trim();
                 record.vendorName = vendorInput.value.trim();
             } else { // Output mode
+                // Get elements directly to ensure they are current
                 const skuSelect = document.getElementById('skuSelect');
                 const vendorSelect = document.getElementById('vendorSelect');
                 const challanSelect = document.getElementById('challanSelect');
 
                 if (!skuSelect || !vendorSelect || !challanSelect) {
-                    showMessage('SKU, Vendor, or Challan dropdown not found. Please try switching input/output mode.', 'error');
+                    showMessage('SKU, Vendor, or Challan dropdown not found. Please try switching input/output mode.', 'error', 'messageBox');
                     console.error("Output dropdowns (SKU, Vendor, or Challan) are null during form submission.");
                     return;
                 }
@@ -1598,23 +1570,23 @@
             // Basic validation for all fields
             if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName ||
                 record.sku === 'Select SKU...' || record.vendorName === 'Select Vendor...' || (currentEntryType === 'Output' && record.inputChallanNo === 'Select Challan...')) {
-                showMessage('Please fill in all required fields and make valid selections.', 'error');
+                showMessage('Please fill in all required fields and make valid selections.', 'error', 'messageBox');
                 return;
             }
             if (record.qty <= 0 || record.rate < 0) {
-                showMessage('Quantity must be positive and Rate cannot be negative.', 'error');
+                showMessage('Quantity must be positive and Rate cannot be negative.', 'error', 'messageBox');
                 return;
             }
 
             // Specific validation for output quantity against available stock from the selected challan
             if (currentEntryType === 'Output') {
-                const selectedChallan = document.getElementById('challanSelect').value; // Get current value
+                const selectedChallan = document.getElementById('challanSelect').value;
                 const relevantInputRecord = allRecords
                     .filter(r => r.type === 'Input' && r.sku === record.sku && r.color === record.color && r.vendorName === record.vendorName && r.challanNo === selectedChallan)
                     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
 
                 if (!relevantInputRecord) {
-                    showMessage('Could not find a matching input record for the selected Challan, SKU, Vendor, and Color.', 'error');
+                    showMessage('Could not find a matching input record for the selected Challan, SKU, Vendor, and Color.', 'error', 'messageBox');
                     return;
                 }
 
@@ -1626,7 +1598,7 @@
                 const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
 
                 if (record.qty > availableQty) {
-                    showMessage(`Output quantity (${record.qty}) exceeds available stock (${availableQty}) from Challan ${selectedChallan} for ${record.sku} (${record.color}).`, 'error');
+                    showMessage(`Output quantity (${record.qty}) exceeds available stock (${availableQty}) from Challan ${selectedChallan} for ${record.sku} (${record.color}).`, 'error', 'messageBox');
                     return;
                 }
             }
@@ -1636,12 +1608,12 @@
                 const appId = firebaseConfig.appId || 'default-app-id';
                 const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
                 await addDoc(recordsCollectionRef, record);
-                showMessage('Record added successfully!', 'success');
+                showMessage('Record added successfully!', 'success', 'messageBox');
                 clearForm();
-                // The onSnapshot listener will handle re-rendering after addDoc
+                // The onSnapshot listener will automatically re-render the tables and update dropdowns
             } catch (error) {
                 console.error('Error adding record:', error);
-                showMessage('Error adding record. Please try again.', 'error');
+                showMessage('Error adding record. Please try again.', 'error', 'messageBox');
             }
         });
 
@@ -1654,19 +1626,34 @@
         // Make deleteRecord function global
         window.deleteRecord = deleteRecord;
 
+        // Event listeners for login form
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                login(); // Call the login function on form submission
+            });
+        }
+        if (demoLoginBtn) {
+            demoLoginBtn.addEventListener('click', () => {
+                usernameInput.value = 'demo';
+                passwordInput.value = 'demo';
+                login();
+            });
+        }
+
         // Initialize Firebase when the DOM content is loaded
         document.addEventListener('DOMContentLoaded', initializeFirebase);
 
         // Add some demo data for testing (only if no records exist for the current user)
         const addDemoData = async () => {
-             if (currentUser && db && userId) { // Ensure currentUser, Firestore, and userId are ready
+             if (currentUser && db && userId) {
                 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
                 const appId = firebaseConfig.appId || 'default-app-id';
                 const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
                 try {
                     const existingDocs = await getDocs(query(recordsCollectionRef));
 
-                    if (existingDocs.empty) { // Check if the snapshot is empty
+                    if (existingDocs.empty) {
                         const sampleRecords = [
                             { date: '2025-07-01', challanNo: 'IN-001', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 100, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: new Date('2025-07-01T10:00:00Z').toISOString() },
                             { date: '2025-07-05', challanNo: 'IN-002', sku: 'BW6085BLUE_DRS-L', color: 'Blue', qty: 50, rate: 1200.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: new Date('2025-07-05T11:00:00Z').toISOString() },
