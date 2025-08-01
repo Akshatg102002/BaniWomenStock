@@ -1135,52 +1135,6 @@
             });
         };
 
-        // Function to render the detailed transaction log table
-        const renderTransactionTable = (recordsToDisplay) => {
-            transactionTableBody.innerHTML = '';
-
-            if (recordsToDisplay.length === 0) {
-                transactionTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="10" class="text-center py-8 text-gray-400">
-                            <i class="fas fa-inbox text-4xl mb-4 block"></i>
-                            No transactions found.
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            const sortedRecords = recordsToDisplay.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            sortedRecords.forEach(record => {
-                const row = transactionTableBody.insertRow();
-                const value = (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2);
-
-                row.innerHTML = `
-                    <td>${record.date}</td>
-                    <td><span style="font-family: monospace; font-size: 0.75rem; background: #333; color: #fff; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">${record.challanNo}</span></td>
-                    <td><span style="font-family: monospace; font-size: 0.75rem;">${record.sku}</span></td>
-                    <td>${record.color || 'N/A'}</td>
-                    <td class="font-semibold">${parseInt(record.qty).toLocaleString()}</td>
-                    <td>₹${parseFloat(record.rate).toFixed(2)}</td>
-                    <td class="font-bold">₹${Number(value).toLocaleString()}</td>
-                    <td>${record.vendorName}</td>
-                    <td>
-                        <span class="${record.type === 'Input' ? 'status-input' : 'status-output'} px-3 py-1 rounded-full text-xs font-semibold">
-                            <i class="fas fa-${record.type === 'Input' ? 'arrow-down' : 'arrow-up'} mr-1"></i>
-                            ${record.type}
-                        </span>
-                    </td>
-                    <td>
-                        <button onclick="deleteRecord('${record.id}')" class="delete-btn">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-            });
-        };
-
         // Updates the vendor filter dropdown options
         const updateVendorFilterOptions = (records) => {
             const uniqueVendors = [...new Set(records.map(r => r.vendorName))].sort();
