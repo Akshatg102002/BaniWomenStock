@@ -1,1612 +1,1612 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Material Record System</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #000000 100%);
-            min-height: 100vh;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Custom CSS without @apply directives */
-        .glass-morphism {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
-        }
-
-        .glass-morphism-light {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
-            color: #000000;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-input {
-            margin-top: 0.25rem;
-            display: block;
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #333333;
-            border-radius: 0.75rem;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            transition: all 0.2s ease-in-out;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .form-input::placeholder {
-            color: #666666;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            color: #000000;
-            background-color: #ffffff;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            transform: translateY(0);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-            background-color: #f0f0f0;
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #ffffff, #e0e0e0);
-            color: #000000;
-        }
-
-        .btn-secondary {
-            background: #333333;
-            color: #ffffff;
-        }
-
-        .btn-secondary:hover {
-            background: #555555;
-        }
-
-        .btn-danger {
-            background: linear-gradient(45deg, #ffffff, #f0f0f0);
-            color: #dc2626;
-            border: 1px solid #dc2626;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-            color: #ffffff;
-        }
-
-        .btn-success {
-            background: linear-gradient(45deg, #ffffff, #f0f0f0);
-            color: #059669;
-            border: 1px solid #059669;
-        }
-
-        .btn-success:hover {
-            background: #059669;
-            color: #ffffff;
-        }
-
-        .btn-toggle {
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            font-weight: 700;
-            font-size: 1.125rem;
-            transition: all 0.3s ease-in-out;
-            border: 2px solid transparent;
-        }
-
-        .btn-toggle.active {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .btn-toggle.inactive {
-            background: transparent;
-            color: #ffffff;
-            border-color: #333333;
-        }
-
-        .btn-toggle.inactive:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #ffffff;
-        }
-
-        .login-container {
-            max-width: 400px;
-            margin: 10vh auto;
-            padding: 2rem;
-        }
-
-        .dashboard-header {
-            background: linear-gradient(135deg, #000000 0%, #333333 100%);
-            color: #ffffff;
-            padding: 2rem;
-            border-radius: 1rem 1rem 0 0;
-            border: 1px solid #333333;
-        }
-
-        .stats-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            border: 1px solid #333333;
-            transition: all 0.3s ease-in-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stats-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: #ffffff;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.1);
-        }
-
-        .stats-card.input::before {
-            background: #10b981;
-        }
-
-        .stats-card.output::before {
-            background: #ef4444;
-        }
-
-        .stats-card.total::before {
-            background: #3b82f6;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #000000;
-            border-radius: 0.75rem;
-            overflow: hidden;
-            border: 1px solid #333333;
-        }
-
-        th {
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            padding: 1rem 1.5rem;
-            text-align: left;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 2px solid #333333;
-        }
-
-        td {
-            padding: 1rem 1.5rem;
-            font-size: 0.875rem;
-            color: #ffffff;
-            border-bottom: 1px solid #1a1a1a;
-        }
-
-        tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transition: background-color 0.2s ease;
-        }
-
-        .message-box {
-            padding: 1rem;
-            margin-top: 1rem;
-            border-radius: 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .message-success {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid #10b981;
-        }
-
-        .message-error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid #ef4444;
-        }
-
-        .loading-spinner {
-            border: 3px solid #333333;
-            border-top: 3px solid #ffffff;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Material Record System</title>
+        <!-- Tailwind CSS CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Inter Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        <!-- Font Awesome for Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+            
+            * {
+                box-sizing: border-box;
             }
-            to {
-                opacity: 1;
+
+            body {
+                font-family: 'Inter', sans-serif;
+                background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #000000 100%);
+                min-height: 100vh;
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Custom CSS without @apply directives */
+            .glass-morphism {
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+            }
+
+            .glass-morphism-light {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+                color: #000000;
+            }
+
+            .container {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 2rem;
+            }
+
+            .form-label {
+                display: block;
+                font-size: 0.875rem;
+                font-weight: 600;
+                color: #ffffff;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-input {
+                margin-top: 0.25rem;
+                display: block;
+                width: 100%;
+                padding: 0.75rem 1rem;
+                border: 2px solid #333333;
+                border-radius: 0.75rem;
+                background-color: #1a1a1a;
+                color: #ffffff;
+                transition: all 0.2s ease-in-out;
+                outline: none;
+            }
+
+            .form-input:focus {
+                border-color: #ffffff;
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+                transform: translateY(-1px);
+            }
+
+            .form-input::placeholder {
+                color: #666666;
+            }
+
+            .btn {
+                padding: 0.75rem 1.5rem;
+                border-radius: 0.75rem;
+                font-weight: 600;
+                color: #000000;
+                background-color: #ffffff;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                transform: translateY(0);
+                box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+                background-color: #f0f0f0;
+            }
+
+            .btn:active {
                 transform: translateY(0);
             }
-        }
 
-        .slide-in {
-            animation: slideIn 0.4s ease-out;
-        }
+            .btn-primary {
+                background: linear-gradient(45deg, #ffffff, #e0e0e0);
+                color: #000000;
+            }
 
-        @keyframes slideIn {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
-        }
+            .btn-secondary {
+                background: #333333;
+                color: #ffffff;
+            }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+            .btn-secondary:hover {
+                background: #555555;
+            }
 
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background: #ffffff;
-            color: #000000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
+            .btn-danger {
+                background: linear-gradient(45deg, #ffffff, #f0f0f0);
+                color: #dc2626;
+                border: 1px solid #dc2626;
+            }
 
-        .export-btn {
-            background: #059669;
-            color: #ffffff;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: none;
-            cursor: pointer;
-        }
+            .btn-danger:hover {
+                background: #dc2626;
+                color: #ffffff;
+            }
 
-        .export-btn:hover {
-            background: #047857;
-            transform: translateY(-1px);
-        }
+            .btn-success {
+                background: linear-gradient(45deg, #ffffff, #f0f0f0);
+                color: #059669;
+                border: 1px solid #059669;
+            }
 
-        .search-box {
-            position: relative;
-        }
+            .btn-success:hover {
+                background: #059669;
+                color: #ffffff;
+            }
 
-        .search-input {
-            padding-left: 2.5rem;
-            padding-right: 1rem;
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
-            border: 2px solid #333333;
-            border-radius: 0.75rem;
-            width: 100%;
-            background: #1a1a1a;
-            color: #ffffff;
-            transition: all 0.2s ease;
-        }
+            .btn-toggle {
+                padding: 1rem 2rem;
+                border-radius: 0.75rem;
+                font-weight: 700;
+                font-size: 1.125rem;
+                transition: all 0.3s ease-in-out;
+                border: 2px solid transparent;
+            }
 
-        .search-input:focus {
-            border-color: #ffffff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-        }
+            .btn-toggle.active {
+                background: #ffffff;
+                color: #000000;
+                border-color: #ffffff;
+                box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+                transform: scale(1.05);
+            }
 
-        .search-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666666;
-        }
+            .btn-toggle.inactive {
+                background: transparent;
+                color: #ffffff;
+                border-color: #333333;
+            }
 
-        .hidden {
-            display: none !important;
-        }
+            .btn-toggle.inactive:hover {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: #ffffff;
+            }
 
-        /* Responsive utilities */
-        @media (max-width: 768px) {
-            .container {
+            .login-container {
+                max-width: 400px;
+                margin: 10vh auto;
+                padding: 2rem;
+            }
+
+            .dashboard-header {
+                background: linear-gradient(135deg, #000000 0%, #333333 100%);
+                color: #ffffff;
+                padding: 2rem;
+                border-radius: 1rem 1rem 0 0;
+                border: 1px solid #333333;
+            }
+
+            .stats-card {
+                background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+                padding: 1.5rem;
+                border-radius: 0.75rem;
+                border: 1px solid #333333;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .stats-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 4px;
+                height: 100%;
+                background: #ffffff;
+            }
+
+            .stats-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 35px rgba(255, 255, 255, 0.1);
+            }
+
+            .stats-card.input::before {
+                background: #10b981;
+            }
+
+            .stats-card.output::before {
+                background: #ef4444;
+            }
+
+            .stats-card.total::before {
+                background: #3b82f6;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                background: #000000;
+                border-radius: 0.75rem;
+                overflow: hidden;
+                border: 1px solid #333333;
+            }
+
+            th {
+                background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+                padding: 1rem 1.5rem;
+                text-align: left;
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #ffffff;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                border-bottom: 2px solid #333333;
+            }
+
+            td {
+                padding: 1rem 1.5rem;
+                font-size: 0.875rem;
+                color: #ffffff;
+                border-bottom: 1px solid #1a1a1a;
+            }
+
+            tr:hover {
+                background: rgba(255, 255, 255, 0.05);
+                transition: background-color 0.2s ease;
+            }
+
+            .message-box {
                 padding: 1rem;
+                margin-top: 1rem;
+                border-radius: 0.75rem;
+                font-size: 0.875rem;
+                font-weight: 500;
             }
 
-            .grid-cols-3 {
-                grid-template-columns: 1fr;
+            .message-success {
+                background: rgba(16, 185, 129, 0.2);
+                color: #10b981;
+                border: 1px solid #10b981;
             }
 
-            .lg\:col-span-3 {
-                grid-column: span 1;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .md\:grid-cols-2 {
-                grid-template-columns: repeat(2, 1fr);
+            .message-error {
+                background: rgba(239, 68, 68, 0.2);
+                color: #ef4444;
+                border: 1px solid #ef4444;
             }
 
-            .md\:grid-cols-3 {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .lg\:grid-cols-3 {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .lg\:col-span-3 {
-                grid-column: span 3;
+            .loading-spinner {
+                border: 3px solid #333333;
+                border-top: 3px solid #ffffff;
+                border-radius: 50%;
+                width: 24px;
+                height: 24px;
+                animation: spin 1s linear infinite;
+                display: inline-block;
+                vertical-align: middle;
+                margin-left: 8px;
             }
 
-            .lg\:flex-row {
-                flex-direction: row;
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
             }
 
-            .lg\:items-center {
+            .fade-in {
+                animation: fadeIn 0.6s ease-in-out;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .slide-in {
+                animation: slideIn 0.4s ease-out;
+            }
+
+            @keyframes slideIn {
+                from { transform: translateX(-100%); }
+                to { transform: translateX(0); }
+            }
+
+            .user-profile {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 0.75rem;
+                padding: 0.75rem;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .avatar {
+                width: 40px;
+                height: 40px;
+                background: #ffffff;
+                color: #000000;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+            }
+
+            .export-btn {
+                background: #059669;
+                color: #ffffff;
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                font-weight: 600;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                border: none;
+                cursor: pointer;
+            }
+
+            .export-btn:hover {
+                background: #047857;
+                transform: translateY(-1px);
+            }
+
+            .search-box {
+                position: relative;
+            }
+
+            .search-input {
+                padding-left: 2.5rem;
+                padding-right: 1rem;
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+                border: 2px solid #333333;
+                border-radius: 0.75rem;
+                width: 100%;
+                background: #1a1a1a;
+                color: #ffffff;
+                transition: all 0.2s ease;
+            }
+
+            .search-input:focus {
+                border-color: #ffffff;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+            }
+
+            .search-icon {
+                position: absolute;
+                left: 0.75rem;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #666666;
+            }
+
+            .hidden {
+                display: none !important;
+            }
+
+            /* Responsive utilities */
+            @media (max-width: 768px) {
+                .container {
+                    padding: 1rem;
+                }
+
+                .grid-cols-3 {
+                    grid-template-columns: 1fr;
+                }
+
+                .lg\:col-span-3 {
+                    grid-column: span 1;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .md\:grid-cols-2 {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .md\:grid-cols-3 {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+
+            @media (min-width: 1024px) {
+                .lg\:grid-cols-3 {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+
+                .lg\:col-span-3 {
+                    grid-column: span 3;
+                }
+
+                .lg\:flex-row {
+                    flex-direction: row;
+                }
+
+                .lg\:items-center {
+                    align-items: center;
+                }
+
+                .lg\:w-auto {
+                    width: auto;
+                }
+            }
+
+            .grid {
+                display: grid;
+            }
+
+            .grid-cols-1 {
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            .gap-4 {
+                gap: 1rem;
+            }
+
+            .gap-6 {
+                gap: 1.5rem;
+            }
+
+            .gap-8 {
+                gap: 2rem;
+            }
+
+            .flex {
+                display: flex;
+            }
+
+            .flex-col {
+                flex-direction: column;
+            }
+
+            .items-center {
                 align-items: center;
             }
 
-            .lg\:w-auto {
-                width: auto;
+            .justify-center {
+                justify-content: center;
             }
-        }
 
-        .grid {
-            display: grid;
-        }
+            .justify-between {
+                justify-content: space-between;
+            }
 
-        .grid-cols-1 {
-            grid-template-columns: repeat(1, 1fr);
-        }
+            .text-center {
+                text-align: center;
+            }
 
-        .gap-4 {
-            gap: 1rem;
-        }
+            .mb-2 { margin-bottom: 0.5rem; }
+            .mb-4 { margin-bottom: 1rem; }
+            .mb-6 { margin-bottom: 1.5rem; }
+            .mb-8 { margin-bottom: 2rem; }
+            .mt-4 { margin-top: 1rem; }
+            .mt-6 { margin-top: 1.5rem; }
 
-        .gap-6 {
-            gap: 1.5rem;
-        }
+            .w-full { width: 100%; }
+            .w-16 { width: 4rem; }
+            .h-16 { height: 4rem; }
 
-        .gap-8 {
-            gap: 2rem;
-        }
+            .text-xs { font-size: 0.75rem; }
+            .text-sm { font-size: 0.875rem; }
+            .text-lg { font-size: 1.125rem; }
+            .text-xl { font-size: 1.25rem; }
+            .text-2xl { font-size: 1.5rem; }
+            .text-3xl { font-size: 1.875rem; }
+            .text-4xl { font-size: 2.25rem; }
 
-        .flex {
-            display: flex;
-        }
+            .font-medium { font-weight: 500; }
+            .font-semibold { font-weight: 600; }
+            .font-bold { font-weight: 700; }
 
-        .flex-col {
-            flex-direction: column;
-        }
+            .rounded-full { border-radius: 9999px; }
+            .rounded-lg { border-radius: 0.5rem; }
+            .rounded-xl { border-radius: 0.75rem; }
+            .rounded-2xl { border-radius: 1rem; }
 
-        .items-center {
-            align-items: center;
-        }
+            .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+            .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+            .px-4 { padding-left: 1rem; padding-right: 1rem; }
+            .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .px-8 { padding-left: 2rem; padding-right: 2rem; }
 
-        .justify-center {
-            justify-content: center;
-        }
+            .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+            .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+            .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+            .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+            .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
 
-        .justify-between {
-            justify-content: space-between;
-        }
+            .p-6 { padding: 1.5rem; }
+            .p-8 { padding: 2rem; }
 
-        .text-center {
-            text-align: center;
-        }
+            .space-y-6 > * + * { margin-top: 1.5rem; }
 
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
-        .mb-8 { margin-bottom: 2rem; }
-        .mt-4 { margin-top: 1rem; }
-        .mt-6 { margin-top: 1.5rem; }
+            .overflow-x-auto {
+                overflow-x: auto;
+            }
 
-        .w-full { width: 100%; }
-        .w-16 { width: 4rem; }
-        .h-16 { height: 4rem; }
+            .min-h-screen {
+                min-height: 100vh;
+            }
 
-        .text-xs { font-size: 0.75rem; }
-        .text-sm { font-size: 0.875rem; }
-        .text-lg { font-size: 1.125rem; }
-        .text-xl { font-size: 1.25rem; }
-        .text-2xl { font-size: 1.5rem; }
-        .text-3xl { font-size: 1.875rem; }
-        .text-4xl { font-size: 2.25rem; }
+            /* Status badge styles */
+            .status-input {
+                background: rgba(16, 185, 129, 0.2);
+                color: #10b981;
+                border: 1px solid #10b981;
+            }
 
-        .font-medium { font-weight: 500; }
-        .font-semibold { font-weight: 600; }
-        .font-bold { font-weight: 700; }
+            .status-output {
+                background: rgba(239, 68, 68, 0.2);
+                color: #ef4444;
+                border: 1px solid #ef4444;
+            }
 
-        .rounded-full { border-radius: 9999px; }
-        .rounded-lg { border-radius: 0.5rem; }
-        .rounded-xl { border-radius: 0.75rem; }
-        .rounded-2xl { border-radius: 1rem; }
+            .delete-btn {
+                color: #ef4444;
+                transition: color 0.2s ease;
+                cursor: pointer;
+                padding: 0.25rem;
+            }
 
-        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
-        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-        .px-4 { padding-left: 1rem; padding-right: 1rem; }
-        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .delete-btn:hover {
+                color: #dc2626;
+            }
 
-        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+            /* Form styling for light theme elements */
+            .form-section {
+                background: rgba(26, 26, 26, 0.8);
+                border-radius: 1rem;
+                padding: 2rem;
+                border: 1px solid #333333;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Firebase Configuration -->
+        <script>
+            const __firebase_config = JSON.stringify({
+                apiKey: "AIzaSyCZV-AReOyDWnmnhIKgDvmpUlO8GdJ6xWg",
+                authDomain: "bani-40b68.firebaseapp.com",
+                projectId: "bani-40b68",
+                storageBucket: "bani-40b68.firebasestorage.app",
+                messagingSenderId: "971923274030",
+                appId: "1:971923274030:web:f122e5b124d08fc44a62bf",
+                measurementId: "G-2WNYB3WNNY"
+            });
+        </script>
 
-        .p-6 { padding: 1.5rem; }
-        .p-8 { padding: 2rem; }
-
-        .space-y-6 > * + * { margin-top: 1.5rem; }
-
-        .overflow-x-auto {
-            overflow-x: auto;
-        }
-
-        .min-h-screen {
-            min-height: 100vh;
-        }
-
-        /* Status badge styles */
-        .status-input {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid #10b981;
-        }
-
-        .status-output {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid #ef4444;
-        }
-
-        .delete-btn {
-            color: #ef4444;
-            transition: color 0.2s ease;
-            cursor: pointer;
-            padding: 0.25rem;
-        }
-
-        .delete-btn:hover {
-            color: #dc2626;
-        }
-
-        /* Form styling for light theme elements */
-        .form-section {
-            background: rgba(26, 26, 26, 0.8);
-            border-radius: 1rem;
-            padding: 2rem;
-            border: 1px solid #333333;
-        }
-    </style>
-</head>
-<body>
-    <!-- Firebase Configuration -->
-    <script>
-        const __firebase_config = JSON.stringify({
-            apiKey: "AIzaSyCZV-AReOyDWnmnhIKgDvmpUlO8GdJ6xWg",
-            authDomain: "bani-40b68.firebaseapp.com",
-            projectId: "bani-40b68",
-            storageBucket: "bani-40b68.firebasestorage.app",
-            messagingSenderId: "971923274030",
-            appId: "1:971923274030:web:f122e5b124d08fc44a62bf",
-            measurementId: "G-2WNYB3WNNY"
-        });
-    </script>
-
-    <!-- Login Screen -->
-    <div id="loginScreen" class="min-h-screen flex items-center justify-center hidden">
-        <div class="login-container glass-morphism rounded-2xl fade-in">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4" style="margin: 0 auto;">
-                    <i class="fas fa-boxes text-black text-2xl"></i>
-                </div>
-                <h1 class="text-3xl font-bold text-white mb-2">Material Record System</h1>
-                <p class="text-gray-400">Secure inventory management</p>
-            </div>
-
-            <form id="loginForm" class="space-y-6">
-                <div>
-                    <label for="username" class="form-label">
-                        <i class="fas fa-user mr-2"></i>Username
-                    </label>
-                    <input type="text" id="username" class="form-input" placeholder="Enter your username" required>
-                </div>
-
-                <div>
-                    <label for="password" class="form-label">
-                        <i class="fas fa-lock mr-2"></i>Password
-                    </label>
-                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-full">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
-                </button>
-
-                <div class="text-center">
-                    <button type="button" id="demoLoginBtn" class="text-white hover:text-gray-300 font-medium" style="color: #ffffff; background: none; border: none; cursor: pointer;">
-                        <i class="fas fa-play mr-1"></i>Try Demo Account
-                    </button>
-                </div>
-            </form>
-
-            <div id="loginMessage" class="message-box hidden"></div>
-        </div>
-    </div>
-
-    <!-- Main Dashboard -->
-    <div id="mainDashboard" class="hidden min-h-screen">
-        <div class="container">
-            <!-- Header -->
-            <div class="dashboard-header rounded-2xl mb-8 fade-in">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-4xl font-bold mb-2">
-                            <i class="fas fa-warehouse mr-3"></i>Material Record System
-                        </h1>
-                        <p class="text-gray-300">Advanced inventory management dashboard</p>
+        <!-- Login Screen -->
+        <div id="loginScreen" class="min-h-screen flex items-center justify-center hidden">
+            <div class="login-container glass-morphism rounded-2xl fade-in">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4" style="margin: 0 auto;">
+                        <i class="fas fa-boxes text-black text-2xl"></i>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <div class="user-profile">
-                            <div class="avatar" id="userAvatar">U</div>
-                            <div>
-                                <div class="font-semibold" id="userDisplayName">User</div>
-                                <div class="text-sm text-gray-300" id="userIdDisplay">Loading...</div>
-                            </div>
-                        </div>
-                        <button id="logoutBtn" class="btn btn-danger">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    <h1 class="text-3xl font-bold text-white mb-2">Material Record System</h1>
+                    <p class="text-gray-400">Secure inventory management</p>
+                </div>
+
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user mr-2"></i>Username
+                        </label>
+                        <input type="text" id="username" class="form-input" placeholder="Enter your username" required>
+                    </div>
+
+                    <div>
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock mr-2"></i>Password
+                        </label>
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-full">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                    </button>
+
+                    <div class="text-center">
+                        <button type="button" id="demoLoginBtn" class="text-white hover:text-gray-300 font-medium" style="color: #ffffff; background: none; border: none; cursor: pointer;">
+                            <i class="fas fa-play mr-1"></i>Try Demo Account
                         </button>
                     </div>
-                </div>
+                </form>
+
+                <div id="loginMessage" class="message-box hidden"></div>
             </div>
+        </div>
 
-            <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="stats-card input">
-                    <div class="flex items-center justify-between">
+        <!-- Main Dashboard -->
+        <div id="mainDashboard" class="hidden min-h-screen">
+            <div class="container">
+                <!-- Header -->
+                <div class="dashboard-header rounded-2xl mb-8 fade-in">
+                    <div class="flex justify-between items-center">
                         <div>
-                            <p class="text-sm font-medium text-gray-400">Total Input</p>
-                            <p class="text-2xl font-bold text-green-400" id="totalInput">0</p>
+                            <h1 class="text-4xl font-bold mb-2">
+                                <i class="fas fa-warehouse mr-3"></i>Material Record System
+                            </h1>
+                            <p class="text-gray-300">Advanced inventory management dashboard</p>
                         </div>
-                        <div class="text-green-400 text-3xl">
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stats-card output">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-400">Total Output</p>
-                            <p class="text-2xl font-bold text-red-400" id="totalOutput">0</p>
-                        </div>
-                        <div class="text-red-400 text-3xl">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stats-card total">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-400">Current Stock</p>
-                            <p class="text-2xl font-bold text-blue-400" id="currentStock">0</p>
-                        </div>
-                        <div class="text-blue-400 text-3xl">
-                            <i class="fas fa-boxes"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Entry Type Selection -->
-            <div class="glass-morphism rounded-2xl p-8 mb-8 fade-in">
-                <div class="flex justify-center gap-6 mb-8">
-                    <button id="inputBtn" class="btn-toggle active">
-                        <i class="fas fa-plus mr-2"></i>Record New Material Input
-                    </button>
-                    <button id="outputBtn" class="btn-toggle inactive">
-                        <i class="fas fa-minus mr-2"></i>Record Material Output
-                    </button>
-                </div>
-
-                <!-- Material Entry Form -->
-                <div class="form-section">
-                    <h2 id="formTitle" class="text-2xl font-bold text-white mb-6 text-center">
-                        <i class="fas fa-plus mr-2"></i>Record New Material Input
-                    </h2>
-                    <form id="materialForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div>
-                            <label for="date" class="form-label">
-                                <i class="fas fa-calendar mr-2"></i>Date
-                            </label>
-                            <input type="date" id="date" class="form-input" required>
-                        </div>
-                        <div>
-                            <label for="challanNo" class="form-label">
-                                <i class="fas fa-receipt mr-2"></i>Challan No
-                            </label>
-                            <input type="text" id="challanNo" class="form-input" placeholder="e.g., CHN-2025-001" required>
-                        </div>
-                        <div id="skuInputContainer">
-                            <label for="sku" class="form-label">
-                                <i class="fas fa-barcode mr-2"></i>SKU
-                            </label>
-                            <input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>
-                        </div>
-                        <div>
-                            <label for="color" class="form-label">
-                                <i class="fas fa-palette mr-2"></i>Color
-                            </label>
-                            <input type="text" id="color" class="form-input" placeholder="e.g., Blue">
-                        </div>
-                        <div>
-                            <label for="qty" class="form-label">
-                                <i class="fas fa-sort-numeric-up mr-2"></i>Quantity
-                            </label>
-                            <input type="number" id="qty" class="form-input" min="1" required>
-                        </div>
-                        <div>
-                            <label for="rate" class="form-label">
-                                <i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)
-                            </label>
-                            <input type="number" id="rate" class="form-input" step="0.01" min="0" required>
-                        </div>
-                        <div id="vendorNameInputContainer" class="lg:col-span-3">
-                            <label for="vendorName" class="form-label">
-                                <i class="fas fa-store mr-2"></i>Vendor Name
-                            </label>
-                            <input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>
-                        </div>
-                        <div id="challanSelectContainer" class="lg:col-span-3" style="display: none;">
-                            <!-- Challan dropdown for output will be dynamically inserted here -->
-                        </div>
-                        <div class="lg:col-span-3 flex justify-center mt-6">
-                            <button type="submit" class="btn btn-primary text-lg px-8 py-4">
-                                <i class="fas fa-save mr-2"></i>Add Record
+                        <div class="flex items-center gap-4">
+                            <div class="user-profile">
+                                <div class="avatar" id="userAvatar">U</div>
+                                <div>
+                                    <div class="font-semibold" id="userDisplayName">User</div>
+                                    <div class="text-sm text-gray-300" id="userIdDisplay">Loading...</div>
+                                </div>
+                            </div>
+                            <button id="logoutBtn" class="btn btn-danger">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
                             </button>
                         </div>
-                    </form>
-                    <div id="messageBox" class="message-box hidden"></div>
-                </div>
-            </div>
-
-            <!-- Filter and Records Display -->
-            <div class="glass-morphism rounded-2xl p-8 fade-in">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                    <h2 class="text-3xl font-bold text-white">
-                        <i class="fas fa-table mr-3"></i>Stock
-                    </h2>
-                    <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                        <!-- Date Filter -->
-                        <div class="flex flex-col sm:flex-row gap-2">
-                            <div>
-                                <label for="startDate" class="form-label hidden sm:block">Start Date</label>
-                                <input type="date" id="startDate" class="form-input w-full sm:w-auto">
-                            </div>
-                            <div>
-                                <label for="endDate" class="form-label hidden sm:block">End Date</label>
-                                <input type="date" id="endDate" class="form-input w-full sm:w-auto">
-                            </div>
-                        </div>
-
-                        <!-- Vendor Filter -->
-                        <select id="vendorFilter" class="form-input w-full sm:w-auto">
-                            <option value="all">All Vendors</option>
-                        </select>
-
-                        <!-- Search Box -->
-                        <div class="search-box w-full sm:w-auto">
-                            <input type="text" id="searchInput" class="search-input" placeholder="Search...">
-                            <i class="fas fa-search search-icon"></i>
-                        </div>
-
-                        <!-- Export Button -->
-                        <button id="exportBtn" class="export-btn w-full sm:w-auto">
-                            <i class="fas fa-download"></i>Export CSV
-                        </button>
                     </div>
                 </div>
 
-                <!-- Aggregated Records Table -->
-                <div class="overflow-x-auto mb-12">
-                    <table id="aggregatedRecordsTable">
-                        <thead>
-                            <tr>
-                                <th scope="col"><i class="fas fa-barcode mr-2"></i>SKU</th>
-                                <th scope="col"><i class="fas fa-palette mr-2"></i>Color</th>
-                                <th scope="col"><i class="fas fa-store mr-2"></i>Vendor</th>
-                                <th scope="col"><i class="fas fa-rupee-sign mr-2"></i>Latest Rate</th>
-                                <th scope="col"><i class="fas fa-arrow-down mr-2"></i>Total Output Qty</th>
-                                <th scope="col"><i class="fas fa-arrow-up mr-2"></i>Total Input Qty</th>
-                                <th scope="col"><i class="fas fa-boxes mr-2"></i></i>Remaining Stock</th>
-                            </tr>
-                        </thead>
-                        <tbody id="aggregatedRecordsTableBody">
-                            <tr>
-                                <td colspan="7" class="text-center py-8 text-gray-400">
-                                    <i class="fas fa-inbox text-4xl mb-4 block"></i>
-                                    No records found.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stats-card input">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-400">Total Input</p>
+                                <p class="text-2xl font-bold text-green-400" id="totalInput">0</p>
+                            </div>
+                            <div class="text-green-400 text-3xl">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card output">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-400">Total Output</p>
+                                <p class="text-2xl font-bold text-red-400" id="totalOutput">0</p>
+                            </div>
+                            <div class="text-red-400 text-3xl">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card total">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-400">Current Stock</p>
+                                <p class="text-2xl font-bold text-blue-400" id="currentStock">0</p>
+                            </div>
+                            <div class="text-blue-400 text-3xl">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entry Type Selection -->
+                <div class="glass-morphism rounded-2xl p-8 mb-8 fade-in">
+                    <div class="flex justify-center gap-6 mb-8">
+                        <button id="inputBtn" class="btn-toggle active">
+                            <i class="fas fa-plus mr-2"></i>Record New Material Output
+                        </button>
+                        <button id="outputBtn" class="btn-toggle inactive">
+                            <i class="fas fa-minus mr-2"></i>Record Material Input
+                        </button>
+                    </div>
+
+                    <!-- Material Entry Form -->
+                    <div class="form-section">
+                        <h2 id="formTitle" class="text-2xl font-bold text-white mb-6 text-center">
+                            <i class="fas fa-plus mr-2"></i>Record New Material Input
+                        </h2>
+                        <form id="materialForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div>
+                                <label for="date" class="form-label">
+                                    <i class="fas fa-calendar mr-2"></i>Date
+                                </label>
+                                <input type="date" id="date" class="form-input" required>
+                            </div>
+                            <div>
+                                <label for="challanNo" class="form-label">
+                                    <i class="fas fa-receipt mr-2"></i>Challan No
+                                </label>
+                                <input type="text" id="challanNo" class="form-input" placeholder="e.g., CHN-2025-001" required>
+                            </div>
+                            <div id="skuInputContainer">
+                                <label for="sku" class="form-label">
+                                    <i class="fas fa-barcode mr-2"></i>SKU
+                                </label>
+                                <input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>
+                            </div>
+                            <div>
+                                <label for="color" class="form-label">
+                                    <i class="fas fa-palette mr-2"></i>Color
+                                </label>
+                                <input type="text" id="color" class="form-input" placeholder="e.g., Blue">
+                            </div>
+                            <div>
+                                <label for="qty" class="form-label">
+                                    <i class="fas fa-sort-numeric-up mr-2"></i>Quantity
+                                </label>
+                                <input type="number" id="qty" class="form-input" min="1" required>
+                            </div>
+                            <div>
+                                <label for="rate" class="form-label">
+                                    <i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)
+                                </label>
+                                <input type="number" id="rate" class="form-input" step="0.01" min="0" required>
+                            </div>
+                            <div id="vendorNameInputContainer" class="lg:col-span-3">
+                                <label for="vendorName" class="form-label">
+                                    <i class="fas fa-store mr-2"></i>Vendor Name
+                                </label>
+                                <input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>
+                            </div>
+                            <div id="challanSelectContainer" class="lg:col-span-3" style="display: none;">
+                                <!-- Challan dropdown for output will be dynamically inserted here -->
+                            </div>
+                            <div class="lg:col-span-3 flex justify-center mt-6">
+                                <button type="submit" class="btn btn-primary text-lg px-8 py-4">
+                                    <i class="fas fa-save mr-2"></i>Add Record
+                                </button>
+                            </div>
+                        </form>
+                        <div id="messageBox" class="message-box hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Filter and Records Display -->
+                <div class="glass-morphism rounded-2xl p-8 fade-in">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                        <h2 class="text-3xl font-bold text-white">
+                            <i class="fas fa-table mr-3"></i>Stock
+                        </h2>
+                        <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                            <!-- Date Filter -->
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <div>
+                                    <label for="startDate" class="form-label hidden sm:block">Start Date</label>
+                                    <input type="date" id="startDate" class="form-input w-full sm:w-auto">
+                                </div>
+                                <div>
+                                    <label for="endDate" class="form-label hidden sm:block">End Date</label>
+                                    <input type="date" id="endDate" class="form-input w-full sm:w-auto">
+                                </div>
+                            </div>
+
+                            <!-- Vendor Filter -->
+                            <select id="vendorFilter" class="form-input w-full sm:w-auto">
+                                <option value="all">All Vendors</option>
+                            </select>
+
+                            <!-- Search Box -->
+                            <div class="search-box w-full sm:w-auto">
+                                <input type="text" id="searchInput" class="search-input" placeholder="Search...">
+                                <i class="fas fa-search search-icon"></i>
+                            </div>
+
+                            <!-- Export Button -->
+                            <button id="exportBtn" class="export-btn w-full sm:w-auto">
+                                <i class="fas fa-download"></i>Export CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Aggregated Records Table -->
+                    <div class="overflow-x-auto mb-12">
+                        <table id="aggregatedRecordsTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col"><i class="fas fa-barcode mr-2"></i>SKU</th>
+                                    <th scope="col"><i class="fas fa-palette mr-2"></i>Color</th>
+                                    <th scope="col"><i class="fas fa-store mr-2"></i>Vendor</th>
+                                    <th scope="col"><i class="fas fa-rupee-sign mr-2"></i>Latest Rate</th>
+                                    <th scope="col"><i class="fas fa-arrow-down mr-2"></i>Total Output Qty</th>
+                                    <th scope="col"><i class="fas fa-arrow-up mr-2"></i>Total Input Qty</th>
+                                    <th scope="col"><i class="fas fa-boxes mr-2"></i></i>Remaining Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody id="aggregatedRecordsTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center py-8 text-gray-400">
+                                        <i class="fas fa-inbox text-4xl mb-4 block"></i>
+                                        No records found.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script type="module">
-        // Import necessary Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, onSnapshot, orderBy, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+        <script type="module">
+            // Import necessary Firebase modules
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+            import { getFirestore, collection, addDoc, query, onSnapshot, orderBy, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-        let app;
-        let db;
-        let userId = null;
+            let app;
+            let db;
+            let userId = null;
 
-        // Hardcoded user credentials for demonstration
-        const users = {
-            'admin': { password: 'admin123', name: 'Administrator', id: 'admin_001' },
-            'user': { password: 'user123', name: 'Standard User', id: 'user_001' },
-            'demo': { password: 'demo', name: 'Demo User', id: 'demo_001' },
-            'Manish': { password: 'Manish@Bani999', name: 'Manish', id: 'manish_user_id' }
-        };
+            // Hardcoded user credentials for demonstration
+            const users = {
+                'admin': { password: 'admin123', name: 'Administrator', id: 'admin_001' },
+                'user': { password: 'user123', name: 'Standard User', id: 'user_001' },
+                'demo': { password: 'demo', name: 'Demo User', id: 'demo_001' },
+                'Manish': { password: 'Manish@Bani999', name: 'Manish', id: 'manish_user_id' }
+            };
 
-        let currentUser = null;
-        let allRecords = [];
-        let aggregatedStock = {};
+            let currentUser = null;
+            let allRecords = [];
+            let aggregatedStock = {};
 
-        // Default to 'Input' tab on load
-        let currentEntryType = 'Input';
+            // Default to 'Input' tab on load
+            let currentEntryType = 'Input';
 
-        // Get all relevant DOM elements
-        const loginScreen = document.getElementById('loginScreen');
-        const mainDashboard = document.getElementById('mainDashboard');
-        const loginForm = document.getElementById('loginForm');
-        const demoLoginBtn = document.getElementById('demoLoginBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const userDisplayName = document.getElementById('userDisplayName');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-        const userAvatar = document.getElementById('userAvatar');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginMessage = document.getElementById('loginMessage');
+            // Get all relevant DOM elements
+            const loginScreen = document.getElementById('loginScreen');
+            const mainDashboard = document.getElementById('mainDashboard');
+            const loginForm = document.getElementById('loginForm');
+            const demoLoginBtn = document.getElementById('demoLoginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userDisplayName = document.getElementById('userDisplayName');
+            const userIdDisplay = document.getElementById('userIdDisplay');
+            const userAvatar = document.getElementById('userAvatar');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginMessage = document.getElementById('loginMessage');
 
-        const inputBtn = document.getElementById('inputBtn');
-        const outputBtn = document.getElementById('outputBtn');
-        const formTitle = document.getElementById('formTitle');
-        const materialForm = document.getElementById('materialForm');
-        const messageBox = document.getElementById('messageBox');
-        const aggregatedRecordsTableBody = document.getElementById('aggregatedRecordsTableBody');
-        const transactionTableBody = document.getElementById('transactionTableBody');
-        const vendorFilter = document.getElementById('vendorFilter');
-        const searchInput = document.getElementById('searchInput');
-        const exportBtn = document.getElementById('exportBtn');
+            const inputBtn = document.getElementById('inputBtn');
+            const outputBtn = document.getElementById('outputBtn');
+            const formTitle = document.getElementById('formTitle');
+            const materialForm = document.getElementById('materialForm');
+            const messageBox = document.getElementById('messageBox');
+            const aggregatedRecordsTableBody = document.getElementById('aggregatedRecordsTableBody');
+            const transactionTableBody = document.getElementById('transactionTableBody');
+            const vendorFilter = document.getElementById('vendorFilter');
+            const searchInput = document.getElementById('searchInput');
+            const exportBtn = document.getElementById('exportBtn');
 
-        const startDateInput = document.getElementById('startDate');
-        const endDateInput = document.getElementById('endDate');
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
 
-        let dateInput = document.getElementById('date');
-        let challanNoInput = document.getElementById('challanNo');
-        let colorInput = document.getElementById('color');
-        let qtyInput = document.getElementById('qty');
-        let rateInput = document.getElementById('rate');
+            let dateInput = document.getElementById('date');
+            let challanNoInput = document.getElementById('challanNo');
+            let colorInput = document.getElementById('color');
+            let qtyInput = document.getElementById('qty');
+            let rateInput = document.getElementById('rate');
 
-        const skuInputContainer = document.getElementById('skuInputContainer');
-        const vendorNameInputContainer = document.getElementById('vendorNameInputContainer');
-        const challanSelectContainer = document.getElementById('challanSelectContainer');
+            const skuInputContainer = document.getElementById('skuInputContainer');
+            const vendorNameInputContainer = document.getElementById('vendorNameInputContainer');
+            const challanSelectContainer = document.getElementById('challanSelectContainer');
 
-        let skuInputText = null;
-        let vendorInputText = null;
-        let vendorSelectDropdown = null;
-        let skuSelectDropdown = null;
-        let challanSelectDropdown = null;
+            let skuInputText = null;
+            let vendorInputText = null;
+            let vendorSelectDropdown = null;
+            let skuSelectDropdown = null;
+            let challanSelectDropdown = null;
 
-        const totalInputDisplay = document.getElementById('totalInput');
-        const totalOutputDisplay = document.getElementById('totalOutput');
-        const currentStockDisplay = document.getElementById('currentStock');
+            const totalInputDisplay = document.getElementById('totalInput');
+            const totalOutputDisplay = document.getElementById('totalOutput');
+            const currentStockDisplay = document.getElementById('currentStock');
 
-        // Function to initialize Firebase and check for a saved user session
-        const initializeFirebase = async () => {
-            try {
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+            // Function to initialize Firebase and check for a saved user session
+            const initializeFirebase = async () => {
+                try {
+                    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 
-                if (!firebaseConfig.projectId) {
-                    console.error("Firebase 'projectId' not provided in __firebase_config.");
-                    showMessage('Firebase configuration error: Project ID missing.', 'error', 'loginMessage');
+                    if (!firebaseConfig.projectId) {
+                        console.error("Firebase 'projectId' not provided in __firebase_config.");
+                        showMessage('Firebase configuration error: Project ID missing.', 'error', 'loginMessage');
+                        showLogin();
+                        return;
+                    }
+
+                    app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+
+                    console.log("Firebase Firestore initialized.");
+
+                    // Check for a user saved in localStorage to bypass login
+                    const savedUser = localStorage.getItem('currentUser');
+                    if (savedUser) {
+                        try {
+                            currentUser = JSON.parse(savedUser);
+                            userId = currentUser.id;
+                            console.log("Loaded user from localStorage:", currentUser);
+                            showDashboard();
+                        } catch (error) {
+                            console.error('Error parsing saved user from localStorage:', error);
+                            localStorage.removeItem('currentUser'); // Clear invalid data
+                            showLogin();
+                        }
+                    } else {
+                        console.log("No user found in localStorage. Showing login screen.");
+                        showLogin();
+                    }
+
+                } catch (error) {
+                    console.error("Error initializing Firebase Firestore:", error);
+                    showMessage('Error initializing application. Please try again.', 'error', 'loginMessage');
+                    if (userIdDisplay) userIdDisplay.textContent = 'Error';
                     showLogin();
+                }
+            };
+
+            // Function to display a message to the user
+            const showMessage = (message, type, elementId = 'messageBox') => {
+                const element = document.getElementById(elementId);
+                if (!element) {
+                    console.warn(`Message box element '${elementId}' not found. Message: ${message}`);
+                    return;
+                }
+                element.textContent = message;
+                element.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'}`;
+                element.classList.remove('hidden');
+                setTimeout(() => {
+                    element.classList.add('hidden');
+                }, 5000);
+            };
+
+            // Function to set up login form event listeners
+            const setupLoginListeners = () => {
+                // Handle standard login form submission
+                if (loginForm) {
+                    loginForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const username = usernameInput.value;
+                        const password = passwordInput.value;
+        
+                        if (users[username] && users[username].password === password) {
+                            currentUser = { username, ...users[username] };
+                            userId = currentUser.id;
+                            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                            console.log("Login successful. currentUser:", currentUser, "userId:", userId);
+                            showDashboard();
+                        } else {
+                            showMessage('Invalid username or password.', 'error', 'loginMessage');
+                        }
+                    });
+                }
+                
+                // Handle demo login button click
+                if (demoLoginBtn) {
+                    demoLoginBtn.addEventListener('click', () => {
+                        const demoUser = users['demo'];
+                        currentUser = { username: 'demo', ...demoUser };
+                        userId = currentUser.id;
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        showDashboard();
+                    });
+                }
+            }
+
+            // Function to log the user out
+            const logout = () => {
+                currentUser = null;
+                userId = null;
+                localStorage.removeItem('currentUser');
+                alert('Logged out successfully!'); // Use alert for simple, non-critical confirmation
+                showLogin();
+            };
+
+            // Function to show the login screen
+            const showLogin = () => {
+                if (loginScreen) loginScreen.classList.remove('hidden');
+                if (mainDashboard) mainDashboard.classList.add('hidden');
+                if (loginMessage) loginMessage.classList.add('hidden');
+                // Do NOT call login() here. We attach event listeners once.
+            };
+
+            // Function to show the main dashboard
+            const showDashboard = () => {
+                console.log("Entering showDashboard function. Current user:", currentUser);
+
+                if (loginScreen) loginScreen.classList.add('hidden');
+                if (mainDashboard) mainDashboard.classList.remove('hidden');
+
+                if (userDisplayName) userDisplayName.textContent = currentUser.name;
+                if (userIdDisplay) userIdDisplay.textContent = currentUser.id;
+                if (userAvatar) userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+
+                if (userId && db) {
+                    setupRealtimeListener();
+                    addDemoData();
+                } else {
+                    console.error("Cannot setup dashboard: userId or db is not ready. Data might not load.");
+                    showMessage("Dashboard data could not be loaded. Please re-login.", "error", 'messageBox');
+                    logout();
+                }
+            };
+
+            // Function to clear the form fields
+            const clearForm = () => {
+                dateInput.value = new Date().toISOString().split('T')[0];
+                challanNoInput.value = '';
+                colorInput.value = '';
+                qtyInput.value = '';
+                rateInput.value = '';
+                qtyInput.max = '';
+
+                const skuInput = document.getElementById('sku');
+                const vendorInput = document.getElementById('vendorName');
+                const vendorSelect = document.getElementById('vendorSelect');
+                const skuSelect = document.getElementById('skuSelect');
+                const challanSelect = document.getElementById('challanSelect');
+
+                if (skuInput) skuInput.value = '';
+                if (vendorInput) vendorInput.value = '';
+                if (vendorSelect) vendorSelect.value = 'Select Vendor...';
+                if (skuSelect) skuSelect.innerHTML = '<option value="Select SKU...">Select SKU...</option>';
+                if (challanSelect) challanSelect.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
+                challanSelectContainer.style.display = 'none';
+            };
+
+            // Function to update the dashboard statistics cards
+            const updateStatistics = () => {
+                let totalInputQty = 0;
+                let totalOutputQty = 0;
+
+                for (const key in aggregatedStock) {
+                    totalInputQty += aggregatedStock[key].inputQty;
+                    totalOutputQty += aggregatedStock[key].outputQty;
+                }
+
+                const stockQty = totalInputQty - totalOutputQty;
+
+                totalInputDisplay.textContent = totalInputQty.toLocaleString();
+                totalOutputDisplay.textContent = totalOutputQty.toLocaleString();
+                currentStockDisplay.textContent = stockQty.toLocaleString();
+            };
+
+            // Function to aggregate records for the summary table
+            const calculateAggregatedStock = (records) => {
+                const tempAggregatedStock = {};
+
+                records.forEach(record => {
+                    const key = `${record.sku}-${record.color || 'N/A'}-${record.vendorName}`;
+                    if (!tempAggregatedStock[key]) {
+                        tempAggregatedStock[key] = {
+                            sku: record.sku,
+                            color: record.color,
+                            vendorName: record.vendorName,
+                            latestRate: 0,
+                            inputQty: 0,
+                            outputQty: 0,
+                            timestamp: null
+                        };
+                    }
+
+                    if (record.type === 'Input') {
+                        tempAggregatedStock[key].inputQty += record.qty;
+                        // Update rate and timestamp only if it's a newer input record
+                        if (!tempAggregatedStock[key].timestamp || record.timestamp > tempAggregatedStock[key].timestamp) {
+                            tempAggregatedStock[key].latestRate = record.rate;
+                            tempAggregatedStock[key].timestamp = record.timestamp;
+                        }
+                    } else if (record.type === 'Output') {
+                        tempAggregatedStock[key].outputQty += record.qty;
+                    }
+                });
+
+                aggregatedStock = tempAggregatedStock;
+            };
+
+            // Function to render the aggregated stock table
+            const renderAggregatedRecordsTable = (stockToDisplay) => {
+                aggregatedRecordsTableBody.innerHTML = '';
+
+                if (Object.keys(stockToDisplay).length === 0) {
+                    aggregatedRecordsTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center py-8 text-gray-400">
+                                <i class="fas fa-inbox text-4xl mb-4 block"></i>
+                                No records found.
+                            </td>
+                        </tr>
+                    `;
                     return;
                 }
 
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
+                const sortedStock = Object.values(stockToDisplay).sort((a, b) => {
+                    if (a.sku < b.sku) return -1;
+                    if (a.sku > b.sku) return 1;
+                    if (a.color < b.color) return -1;
+                    if (a.color > b.color) return 1;
+                    return 0;
+                });
 
-                console.log("Firebase Firestore initialized.");
+                sortedStock.forEach(item => {
+                    const remaining = item.inputQty - item.outputQty;
+                    const row = aggregatedRecordsTableBody.insertRow();
 
-                // Check for a user saved in localStorage to bypass login
-                const savedUser = localStorage.getItem('currentUser');
-                if (savedUser) {
+                    row.innerHTML = `
+                        <td><span style="font-family: monospace; font-size: 0.75rem;">${item.sku}</span></td>
+                        <td>${item.color || 'N/A'}</td>
+                        <td>${item.vendorName}</td>
+                        <td>₹${parseFloat(item.latestRate).toFixed(2)}</td>
+                        <td class="font-semibold text-green-400">${item.inputQty.toLocaleString()}</td>
+                        <td class="font-semibold text-red-400">${item.outputQty.toLocaleString()}</td>
+                        <td class="font-bold ${remaining < 0 ? 'text-red-500' : 'text-blue-400'}">${remaining.toLocaleString()}</td>
+                    `;
+                });
+            };
+
+            // Updates the vendor filter dropdown options
+            const updateVendorFilterOptions = (records) => {
+                const uniqueVendors = [...new Set(records.map(r => r.vendorName))].sort();
+                vendorFilter.innerHTML = '<option value="all">All Vendors</option>';
+                uniqueVendors.forEach(vendor => {
+                    const option = document.createElement('option');
+                    option.value = vendor;
+                    option.textContent = vendor;
+                    vendorFilter.appendChild(option);
+                });
+                const currentFilter = vendorFilter.value;
+                if (uniqueVendors.includes(currentFilter)) {
+                    vendorFilter.value = currentFilter;
+                }
+            };
+
+            // Filters records based on user input (date, vendor, search)
+            const filterRecords = () => {
+                const selectedVendor = vendorFilter.value;
+                const searchTerm = searchInput.value.toLowerCase();
+                const start = startDateInput.value ? new Date(startDateInput.value).setHours(0,0,0,0) : null;
+                const end = endDateInput.value ? new Date(endDateInput.value).setHours(23,59,59,999) : null;
+
+                let filteredRawRecords = allRecords.filter(record => {
+                    const recordDate = new Date(record.date).getTime();
+                    const matchesDate = (!start || recordDate >= start) && (!end || recordDate <= end);
+                    const matchesVendor = (selectedVendor === 'all' || record.vendorName === selectedVendor);
+                    const matchesSearch = (
+                        record.challanNo.toLowerCase().includes(searchTerm) ||
+                        record.sku.toLowerCase().includes(searchTerm) ||
+                        record.vendorName.toLowerCase().includes(searchTerm) ||
+                        record.color?.toLowerCase().includes(searchTerm) ||
+                        record.type.toLowerCase().includes(searchTerm) ||
+                        record.date.includes(searchTerm)
+                    );
+                    return matchesDate && matchesVendor && matchesSearch;
+                });
+
+                calculateAggregatedStock(filteredRawRecords);
+                renderAggregatedRecordsTable(aggregatedStock);
+                renderTransactionTable(filteredRawRecords);
+            };
+
+            // Deletes a record from Firestore
+            const deleteRecord = async (recordId) => {
+                const confirmDelete = confirm('Are you sure you want to delete this record? This action cannot be undone.');
+
+                if (confirmDelete) {
                     try {
-                        currentUser = JSON.parse(savedUser);
-                        userId = currentUser.id;
-                        console.log("Loaded user from localStorage:", currentUser);
-                        showDashboard();
+                        if (!db || !userId) {
+                            showMessage('Database not ready or user not logged in.', 'error', 'messageBox');
+                            return;
+                        }
+                        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+                        const appId = firebaseConfig.appId || 'default-app-id';
+                        const recordRef = doc(db, `artifacts/${appId}/users/${userId}/material_records`, recordId);
+                        await deleteDoc(recordRef);
+                        showMessage('Record deleted successfully!', 'success', 'messageBox');
                     } catch (error) {
-                        console.error('Error parsing saved user from localStorage:', error);
-                        localStorage.removeItem('currentUser'); // Clear invalid data
-                        showLogin();
+                        console.error('Error deleting record:', error);
+                        showMessage('Error deleting record', 'error', 'messageBox');
+                    }
+                }
+            };
+
+            // Exports data to a CSV file
+            const exportToCSV = () => {
+                const headers = ['Date', 'Challan No', 'SKU', 'Color', 'Quantity', 'Rate', 'Value', 'Vendor Name', 'Type'];
+                const csvContent = [
+                    headers.join(','),
+                    ...allRecords.map(record => [
+                        record.date,
+                        record.challanNo,
+                        record.sku,
+                        record.color || '',
+                        record.qty,
+                        record.rate,
+                        (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2),
+                        record.vendorName,
+                        record.type
+                    ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
+                ].join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `material_transactions_${new Date().toISOString().split('T')[0]}.csv`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            };
+
+            // Sets up the real-time Firestore listener
+            const setupRealtimeListener = () => {
+                if (!db || !userId) {
+                    console.log("Firestore or User ID not ready for listener setup. Retrying in 500ms.");
+                    setTimeout(setupRealtimeListener, 500);
+                    return;
+                }
+
+                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+                const appId = firebaseConfig.appId || 'default-app-id';
+                const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
+                const q = query(recordsCollectionRef, orderBy('timestamp', 'desc'));
+
+                onSnapshot(q, (snapshot) => {
+                    allRecords = [];
+                    snapshot.forEach((doc) => {
+                        allRecords.push({ id: doc.id, ...doc.data() });
+                    });
+                    calculateAggregatedStock(allRecords);
+                    updateStatistics();
+                    updateVendorFilterOptions(allRecords);
+                    updateFormFieldsForEntryType();
+                    filterRecords();
+                }, (error) => {
+                    console.error("Error fetching real-time updates:", error);
+                    showMessage('Error fetching records. Please refresh the page.', 'error', 'messageBox');
+                });
+            };
+
+            // Helper function to create a dropdown select element dynamically
+            const createSelectElement = (id, labelText, options, onChangeHandler, isRequired = false) => {
+                const div = document.createElement('div');
+                const label = document.createElement('label');
+                label.htmlFor = id;
+                label.className = 'form-label';
+                label.innerHTML = `<i class="fas fa-${id.includes('vendor') ? 'store' : (id.includes('sku') ? 'barcode' : 'receipt')} mr-2"></i>${labelText}`;
+                div.appendChild(label);
+
+                const select = document.createElement('select');
+                select.id = id;
+                select.className = 'form-input';
+                if (isRequired) select.required = true;
+                select.addEventListener('change', onChangeHandler);
+
+                options.forEach(optionValue => {
+                    const option = document.createElement('option');
+                    option.value = optionValue;
+                    option.textContent = optionValue;
+                    select.appendChild(option);
+                });
+                div.appendChild(select);
+                return div;
+            };
+
+            // Updates the form fields based on the selected entry type (Input/Output)
+            const updateFormFieldsForEntryType = () => {
+                clearForm();
+
+                skuInputContainer.innerHTML = '';
+                vendorNameInputContainer.innerHTML = '';
+                challanSelectContainer.style.display = 'none';
+                challanSelectContainer.innerHTML = '';
+
+                if (currentEntryType === 'Output') {
+                    const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].sort();
+                    const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', ['Select Vendor...', ...uniqueInputVendors], handleVendorSelectChange, true);
+                    vendorNameInputContainer.appendChild(vendorSelectDiv);
+                    vendorSelectDropdown = document.getElementById('vendorSelect');
+
+                    const skuSelectDiv = createSelectElement('skuSelect', 'SKU', ['Select SKU...'], handleSkuSelectChange, true);
+                    skuInputContainer.appendChild(skuSelectDiv);
+                    skuSelectDropdown = document.getElementById('skuSelect');
+
+                    const challanSelectDiv = createSelectElement('challanSelect', 'Challan No', ['Select Challan...'], handleChallanSelectChange, true);
+                    challanSelectContainer.appendChild(challanSelectDiv);
+                    challanSelectDropdown = document.getElementById('challanSelect');
+
+                    skuInputText = null;
+                    vendorInputText = null;
+                    formTitle.innerHTML = '<i class="fas fa-minus mr-2"></i>Record Material Input';
+                    outputBtn.classList.add('active');
+                    outputBtn.classList.remove('inactive');
+                    inputBtn.classList.remove('active');
+                    inputBtn.classList.add('inactive');
+
+                    if (uniqueInputVendors.length === 0) {
+                        showMessage('No input records found to select vendors/SKUs from for output.', 'error', 'messageBox');
                     }
                 } else {
-                    console.log("No user found in localStorage. Showing login screen.");
-                    showLogin();
+                    skuInputContainer.innerHTML = `
+                        <label for="sku" class="form-label">
+                            <i class="fas fa-barcode mr-2"></i>SKU
+                        </label>
+                        <input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>
+                    `;
+                    vendorNameInputContainer.innerHTML = `
+                        <label for="vendorName" class="form-label">
+                            <i class="fas fa-store mr-2"></i>Vendor Name
+                        </label>
+                        <input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>
+                    `;
+                    skuInputText = document.getElementById('sku');
+                    vendorInputText = document.getElementById('vendorName');
+                    vendorSelectDropdown = null;
+                    skuSelectDropdown = null;
+                    challanSelectDropdown = null;
+                    formTitle.innerHTML = '<i class="fas fa-plus mr-2"></i>Record New Material Output';
+                    inputBtn.classList.add('active');
+                    inputBtn.classList.remove('inactive');
+                    outputBtn.classList.remove('active');
+                    outputBtn.classList.add('inactive');
+                }
+                dateInput.value = new Date().toISOString().split('T')[0];
+            };
+
+            // Event handler for when the vendor dropdown changes (for Output)
+            const handleVendorSelectChange = () => {
+                const selectedVendor = vendorSelectDropdown.value;
+                const skuOptions = ['Select SKU...'];
+                if (selectedVendor !== 'Select Vendor...') {
+                    const uniqueSkusForVendor = [...new Set(
+                        allRecords
+                            .filter(r => r.type === 'Input' && r.vendorName === selectedVendor)
+                            .map(r => r.sku)
+                    )].sort();
+                    skuOptions.push(...uniqueSkusForVendor);
                 }
 
-            } catch (error) {
-                console.error("Error initializing Firebase Firestore:", error);
-                showMessage('Error initializing application. Please try again.', 'error', 'loginMessage');
-                if (userIdDisplay) userIdDisplay.textContent = 'Error';
-                showLogin();
-            }
-        };
-
-        // Function to display a message to the user
-        const showMessage = (message, type, elementId = 'messageBox') => {
-            const element = document.getElementById(elementId);
-            if (!element) {
-                console.warn(`Message box element '${elementId}' not found. Message: ${message}`);
-                return;
-            }
-            element.textContent = message;
-            element.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'}`;
-            element.classList.remove('hidden');
-            setTimeout(() => {
-                element.classList.add('hidden');
-            }, 5000);
-        };
-
-        // Function to set up login form event listeners
-        const setupLoginListeners = () => {
-             // Handle standard login form submission
-            if (loginForm) {
-                loginForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const username = usernameInput.value;
-                    const password = passwordInput.value;
-    
-                    if (users[username] && users[username].password === password) {
-                        currentUser = { username, ...users[username] };
-                        userId = currentUser.id;
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        console.log("Login successful. currentUser:", currentUser, "userId:", userId);
-                        showDashboard();
-                    } else {
-                        showMessage('Invalid username or password.', 'error', 'loginMessage');
-                    }
+                skuSelectDropdown.innerHTML = '';
+                skuOptions.forEach(optionValue => {
+                    const option = document.createElement('option');
+                    option.value = optionValue;
+                    option.textContent = optionValue;
+                    skuSelectDropdown.appendChild(option);
                 });
-            }
-            
-            // Handle demo login button click
-            if (demoLoginBtn) {
-                demoLoginBtn.addEventListener('click', () => {
-                    const demoUser = users['demo'];
-                    currentUser = { username: 'demo', ...demoUser };
-                    userId = currentUser.id;
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    showDashboard();
-                });
-            }
-        }
+                skuSelectDropdown.value = 'Select SKU...';
 
-        // Function to log the user out
-        const logout = () => {
-            currentUser = null;
-            userId = null;
-            localStorage.removeItem('currentUser');
-            alert('Logged out successfully!'); // Use alert for simple, non-critical confirmation
-            showLogin();
-        };
-
-        // Function to show the login screen
-        const showLogin = () => {
-            if (loginScreen) loginScreen.classList.remove('hidden');
-            if (mainDashboard) mainDashboard.classList.add('hidden');
-            if (loginMessage) loginMessage.classList.add('hidden');
-            // Do NOT call login() here. We attach event listeners once.
-        };
-
-        // Function to show the main dashboard
-        const showDashboard = () => {
-            console.log("Entering showDashboard function. Current user:", currentUser);
-
-            if (loginScreen) loginScreen.classList.add('hidden');
-            if (mainDashboard) mainDashboard.classList.remove('hidden');
-
-            if (userDisplayName) userDisplayName.textContent = currentUser.name;
-            if (userIdDisplay) userIdDisplay.textContent = currentUser.id;
-            if (userAvatar) userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
-
-            if (userId && db) {
-                setupRealtimeListener();
-                addDemoData();
-            } else {
-                console.error("Cannot setup dashboard: userId or db is not ready. Data might not load.");
-                showMessage("Dashboard data could not be loaded. Please re-login.", "error", 'messageBox');
-                logout();
-            }
-        };
-
-        // Function to clear the form fields
-        const clearForm = () => {
-            dateInput.value = new Date().toISOString().split('T')[0];
-            challanNoInput.value = '';
-            colorInput.value = '';
-            qtyInput.value = '';
-            rateInput.value = '';
-            qtyInput.max = '';
-
-            const skuInput = document.getElementById('sku');
-            const vendorInput = document.getElementById('vendorName');
-            const vendorSelect = document.getElementById('vendorSelect');
-            const skuSelect = document.getElementById('skuSelect');
-            const challanSelect = document.getElementById('challanSelect');
-
-            if (skuInput) skuInput.value = '';
-            if (vendorInput) vendorInput.value = '';
-            if (vendorSelect) vendorSelect.value = 'Select Vendor...';
-            if (skuSelect) skuSelect.innerHTML = '<option value="Select SKU...">Select SKU...</option>';
-            if (challanSelect) challanSelect.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
-            challanSelectContainer.style.display = 'none';
-        };
-
-        // Function to update the dashboard statistics cards
-        const updateStatistics = () => {
-            let totalInputQty = 0;
-            let totalOutputQty = 0;
-
-            for (const key in aggregatedStock) {
-                totalInputQty += aggregatedStock[key].inputQty;
-                totalOutputQty += aggregatedStock[key].outputQty;
-            }
-
-            const stockQty = totalInputQty - totalOutputQty;
-
-            totalInputDisplay.textContent = totalInputQty.toLocaleString();
-            totalOutputDisplay.textContent = totalOutputQty.toLocaleString();
-            currentStockDisplay.textContent = stockQty.toLocaleString();
-        };
-
-        // Function to aggregate records for the summary table
-        const calculateAggregatedStock = (records) => {
-            const tempAggregatedStock = {};
-
-            records.forEach(record => {
-                const key = `${record.sku}-${record.color || 'N/A'}-${record.vendorName}`;
-                if (!tempAggregatedStock[key]) {
-                    tempAggregatedStock[key] = {
-                        sku: record.sku,
-                        color: record.color,
-                        vendorName: record.vendorName,
-                        latestRate: 0,
-                        inputQty: 0,
-                        outputQty: 0,
-                        timestamp: null
-                    };
-                }
-
-                if (record.type === 'Input') {
-                    tempAggregatedStock[key].inputQty += record.qty;
-                    // Update rate and timestamp only if it's a newer input record
-                    if (!tempAggregatedStock[key].timestamp || record.timestamp > tempAggregatedStock[key].timestamp) {
-                        tempAggregatedStock[key].latestRate = record.rate;
-                        tempAggregatedStock[key].timestamp = record.timestamp;
-                    }
-                } else if (record.type === 'Output') {
-                    tempAggregatedStock[key].outputQty += record.qty;
-                }
-            });
-
-            aggregatedStock = tempAggregatedStock;
-        };
-
-        // Function to render the aggregated stock table
-        const renderAggregatedRecordsTable = (stockToDisplay) => {
-            aggregatedRecordsTableBody.innerHTML = '';
-
-            if (Object.keys(stockToDisplay).length === 0) {
-                aggregatedRecordsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="text-center py-8 text-gray-400">
-                            <i class="fas fa-inbox text-4xl mb-4 block"></i>
-                            No records found.
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            const sortedStock = Object.values(stockToDisplay).sort((a, b) => {
-                if (a.sku < b.sku) return -1;
-                if (a.sku > b.sku) return 1;
-                if (a.color < b.color) return -1;
-                if (a.color > b.color) return 1;
-                return 0;
-            });
-
-            sortedStock.forEach(item => {
-                const remaining = item.inputQty - item.outputQty;
-                const row = aggregatedRecordsTableBody.insertRow();
-
-                row.innerHTML = `
-                    <td><span style="font-family: monospace; font-size: 0.75rem;">${item.sku}</span></td>
-                    <td>${item.color || 'N/A'}</td>
-                    <td>${item.vendorName}</td>
-                    <td>₹${parseFloat(item.latestRate).toFixed(2)}</td>
-                    <td class="font-semibold text-green-400">${item.inputQty.toLocaleString()}</td>
-                    <td class="font-semibold text-red-400">${item.outputQty.toLocaleString()}</td>
-                    <td class="font-bold ${remaining < 0 ? 'text-red-500' : 'text-blue-400'}">${remaining.toLocaleString()}</td>
-                `;
-            });
-        };
-
-        // Updates the vendor filter dropdown options
-        const updateVendorFilterOptions = (records) => {
-            const uniqueVendors = [...new Set(records.map(r => r.vendorName))].sort();
-            vendorFilter.innerHTML = '<option value="all">All Vendors</option>';
-            uniqueVendors.forEach(vendor => {
-                const option = document.createElement('option');
-                option.value = vendor;
-                option.textContent = vendor;
-                vendorFilter.appendChild(option);
-            });
-            const currentFilter = vendorFilter.value;
-            if (uniqueVendors.includes(currentFilter)) {
-                vendorFilter.value = currentFilter;
-            }
-        };
-
-        // Filters records based on user input (date, vendor, search)
-        const filterRecords = () => {
-            const selectedVendor = vendorFilter.value;
-            const searchTerm = searchInput.value.toLowerCase();
-            const start = startDateInput.value ? new Date(startDateInput.value).setHours(0,0,0,0) : null;
-            const end = endDateInput.value ? new Date(endDateInput.value).setHours(23,59,59,999) : null;
-
-            let filteredRawRecords = allRecords.filter(record => {
-                const recordDate = new Date(record.date).getTime();
-                const matchesDate = (!start || recordDate >= start) && (!end || recordDate <= end);
-                const matchesVendor = (selectedVendor === 'all' || record.vendorName === selectedVendor);
-                const matchesSearch = (
-                    record.challanNo.toLowerCase().includes(searchTerm) ||
-                    record.sku.toLowerCase().includes(searchTerm) ||
-                    record.vendorName.toLowerCase().includes(searchTerm) ||
-                    record.color?.toLowerCase().includes(searchTerm) ||
-                    record.type.toLowerCase().includes(searchTerm) ||
-                    record.date.includes(searchTerm)
-                );
-                return matchesDate && matchesVendor && matchesSearch;
-            });
-
-            calculateAggregatedStock(filteredRawRecords);
-            renderAggregatedRecordsTable(aggregatedStock);
-            renderTransactionTable(filteredRawRecords);
-        };
-
-        // Deletes a record from Firestore
-        const deleteRecord = async (recordId) => {
-            const confirmDelete = confirm('Are you sure you want to delete this record? This action cannot be undone.');
-
-            if (confirmDelete) {
-                try {
-                    if (!db || !userId) {
-                        showMessage('Database not ready or user not logged in.', 'error', 'messageBox');
-                        return;
-                    }
-                    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-                    const appId = firebaseConfig.appId || 'default-app-id';
-                    const recordRef = doc(db, `artifacts/${appId}/users/${userId}/material_records`, recordId);
-                    await deleteDoc(recordRef);
-                    showMessage('Record deleted successfully!', 'success', 'messageBox');
-                } catch (error) {
-                    console.error('Error deleting record:', error);
-                    showMessage('Error deleting record', 'error', 'messageBox');
-                }
-            }
-        };
-
-        // Exports data to a CSV file
-        const exportToCSV = () => {
-            const headers = ['Date', 'Challan No', 'SKU', 'Color', 'Quantity', 'Rate', 'Value', 'Vendor Name', 'Type'];
-            const csvContent = [
-                headers.join(','),
-                ...allRecords.map(record => [
-                    record.date,
-                    record.challanNo,
-                    record.sku,
-                    record.color || '',
-                    record.qty,
-                    record.rate,
-                    (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2),
-                    record.vendorName,
-                    record.type
-                ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
-            ].join('\n');
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `material_transactions_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        };
-
-        // Sets up the real-time Firestore listener
-        const setupRealtimeListener = () => {
-            if (!db || !userId) {
-                console.log("Firestore or User ID not ready for listener setup. Retrying in 500ms.");
-                setTimeout(setupRealtimeListener, 500);
-                return;
-            }
-
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-            const appId = firebaseConfig.appId || 'default-app-id';
-            const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
-            const q = query(recordsCollectionRef, orderBy('timestamp', 'desc'));
-
-            onSnapshot(q, (snapshot) => {
-                allRecords = [];
-                snapshot.forEach((doc) => {
-                    allRecords.push({ id: doc.id, ...doc.data() });
-                });
-                calculateAggregatedStock(allRecords);
-                updateStatistics();
-                updateVendorFilterOptions(allRecords);
-                updateFormFieldsForEntryType();
-                filterRecords();
-            }, (error) => {
-                console.error("Error fetching real-time updates:", error);
-                showMessage('Error fetching records. Please refresh the page.', 'error', 'messageBox');
-            });
-        };
-
-        // Helper function to create a dropdown select element dynamically
-        const createSelectElement = (id, labelText, options, onChangeHandler, isRequired = false) => {
-            const div = document.createElement('div');
-            const label = document.createElement('label');
-            label.htmlFor = id;
-            label.className = 'form-label';
-            label.innerHTML = `<i class="fas fa-${id.includes('vendor') ? 'store' : (id.includes('sku') ? 'barcode' : 'receipt')} mr-2"></i>${labelText}`;
-            div.appendChild(label);
-
-            const select = document.createElement('select');
-            select.id = id;
-            select.className = 'form-input';
-            if (isRequired) select.required = true;
-            select.addEventListener('change', onChangeHandler);
-
-            options.forEach(optionValue => {
-                const option = document.createElement('option');
-                option.value = optionValue;
-                option.textContent = optionValue;
-                select.appendChild(option);
-            });
-            div.appendChild(select);
-            return div;
-        };
-
-        // Updates the form fields based on the selected entry type (Input/Output)
-        const updateFormFieldsForEntryType = () => {
-            clearForm();
-
-            skuInputContainer.innerHTML = '';
-            vendorNameInputContainer.innerHTML = '';
-            challanSelectContainer.style.display = 'none';
-            challanSelectContainer.innerHTML = '';
-
-            if (currentEntryType === 'Output') {
-                const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].sort();
-                const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', ['Select Vendor...', ...uniqueInputVendors], handleVendorSelectChange, true);
-                vendorNameInputContainer.appendChild(vendorSelectDiv);
-                vendorSelectDropdown = document.getElementById('vendorSelect');
-
-                const skuSelectDiv = createSelectElement('skuSelect', 'SKU', ['Select SKU...'], handleSkuSelectChange, true);
-                skuInputContainer.appendChild(skuSelectDiv);
-                skuSelectDropdown = document.getElementById('skuSelect');
-
-                const challanSelectDiv = createSelectElement('challanSelect', 'Challan No', ['Select Challan...'], handleChallanSelectChange, true);
-                challanSelectContainer.appendChild(challanSelectDiv);
-                challanSelectDropdown = document.getElementById('challanSelect');
-
-                skuInputText = null;
-                vendorInputText = null;
-                formTitle.innerHTML = '<i class="fas fa-minus mr-2"></i>Record Material Output';
-                outputBtn.classList.add('active');
-                outputBtn.classList.remove('inactive');
-                inputBtn.classList.remove('active');
-                inputBtn.classList.add('inactive');
-
-                if (uniqueInputVendors.length === 0) {
-                    showMessage('No input records found to select vendors/SKUs from for output.', 'error', 'messageBox');
-                }
-            } else {
-                skuInputContainer.innerHTML = `
-                    <label for="sku" class="form-label">
-                        <i class="fas fa-barcode mr-2"></i>SKU
-                    </label>
-                    <input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>
-                `;
-                vendorNameInputContainer.innerHTML = `
-                    <label for="vendorName" class="form-label">
-                        <i class="fas fa-store mr-2"></i>Vendor Name
-                    </label>
-                    <input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>
-                `;
-                skuInputText = document.getElementById('sku');
-                vendorInputText = document.getElementById('vendorName');
-                vendorSelectDropdown = null;
-                skuSelectDropdown = null;
-                challanSelectDropdown = null;
-                formTitle.innerHTML = '<i class="fas fa-plus mr-2"></i>Record New Material Input';
-                inputBtn.classList.add('active');
-                inputBtn.classList.remove('inactive');
-                outputBtn.classList.remove('active');
-                outputBtn.classList.add('inactive');
-            }
-            dateInput.value = new Date().toISOString().split('T')[0];
-        };
-
-        // Event handler for when the vendor dropdown changes (for Output)
-        const handleVendorSelectChange = () => {
-            const selectedVendor = vendorSelectDropdown.value;
-            const skuOptions = ['Select SKU...'];
-            if (selectedVendor !== 'Select Vendor...') {
-                const uniqueSkusForVendor = [...new Set(
-                    allRecords
-                        .filter(r => r.type === 'Input' && r.vendorName === selectedVendor)
-                        .map(r => r.sku)
-                )].sort();
-                skuOptions.push(...uniqueSkusForVendor);
-            }
-
-            skuSelectDropdown.innerHTML = '';
-            skuOptions.forEach(optionValue => {
-                const option = document.createElement('option');
-                option.value = optionValue;
-                option.textContent = optionValue;
-                skuSelectDropdown.appendChild(option);
-            });
-            skuSelectDropdown.value = 'Select SKU...';
-
-            challanSelectDropdown.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
-            challanSelectContainer.style.display = 'none';
-
-            colorInput.value = '';
-            qtyInput.value = '';
-            rateInput.value = '';
-            qtyInput.max = '';
-            challanNoInput.value = '';
-        };
-
-        // Event handler for when the SKU dropdown changes (for Output)
-        const handleSkuSelectChange = () => {
-            const selectedSku = skuSelectDropdown.value;
-            const selectedVendor = vendorSelectDropdown.value;
-            const challanOptions = ['Select Challan...'];
-
-            if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...') {
-                const uniqueChallansForSku = [...new Set(
-                    allRecords
-                        .filter(r => r.type === 'Input' && r.vendorName === selectedVendor && r.sku === selectedSku)
-                        .map(r => r.challanNo)
-                )].sort();
-                challanOptions.push(...uniqueChallansForSku);
-                challanSelectContainer.style.display = 'block';
-            } else {
+                challanSelectDropdown.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
                 challanSelectContainer.style.display = 'none';
-            }
 
-            challanSelectDropdown.innerHTML = '';
-            challanOptions.forEach(optionValue => {
-                const option = document.createElement('option');
-                option.value = optionValue;
-                option.textContent = optionValue;
-                challanSelectDropdown.appendChild(option);
-            });
-            challanSelectDropdown.value = 'Select Challan...';
+                colorInput.value = '';
+                qtyInput.value = '';
+                rateInput.value = '';
+                qtyInput.max = '';
+                challanNoInput.value = '';
+            };
 
-            colorInput.value = '';
-            qtyInput.value = '';
-            rateInput.value = '';
-            qtyInput.max = '';
-            challanNoInput.value = '';
-        };
+            // Event handler for when the SKU dropdown changes (for Output)
+            const handleSkuSelectChange = () => {
+                const selectedSku = skuSelectDropdown.value;
+                const selectedVendor = vendorSelectDropdown.value;
+                const challanOptions = ['Select Challan...'];
 
-        // Event handler for when the Challan dropdown changes (for Output)
-        const handleChallanSelectChange = () => {
-            const selectedSku = skuSelectDropdown.value;
-            const selectedVendor = vendorSelectDropdown.value;
-            const selectedChallan = challanSelectDropdown.value;
+                if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...') {
+                    const uniqueChallansForSku = [...new Set(
+                        allRecords
+                            .filter(r => r.type === 'Input' && r.vendorName === selectedVendor && r.sku === selectedSku)
+                            .map(r => r.challanNo)
+                    )].sort();
+                    challanOptions.push(...uniqueChallansForSku);
+                    challanSelectContainer.style.display = 'block';
+                } else {
+                    challanSelectContainer.style.display = 'none';
+                }
 
-            if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...' && selectedChallan !== 'Select Challan...') {
-                const relevantInputRecords = allRecords.filter(r => r.type === 'Input' && r.sku === selectedSku && r.vendorName === selectedVendor && r.challanNo === selectedChallan);
-                
-                if (relevantInputRecords.length > 0) {
-                    const latestInputRecord = relevantInputRecords.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+                challanSelectDropdown.innerHTML = '';
+                challanOptions.forEach(optionValue => {
+                    const option = document.createElement('option');
+                    option.value = optionValue;
+                    option.textContent = optionValue;
+                    challanSelectDropdown.appendChild(option);
+                });
+                challanSelectDropdown.value = 'Select Challan...';
 
-                    const inputQtyForChallan = relevantInputRecords.reduce((sum, r) => sum + r.qty, 0);
-                    const outputQtyFromThisChallan = allRecords
-                        .filter(r => r.type === 'Output' && r.sku === selectedSku && r.color === latestInputRecord.color && r.challanNo === selectedChallan)
-                        .reduce((sum, r) => sum + r.qty, 0);
+                colorInput.value = '';
+                qtyInput.value = '';
+                rateInput.value = '';
+                qtyInput.max = '';
+                challanNoInput.value = '';
+            };
 
-                    const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
+            // Event handler for when the Challan dropdown changes (for Output)
+            const handleChallanSelectChange = () => {
+                const selectedSku = skuSelectDropdown.value;
+                const selectedVendor = vendorSelectDropdown.value;
+                const selectedChallan = challanSelectDropdown.value;
 
-                    colorInput.value = latestInputRecord.color || '';
-                    rateInput.value = parseFloat(latestInputRecord.rate).toFixed(2);
-                    challanNoInput.value = selectedChallan;
+                if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...' && selectedChallan !== 'Select Challan...') {
+                    const relevantInputRecords = allRecords.filter(r => r.type === 'Input' && r.sku === selectedSku && r.vendorName === selectedVendor && r.challanNo === selectedChallan);
                     
-                    qtyInput.value = availableQty > 0 ? availableQty : 0;
-                    qtyInput.max = availableQty;
-                    qtyInput.min = 1;
-                    showMessage(`Available stock for this challan: ${availableQty}`, 'success', 'messageBox');
+                    if (relevantInputRecords.length > 0) {
+                        const latestInputRecord = relevantInputRecords.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+
+                        const inputQtyForChallan = relevantInputRecords.reduce((sum, r) => sum + r.qty, 0);
+                        const outputQtyFromThisChallan = allRecords
+                            .filter(r => r.type === 'Output' && r.sku === selectedSku && r.color === latestInputRecord.color && r.challanNo === selectedChallan)
+                            .reduce((sum, r) => sum + r.qty, 0);
+
+                        const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
+
+                        colorInput.value = latestInputRecord.color || '';
+                        rateInput.value = parseFloat(latestInputRecord.rate).toFixed(2);
+                        challanNoInput.value = selectedChallan;
+                        
+                        qtyInput.value = availableQty > 0 ? availableQty : 0;
+                        qtyInput.max = availableQty;
+                        qtyInput.min = 1;
+                        showMessage(`Available stock for this challan: ${availableQty}`, 'success', 'messageBox');
+                    } else {
+                        colorInput.value = '';
+                        qtyInput.value = '';
+                        rateInput.value = '';
+                        qtyInput.max = '';
+                        challanNoInput.value = '';
+                        showMessage('No matching input record found for this Challan.', 'error', 'messageBox');
+                    }
                 } else {
                     colorInput.value = '';
                     qtyInput.value = '';
                     rateInput.value = '';
                     qtyInput.max = '';
                     challanNoInput.value = '';
-                    showMessage('No matching input record found for this Challan.', 'error', 'messageBox');
                 }
-            } else {
-                colorInput.value = '';
-                qtyInput.value = '';
-                rateInput.value = '';
-                qtyInput.max = '';
-                challanNoInput.value = '';
-            }
-        };
+            };
 
-        // Event listeners for the input/output toggle buttons
-        inputBtn.addEventListener('click', () => {
-            currentEntryType = 'Input';
-            updateFormFieldsForEntryType();
-        });
-
-        outputBtn.addEventListener('click', () => {
-            currentEntryType = 'Output';
-            updateFormFieldsForEntryType();
-        });
-
-        // Event listener for the material form submission
-        materialForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            console.log("Form submit attempt. currentUser:", currentUser, "userId:", userId);
-
-            if (!db || !userId) {
-                showMessage('Database is not initialized or user ID is missing. Please refresh and try again.', 'error', 'messageBox');
-                console.error("Attempted to add record but db or userId is missing. db:", db, "userId:", userId);
-                return;
-            }
-
-            let record = {};
-            record.date = dateInput.value;
-            record.challanNo = challanNoInput.value.trim();
-            record.color = colorInput.value.trim();
-            record.qty = parseInt(qtyInput.value);
-            record.rate = parseFloat(rateInput.value);
-            record.timestamp = new Date().toISOString();
-
-            if (currentEntryType === 'Input') {
-                record.type = 'Input';
-
-                const skuInput = document.getElementById('sku');
-                const vendorInput = document.getElementById('vendorName');
-
-                if (!skuInput || !vendorInput) {
-                    showMessage('SKU or Vendor Name input field not found. Please try switching tabs.', 'error', 'messageBox');
-                    console.error("Input fields (SKU or Vendor) are null during form submission.");
-                    return;
-                }
-                record.sku = skuInput.value.trim();
-                record.vendorName = vendorInput.value.trim();
-            } else {
-                record.type = 'Output';
-
-                const skuSelect = document.getElementById('skuSelect');
-                const vendorSelect = document.getElementById('vendorSelect');
-                const challanSelect = document.getElementById('challanSelect');
-
-                if (!skuSelect || !vendorSelect || !challanSelect) {
-                    showMessage('SKU, Vendor, or Challan dropdown not found. Please try switching tabs.', 'error', 'messageBox');
-                    console.error("Output dropdowns (SKU, Vendor, or Challan) are null during form submission.");
-                    return;
-                }
-
-                record.sku = skuSelect.value;
-                record.vendorName = vendorSelect.value;
-                record.challanNo = challanSelect.value;
-                
-                // Get the rate and color from the selected input record
-                const selectedInputRecord = allRecords.find(r => r.type === 'Input' && r.challanNo === record.challanNo && r.sku === record.sku && r.vendorName === record.vendorName);
-                if (selectedInputRecord) {
-                    record.rate = selectedInputRecord.rate;
-                    record.color = selectedInputRecord.color;
-                } else {
-                    showMessage('Cannot find a matching input record to determine rate and color.', 'error', 'messageBox');
-                    return;
-                }
-            }
-
-            if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName ||
-                record.sku === 'Select SKU...' || record.vendorName === 'Select Vendor...' || (currentEntryType === 'Output' && record.challanNo === 'Select Challan...')) {
-                showMessage('Please fill in all required fields and make valid selections.', 'error', 'messageBox');
-                return;
-            }
-            if (record.qty <= 0 || record.rate < 0) {
-                showMessage('Quantity must be positive and Rate cannot be negative.', 'error', 'messageBox');
-                return;
-            }
-
-            if (currentEntryType === 'Output') {
-                const selectedChallan = challanSelect.value;
-                const availableQty = parseFloat(qtyInput.max);
-
-                if (record.qty > availableQty) {
-                    showMessage(`Output quantity (${record.qty}) exceeds available stock (${availableQty}) from Challan ${selectedChallan} for ${record.sku} (${record.color}).`, 'error', 'messageBox');
-                    return;
-                }
-            }
-
-            try {
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-                const appId = firebaseConfig.appId || 'default-app-id';
-                const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
-                await addDoc(recordsCollectionRef, record);
-                showMessage('Record added successfully!', 'success', 'messageBox');
-                clearForm();
+            // Event listeners for the input/output toggle buttons
+            inputBtn.addEventListener('click', () => {
+                currentEntryType = 'Input';
                 updateFormFieldsForEntryType();
-            } catch (error) {
-                console.error('Error adding record:', error);
-                showMessage('Error adding record. Please try again.', 'error', 'messageBox');
-            }
-        });
+            });
 
-        // Event listeners for filtering and export functions
-        vendorFilter.addEventListener('change', filterRecords);
-        searchInput.addEventListener('input', filterRecords);
-        startDateInput.addEventListener('change', filterRecords);
-        endDateInput.addEventListener('change', filterRecords);
-        exportBtn.addEventListener('click', exportToCSV);
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', logout);
-        }
+            outputBtn.addEventListener('click', () => {
+                currentEntryType = 'Output';
+                updateFormFieldsForEntryType();
+            });
 
-        // Expose the deleteRecord function to the global scope for the table action buttons
-        window.deleteRecord = deleteRecord;
+            // Event listener for the material form submission
+            materialForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-        // Main entry point for the application, runs once the DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeFirebase();
-            setupLoginListeners(); // This is the crucial fix: calling the function to attach listeners.
-        });
+                console.log("Form submit attempt. currentUser:", currentUser, "userId:", userId);
 
-        // Function to add demo data if the collection is empty
-        const addDemoData = async () => {
-            if (currentUser && db && userId) {
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-                const appId = firebaseConfig.appId || 'default-app-id';
-                const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
-                try {
-                    const existingDocs = await getDocs(query(recordsCollectionRef));
-                    if (existingDocs.empty) {
-                        const sampleRecords = [
-                            { date: '2025-07-01', challanNo: 'IN-001', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 100, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: '2025-07-01T10:00:00Z' },
-                            { date: '2025-07-05', challanNo: 'IN-002', sku: 'BW6085BLUE_DRS-L', color: 'Blue', qty: 50, rate: 1200.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: '2025-07-05T11:00:00Z' },
-                            { date: '2025-07-10', challanNo: 'IN-003', sku: 'BW8034GREY_COD-M', color: 'Grey', qty: 75, rate: 800.00, vendorName: 'Amazon - Fashion', type: 'Input', timestamp: '2025-07-10T12:00:00Z' },
-                            { date: '2025-07-15', challanNo: 'OUT-001', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 20, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Output', timestamp: '2025-07-15T13:00:00Z' },
-                            { date: '2025-07-20', challanNo: 'IN-004', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 30, rate: 1050.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: '2025-07-20T14:00:00Z' },
-                            { date: '2025-07-25', challanNo: 'OUT-002', sku: 'BW8034GREY_COD-M', color: 'Grey', qty: 10, rate: 800.00, vendorName: 'Amazon - Fashion', type: 'Output', timestamp: '2025-07-25T15:00:00Z' },
-                            { date: '2025-07-25', challanNo: 'OUT-003', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 10, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Output', timestamp: '2025-07-25T16:00:00Z' },
-                            { date: '2025-07-28', challanNo: 'IN-005', sku: 'BW6083BLUE_DRS-L', color: 'Light Blue', qty: 40, rate: 950.00, vendorName: 'Flipkart - Retail', type: 'Input', timestamp: '2025-07-28T09:00:00Z' }
-                        ];
-
-                        for (const record of sampleRecords) {
-                            await addDoc(recordsCollectionRef, record);
-                        }
-                        console.log("Demo data added.");
-                    }
-                } catch (error) {
-                    console.error("Error checking or adding demo data:", error);
+                if (!db || !userId) {
+                    showMessage('Database is not initialized or user ID is missing. Please refresh and try again.', 'error', 'messageBox');
+                    console.error("Attempted to add record but db or userId is missing. db:", db, "userId:", userId);
+                    return;
                 }
+
+                let record = {};
+                record.date = dateInput.value;
+                record.challanNo = challanNoInput.value.trim();
+                record.color = colorInput.value.trim();
+                record.qty = parseInt(qtyInput.value);
+                record.rate = parseFloat(rateInput.value);
+                record.timestamp = new Date().toISOString();
+
+                if (currentEntryType === 'Input') {
+                    record.type = 'Input';
+
+                    const skuInput = document.getElementById('sku');
+                    const vendorInput = document.getElementById('vendorName');
+
+                    if (!skuInput || !vendorInput) {
+                        showMessage('SKU or Vendor Name input field not found. Please try switching tabs.', 'error', 'messageBox');
+                        console.error("Input fields (SKU or Vendor) are null during form submission.");
+                        return;
+                    }
+                    record.sku = skuInput.value.trim();
+                    record.vendorName = vendorInput.value.trim();
+                } else {
+                    record.type = 'Output';
+
+                    const skuSelect = document.getElementById('skuSelect');
+                    const vendorSelect = document.getElementById('vendorSelect');
+                    const challanSelect = document.getElementById('challanSelect');
+
+                    if (!skuSelect || !vendorSelect || !challanSelect) {
+                        showMessage('SKU, Vendor, or Challan dropdown not found. Please try switching tabs.', 'error', 'messageBox');
+                        console.error("Output dropdowns (SKU, Vendor, or Challan) are null during form submission.");
+                        return;
+                    }
+
+                    record.sku = skuSelect.value;
+                    record.vendorName = vendorSelect.value;
+                    record.challanNo = challanSelect.value;
+                    
+                    // Get the rate and color from the selected input record
+                    const selectedInputRecord = allRecords.find(r => r.type === 'Input' && r.challanNo === record.challanNo && r.sku === record.sku && r.vendorName === record.vendorName);
+                    if (selectedInputRecord) {
+                        record.rate = selectedInputRecord.rate;
+                        record.color = selectedInputRecord.color;
+                    } else {
+                        showMessage('Cannot find a matching input record to determine rate and color.', 'error', 'messageBox');
+                        return;
+                    }
+                }
+
+                if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName ||
+                    record.sku === 'Select SKU...' || record.vendorName === 'Select Vendor...' || (currentEntryType === 'Output' && record.challanNo === 'Select Challan...')) {
+                    showMessage('Please fill in all required fields and make valid selections.', 'error', 'messageBox');
+                    return;
+                }
+                if (record.qty <= 0 || record.rate < 0) {
+                    showMessage('Quantity must be positive and Rate cannot be negative.', 'error', 'messageBox');
+                    return;
+                }
+
+                if (currentEntryType === 'Output') {
+                    const selectedChallan = challanSelect.value;
+                    const availableQty = parseFloat(qtyInput.max);
+
+                    if (record.qty > availableQty) {
+                        showMessage(`Output quantity (${record.qty}) exceeds available stock (${availableQty}) from Challan ${selectedChallan} for ${record.sku} (${record.color}).`, 'error', 'messageBox');
+                        return;
+                    }
+                }
+
+                try {
+                    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+                    const appId = firebaseConfig.appId || 'default-app-id';
+                    const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
+                    await addDoc(recordsCollectionRef, record);
+                    showMessage('Record added successfully!', 'success', 'messageBox');
+                    clearForm();
+                    updateFormFieldsForEntryType();
+                } catch (error) {
+                    console.error('Error adding record:', error);
+                    showMessage('Error adding record. Please try again.', 'error', 'messageBox');
+                }
+            });
+
+            // Event listeners for filtering and export functions
+            vendorFilter.addEventListener('change', filterRecords);
+            searchInput.addEventListener('input', filterRecords);
+            startDateInput.addEventListener('change', filterRecords);
+            endDateInput.addEventListener('change', filterRecords);
+            exportBtn.addEventListener('click', exportToCSV);
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', logout);
             }
-        };
-    </script>
-</body>
-</html>
+
+            // Expose the deleteRecord function to the global scope for the table action buttons
+            window.deleteRecord = deleteRecord;
+
+            // Main entry point for the application, runs once the DOM is ready
+            document.addEventListener('DOMContentLoaded', () => {
+                initializeFirebase();
+                setupLoginListeners(); // This is the crucial fix: calling the function to attach listeners.
+            });
+
+            // Function to add demo data if the collection is empty
+            const addDemoData = async () => {
+                if (currentUser && db && userId) {
+                    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+                    const appId = firebaseConfig.appId || 'default-app-id';
+                    const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
+                    try {
+                        const existingDocs = await getDocs(query(recordsCollectionRef));
+                        if (existingDocs.empty) {
+                            const sampleRecords = [
+                                { date: '2025-07-01', challanNo: 'IN-001', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 100, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: '2025-07-01T10:00:00Z' },
+                                { date: '2025-07-05', challanNo: 'IN-002', sku: 'BW6085BLUE_DRS-L', color: 'Blue', qty: 50, rate: 1200.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: '2025-07-05T11:00:00Z' },
+                                { date: '2025-07-10', challanNo: 'IN-003', sku: 'BW8034GREY_COD-M', color: 'Grey', qty: 75, rate: 800.00, vendorName: 'Amazon - Fashion', type: 'Input', timestamp: '2025-07-10T12:00:00Z' },
+                                { date: '2025-07-15', challanNo: 'OUT-001', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 20, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Output', timestamp: '2025-07-15T13:00:00Z' },
+                                { date: '2025-07-20', challanNo: 'IN-004', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 30, rate: 1050.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: '2025-07-20T14:00:00Z' },
+                                { date: '2025-07-25', challanNo: 'OUT-002', sku: 'BW8034GREY_COD-M', color: 'Grey', qty: 10, rate: 800.00, vendorName: 'Amazon - Fashion', type: 'Output', timestamp: '2025-07-25T15:00:00Z' },
+                                { date: '2025-07-25', challanNo: 'OUT-003', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 10, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Output', timestamp: '2025-07-25T16:00:00Z' },
+                                { date: '2025-07-28', challanNo: 'IN-005', sku: 'BW6083BLUE_DRS-L', color: 'Light Blue', qty: 40, rate: 950.00, vendorName: 'Flipkart - Retail', type: 'Input', timestamp: '2025-07-28T09:00:00Z' }
+                            ];
+
+                            for (const record of sampleRecords) {
+                                await addDoc(recordsCollectionRef, record);
+                            }
+                            console.log("Demo data added.");
+                        }
+                    } catch (error) {
+                        console.error("Error checking or adding demo data:", error);
+                    }
+                }
+            };
+        </script>
+    </body>
+    </html>
