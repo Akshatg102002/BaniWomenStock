@@ -144,9 +144,13 @@
                     </button>
                 </div>
 
-                <!-- Master SKU Status -->
+                <!-- Master SKU File Upload -->
                 <div class="flex flex-col items-center justify-center mb-8">
-                    <p id="fileStatus" class="text-xs mt-2 text-gray-400">Loading master SKU list...</p>
+                    <label class="form-label text-center">
+                        <i class="fas fa-upload mr-2"></i>Upload Master SKUs (CSV)
+                    </label>
+                    <input type="file" id="masterSkuFile" accept=".csv" class="file-input">
+                    <p id="fileStatus" class="text-xs mt-2 text-gray-400">No file selected.</p>
                 </div>
 
                 <!-- Material Entry Form -->
@@ -274,7 +278,7 @@
                 </div>
 
                 <!-- Transaction Log Section -->
-                <!-- <h2 class="text-3xl font-bold text-white mb-6 text-center">
+                <h2 class="text-3xl font-bold text-white mb-6 text-center">
                     <i class="fas fa-history mr-3"></i>Transaction Log
                 </h2>
                 <div class="overflow-x-auto">
@@ -301,7 +305,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
@@ -326,7 +330,7 @@
         let currentUser = null;
         let allRecords = [];
         let aggregatedStock = {};
-        let masterSKUs = []; // Array to hold data from the master SKU list
+        let masterSKUs = []; // New array to hold data from the CSV file
 
         // Default to 'Input' tab on load
         let currentEntryType = 'Input';
@@ -343,6 +347,7 @@
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
         const loginMessage = document.getElementById('loginMessage');
+        const masterSkuFile = document.getElementById('masterSkuFile');
         const fileStatus = document.getElementById('fileStatus');
 
         const inputBtn = document.getElementById('inputBtn');
@@ -356,19 +361,16 @@
         const searchInput = document.getElementById('searchInput');
         const exportBtn = document.getElementById('exportBtn');
 
-        const startDateInput = document.getElementById('startDate');
-        const endDateInput = document.getElementById('endDate');
-
         let dateInput = document.getElementById('date');
         let challanNoInput = document.getElementById('challanNo');
         let colorInput = document.getElementById('color');
         let qtyInput = document.getElementById('qty');
         let rateInput = document.getElementById('rate');
 
-        const skuInputContainer = document.getElementById('skuInputContainer');
-        const vendorNameInputContainer = document.getElementById('vendorNameInputContainer');
-        const challanSelectContainer = document.getElementById('challanSelectContainer');
-        const skuDataList = document.getElementById('sku-datalist');
+        let skuInputContainer = document.getElementById('skuInputContainer');
+        let vendorNameInputContainer = document.getElementById('vendorNameInputContainer');
+        let challanSelectContainer = document.getElementById('challanSelectContainer');
+        let skuDataList = document.getElementById('sku-datalist');
 
         let skuInputText = null;
         let vendorInputText = null;
@@ -487,7 +489,6 @@
             if (loginScreen) loginScreen.classList.remove('hidden');
             if (mainDashboard) mainDashboard.classList.add('hidden');
             if (loginMessage) loginMessage.classList.add('hidden');
-            // Do NOT call login() here. We attach event listeners once.
         };
 
         // Function to show the main dashboard
@@ -504,7 +505,7 @@
             if (userId && db) {
                 setupRealtimeListener();
                 addDemoData();
-                loadMasterSKUsFromRoot(); // Call to load SKUs automatically
+                updateFileStatus(); // Update the status message for the SKU list
             } else {
                 console.error("Cannot setup dashboard: userId or db is not ready. Data might not load.");
                 showMessage("Dashboard data could not be loaded. Please re-login.", "error", 'messageBox');
@@ -515,11 +516,11 @@
         // Function to clear the form fields
         const clearForm = () => {
             dateInput.value = new Date().toISOString().split('T')[0];
-            challanNoInput.value = '';
-            colorInput.value = '';
-            qtyInput.value = '';
-            rateInput.value = '';
-            qtyInput.max = '';
+            if (challanNoInput) challanNoInput.value = '';
+            if (colorInput) colorInput.value = '';
+            if (qtyInput) qtyInput.value = '';
+            if (rateInput) rateInput.value = '';
+            if (qtyInput) qtyInput.max = '';
 
             const skuInput = document.getElementById('sku');
             const vendorInput = document.getElementById('vendorName');
@@ -532,7 +533,6 @@
             if (vendorSelect) vendorSelect.value = 'Select Vendor...';
             if (skuSelect) skuSelect.innerHTML = '<option value="Select SKU...">Select SKU...</option>';
             if (challanSelect) challanSelect.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
-            challanSelectContainer.style.display = 'none';
         };
 
         // Function to update the dashboard statistics cards
@@ -691,6 +691,8 @@
         const filterRecords = () => {
             const selectedVendor = vendorFilter.value;
             const searchTerm = searchInput.value.toLowerCase();
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
             const start = startDateInput.value ? new Date(startDateInput.value).setHours(0,0,0,0) : null;
             const end = endDateInput.value ? new Date(endDateInput.value).setHours(23,59,59,999) : null;
 
@@ -819,25 +821,73 @@
         // Updates the form fields based on the selected entry type (Input/Output)
         const updateFormFieldsForEntryType = () => {
             clearForm();
-        
-            skuInputContainer.innerHTML = '';
-            vendorNameInputContainer.innerHTML = '';
-            challanSelectContainer.style.display = 'none';
-            challanSelectContainer.innerHTML = '';
+            
+            // Get a reference to the form and its container
+            const formGrid = document.getElementById('materialForm');
+            formGrid.innerHTML = '';
 
             if (currentEntryType === 'Output') {
                 const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].sort();
                 const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', ['Select Vendor...', ...uniqueInputVendors], handleVendorSelectChange, true);
-                vendorNameInputContainer.appendChild(vendorSelectDiv);
-                vendorSelectDropdown = document.getElementById('vendorSelect');
 
                 const skuSelectDiv = createSelectElement('skuSelect', 'SKU', ['Select SKU...'], handleSkuSelectChange, true);
-                skuInputContainer.appendChild(skuSelectDiv);
-                skuSelectDropdown = document.getElementById('skuSelect');
 
                 const challanSelectDiv = createSelectElement('challanSelect', 'Challan No', ['Select Challan...'], handleChallanSelectChange, true);
+                
+                // Construct the HTML for the form fields in the desired order
+                formGrid.innerHTML = `
+                    <div id="vendorNameInputContainer"></div>
+                    <div id="skuInputContainer"></div>
+                    <div id="challanSelectContainer"></div>
+                    <div>
+                        <label for="date" class="form-label">
+                            <i class="fas fa-calendar mr-2"></i>Date
+                        </label>
+                        <input type="date" id="date" class="form-input" required>
+                    </div>
+                    <div>
+                        <label for="color" class="form-label">
+                            <i class="fas fa-palette mr-2"></i>Color
+                        </label>
+                        <input type="text" id="color" class="form-input" placeholder="e.g., Blue" readonly>
+                    </div>
+                    <div>
+                        <label for="qty" class="form-label">
+                            <i class="fas fa-sort-numeric-up mr-2"></i>Quantity
+                        </label>
+                        <input type="number" id="qty" class="form-input" min="1" required>
+                    </div>
+                    <div>
+                        <label for="rate" class="form-label">
+                            <i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)
+                        </label>
+                        <input type="number" id="rate" class="form-input" step="0.01" min="0" readonly>
+                    </div>
+                    <div class="lg:col-span-3 flex justify-center mt-6">
+                        <button type="submit" class="btn btn-primary text-lg px-8 py-4">
+                            <i class="fas fa-save mr-2"></i>Add Record
+                        </button>
+                    </div>
+                    <div id="messageBox" class="message-box hidden"></div>
+                `;
+
+                // Re-assign form elements after re-building the form
+                vendorNameInputContainer = document.getElementById('vendorNameInputContainer');
+                skuInputContainer = document.getElementById('skuInputContainer');
+                challanSelectContainer = document.getElementById('challanSelectContainer');
+
+                vendorNameInputContainer.appendChild(vendorSelectDiv);
+                skuInputContainer.appendChild(skuSelectDiv);
                 challanSelectContainer.appendChild(challanSelectDiv);
+                
+                vendorSelectDropdown = document.getElementById('vendorSelect');
+                skuSelectDropdown = document.getElementById('skuSelect');
                 challanSelectDropdown = document.getElementById('challanSelect');
+                dateInput = document.getElementById('date');
+                // challanNoInput is not used in output, it's replaced by challanSelectDropdown
+                colorInput = document.getElementById('color');
+                qtyInput = document.getElementById('qty');
+                rateInput = document.getElementById('rate');
 
                 skuInputText = null;
                 vendorInputText = null;
@@ -851,25 +901,69 @@
                     showMessage('No input records found to select vendors/SKUs from for output.', 'error', 'messageBox');
                 }
             } else { // Current Entry Type is 'Input'
-                const skuInputHTML = `
-                    <label for="sku" class="form-label">
-                        <i class="fas fa-barcode mr-2"></i>SKU
-                    </label>
-                    <input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" list="sku-datalist" required>
-                    <datalist id="sku-datalist"></datalist>
+                 formGrid.innerHTML = `
+                    <div>
+                        <label for="date" class="form-label">
+                            <i class="fas fa-calendar mr-2"></i>Date
+                        </label>
+                        <input type="date" id="date" class="form-input" required>
+                    </div>
+                    <div>
+                        <label for="challanNo" class="form-label">
+                            <i class="fas fa-receipt mr-2"></i>Challan No
+                        </label>
+                        <input type="text" id="challanNo" class="form-input" placeholder="e.g., CHN-2025-001" required>
+                    </div>
+                    <div id="skuInputContainer">
+                        <label for="sku" class="form-label">
+                            <i class="fas fa-barcode mr-2"></i>SKU
+                        </label>
+                        <input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" list="sku-datalist" required>
+                        <datalist id="sku-datalist"></datalist>
+                    </div>
+                    <div>
+                        <label for="color" class="form-label">
+                            <i class="fas fa-palette mr-2"></i>Color
+                        </label>
+                        <input type="text" id="color" class="form-input" placeholder="e.g., Blue">
+                    </div>
+                    <div>
+                        <label for="qty" class="form-label">
+                            <i class="fas fa-sort-numeric-up mr-2"></i>Quantity
+                        </label>
+                        <input type="number" id="qty" class="form-input" min="1" required>
+                    </div>
+                    <div>
+                        <label for="rate" class="form-label">
+                            <i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)
+                        </label>
+                        <input type="number" id="rate" class="form-input" step="0.01" min="0" required>
+                    </div>
+                    <div id="vendorNameInputContainer" class="lg:col-span-3">
+                        <label for="vendorName" class="form-label">
+                            <i class="fas fa-store mr-2"></i>Vendor Name
+                        </label>
+                        <input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>
+                    </div>
+                    <div id="challanSelectContainer" class="lg:col-span-3" style="display: none;">
+                    </div>
+                    <div class="lg:col-span-3 flex justify-center mt-6">
+                        <button type="submit" class="btn btn-primary text-lg px-8 py-4">
+                            <i class="fas fa-save mr-2"></i>Add Record
+                        </button>
+                    </div>
+                    <div id="messageBox" class="message-box hidden"></div>
                 `;
-                skuInputContainer.innerHTML = skuInputHTML;
-
-                const vendorInputHTML = `
-                    <label for="vendorName" class="form-label">
-                        <i class="fas fa-store mr-2"></i>Vendor Name
-                    </label>
-                    <input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>
-                `;
-                vendorNameInputContainer.innerHTML = vendorInputHTML;
-
+                
+                // Re-assign form elements after re-building the form
+                dateInput = document.getElementById('date');
+                challanNoInput = document.getElementById('challanNo');
+                colorInput = document.getElementById('color');
+                qtyInput = document.getElementById('qty');
+                rateInput = document.getElementById('rate');
                 skuInputText = document.getElementById('sku');
                 vendorInputText = document.getElementById('vendorName');
+                
                 vendorSelectDropdown = null;
                 skuSelectDropdown = null;
                 challanSelectDropdown = null;
@@ -929,13 +1023,13 @@
             skuSelectDropdown.value = 'Select SKU...';
 
             challanSelectDropdown.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
-            challanSelectContainer.style.display = 'none';
+            //challanSelectContainer.style.display = 'none'; // Keep visible but empty
 
             colorInput.value = '';
             qtyInput.value = '';
             rateInput.value = '';
             qtyInput.max = '';
-            challanNoInput.value = '';
+            // challanNoInput is not used in output
         };
 
         // Event handler for when the SKU dropdown changes (for Output)
@@ -969,7 +1063,7 @@
             qtyInput.value = '';
             rateInput.value = '';
             qtyInput.max = '';
-            challanNoInput.value = '';
+            // challanNoInput is not used in output
         };
 
         // Event handler for when the Challan dropdown changes (for Output)
@@ -993,7 +1087,6 @@
 
                     colorInput.value = latestInputRecord.color || '';
                     rateInput.value = parseFloat(latestInputRecord.rate).toFixed(2);
-                    challanNoInput.value = selectedChallan;
                     
                     qtyInput.value = availableQty > 0 ? availableQty : 0;
                     qtyInput.max = availableQty;
@@ -1004,7 +1097,6 @@
                     qtyInput.value = '';
                     rateInput.value = '';
                     qtyInput.max = '';
-                    challanNoInput.value = '';
                     showMessage('No matching input record found for this Challan.', 'error', 'messageBox');
                 }
             } else {
@@ -1012,41 +1104,54 @@
                 qtyInput.value = '';
                 rateInput.value = '';
                 qtyInput.max = '';
-                challanNoInput.value = '';
             }
         };
 
-        // Fetches the master SKU list from the root directory
-        const loadMasterSKUsFromRoot = async () => {
-            try {
-                const response = await fetch('/Master_SKUs.csv');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const text = await response.text();
-                const lines = text.split('\n');
-                // Assuming the first line is headers and the first column is the SKU
-                const skus = lines.slice(1).map(line => line.split(',')[0].trim()).filter(sku => sku);
-                masterSKUs = [...new Set(skus)].sort();
-                
-                // Update datalist if the input tab is active
-                if (currentEntryType === 'Input') {
-                    const datalist = document.getElementById('sku-datalist');
-                    if (datalist) {
-                        datalist.innerHTML = masterSKUs.map(sku => `<option value="${sku}">`).join('');
-                    }
-                }
-                fileStatus.textContent = `${masterSKUs.length} SKUs loaded.`;
-                fileStatus.classList.remove('text-gray-400');
+        // Updates the file status message
+        const updateFileStatus = () => {
+            if (masterSKUs.length > 0) {
+                fileStatus.textContent = `Master SKU list loaded.`;
+                fileStatus.classList.remove('text-gray-400', 'text-red-400');
                 fileStatus.classList.add('text-green-400');
-            } catch (error) {
-                console.error('Error fetching master SKU file:', error);
-                fileStatus.textContent = 'Failed to load master SKU list.';
-                fileStatus.classList.remove('text-gray-400');
+            } else {
+                fileStatus.textContent = 'No master SKU list loaded. Please upload a file.';
+                fileStatus.classList.remove('text-gray-400', 'text-green-400');
                 fileStatus.classList.add('text-red-400');
             }
         };
 
+        // Handles local CSV file upload
+        const handleFileUpload = (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                fileStatus.textContent = 'No file selected.';
+                masterSKUs = [];
+                updateFormFieldsForEntryType();
+                return;
+            }
+            fileStatus.textContent = `Reading ${file.name}...`;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const text = event.target.result;
+                const lines = text.split('\n');
+                const skus = lines.slice(1).map(line => line.split(',')[0].trim()).filter(sku => sku);
+                masterSKUs = [...new Set(skus)].sort();
+                updateFormFieldsForEntryType(); // Re-render the form with new datalist options
+                updateFileStatus();
+            };
+            reader.onerror = (error) => {
+                console.error('Error reading file:', error);
+                fileStatus.textContent = 'Error reading file.';
+                showMessage('Error reading file. Please try again.', 'error');
+                masterSKUs = [];
+                updateFileStatus();
+            };
+            reader.readAsText(file);
+        };
+        
+        masterSkuFile.addEventListener('change', handleFileUpload);
+        
         // Event listeners for the input/output toggle buttons
         inputBtn.addEventListener('click', () => {
             currentEntryType = 'Input';
@@ -1080,33 +1185,20 @@
 
             if (currentEntryType === 'Input') {
                 record.type = 'Input';
-
-                const skuInput = document.getElementById('sku');
-                const vendorInput = document.getElementById('vendorName');
-
-                if (!skuInput || !vendorInput) {
-                    showMessage('SKU or Vendor Name input field not found. Please try switching tabs.', 'error', 'messageBox');
-                    console.error("Input fields (SKU or Vendor) are null during form submission.");
-                    return;
-                }
-                record.sku = skuInput.value.trim();
-                record.vendorName = vendorInput.value.trim();
+                record.sku = skuInputText.value.trim();
+                record.vendorName = vendorInputText.value.trim();
             } else {
                 record.type = 'Output';
 
-                const skuSelect = document.getElementById('skuSelect');
-                const vendorSelect = document.getElementById('vendorSelect');
-                const challanSelect = document.getElementById('challanSelect');
-
-                if (!skuSelect || !vendorSelect || !challanSelect) {
-                    showMessage('SKU, Vendor, or Challan dropdown not found. Please try switching tabs.', 'error', 'messageBox');
+                if (!skuSelectDropdown || !vendorSelectDropdown || !challanSelectDropdown) {
+                     showMessage('SKU, Vendor, or Challan dropdown not found. Please try switching tabs.', 'error', 'messageBox');
                     console.error("Output dropdowns (SKU, Vendor, or Challan) are null during form submission.");
                     return;
                 }
 
-                record.sku = skuSelect.value;
-                record.vendorName = vendorSelect.value;
-                record.challanNo = challanSelect.value;
+                record.sku = skuSelectDropdown.value;
+                record.vendorName = vendorSelectDropdown.value;
+                record.challanNo = challanSelectDropdown.value;
                 
                 // Get the rate and color from the selected input record
                 const selectedInputRecord = allRecords.find(r => r.type === 'Input' && r.challanNo === record.challanNo && r.sku === record.sku && r.vendorName === record.vendorName);
@@ -1130,11 +1222,10 @@
             }
 
             if (currentEntryType === 'Output') {
-                const selectedChallan = challanSelect.value;
                 const availableQty = parseFloat(qtyInput.max);
 
                 if (record.qty > availableQty) {
-                    showMessage(`Output quantity (${record.qty}) exceeds available stock (${availableQty}) from Challan ${selectedChallan} for ${record.sku} (${record.color}).`, 'error', 'messageBox');
+                    showMessage(`Output quantity (${record.qty}) exceeds available stock (${availableQty}) from this challan for ${record.sku} (${record.color}).`, 'error', 'messageBox');
                     return;
                 }
             }
@@ -1154,6 +1245,8 @@
         });
 
         // Event listeners for filtering and export functions
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
         vendorFilter.addEventListener('change', filterRecords);
         searchInput.addEventListener('input', filterRecords);
         startDateInput.addEventListener('change', filterRecords);
