@@ -528,13 +528,13 @@
         }
 
         /* Status badge styles */
-        .status-input {
+        .status-output {
             background: rgba(16, 185, 129, 0.2);
             color: #10b981;
             border: 1px solid #10b981;
         }
 
-        .status-output {
+        .status-issue {
             background: rgba(239, 68, 68, 0.2);
             color: #ef4444;
             border: 1px solid #ef4444;
@@ -572,6 +572,14 @@
             border-radius: 1rem;
             padding: 2rem;
             border: 1px solid #333333;
+        }
+        
+        /* Utility for line-clamp */
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
         }
 
         /* Print styles for challan */
@@ -686,10 +694,10 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="stats-card input">
+                <div class="stats-card output">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-400">Total Input</p>
+                            <p class="text-sm font-medium text-gray-400">Total Output</p>
                             <p class="text-2xl font-bold text-green-400" id="totalInput">0</p>
                         </div>
                         <div class="text-green-400 text-3xl">
@@ -698,10 +706,10 @@
                     </div>
                 </div>
 
-                <div class="stats-card output">
+                <div class="stats-card input">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-400">Total Output</p>
+                            <p class="text-sm font-medium text-gray-400">Total Issued</p>
                             <p class="text-2xl font-bold text-red-400" id="totalOutput">0</p>
                         </div>
                         <div class="text-red-400 text-3xl">
@@ -726,16 +734,16 @@
             <div class="glass-morphism rounded-2xl p-8 mb-8 fade-in">
                 <div class="flex justify-center gap-6 mb-8">
                     <button id="inputBtn" class="btn-toggle active">
-                        <i class="fas fa-plus mr-2"></i>Input Material
+                        <i class="fas fa-plus mr-2"></i>Output Material
                     </button>
                     <button id="outputBtn" class="btn-toggle inactive">
-                        <i class="fas fa-minus mr-2"></i>Output Material
+                        <i class="fas fa-minus mr-2"></i>Issue Material
                     </button>
                 </div>
 
                 <div class="form-section">
                     <h2 id="formTitle" class="text-2xl font-bold text-white mb-6 text-center">
-                        <i class="fas fa-edit mr-2"></i>Record Input Material
+                        <i class="fas fa-edit mr-2"></i>Record Output Material
                     </h2>
                     <form id="materialForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div>
@@ -833,8 +841,8 @@
                                 <th scope="col"><i class="fas fa-palette mr-2"></i>Color</th>
                                 <th scope="col"><i class="fas fa-store mr-2"></i>Vendor</th>
                                 <th scope="col"><i class="fas fa-rupee-sign mr-2"></i>Latest Rate</th>
-                                <th scope="col"><i class="fas fa-arrow-down mr-2"></i>Total Input Qty</th>
-                                <th scope="col"><i class="fas fa-arrow-up mr-2"></i>Total Output Qty</th>
+                                <th scope="col"><i class="fas fa-arrow-down mr-2"></i>Total Output Qty</th>
+                                <th scope="col"><i class="fas fa-arrow-up mr-2"></i>Total Issued Qty</th>
                                 <th scope="col"><i class="fas fa-boxes mr-2"></i>Remaining Stock</th>
                             </tr>
                         </thead>
@@ -863,7 +871,7 @@
                                 <th scope="col"><i class="fas fa-rupee-sign mr-2"></i>Rate</th>
                                 <th scope="col"><i class="fas fa-calculator mr-2"></i>Value</th>
                                 <th scope="col"><i class="fas fa-store mr-2"></i>Vendor</th>
-                                <th scope="col"><i class="fas fa-sticky-note mr-2"></i>Remarks</th>
+                                <th scope="col" style="max-width: 150px;"><i class="fas fa-sticky-note mr-2"></i>Remarks</th>
                                 <th scope="col"><i class="fas fa-tag mr-2"></i>Type</th>
                                 <th scope="col"><i class="fas fa-cog mr-2"></i>Actions</th>
                             </tr>
@@ -1069,8 +1077,6 @@
             if (document.getElementById('skuSelect')) document.getElementById('skuSelect').innerHTML = '<option value="Select SKU...">Select SKU...</option>';
             if (document.getElementById('challanSelect')) document.getElementById('challanSelect').innerHTML = '<option value="Select Challan...">Select Challan...</option>';
             challanSelectContainer.style.display = 'none'; // Hide challan dropdown initially
-
-            printChallanBtn.classList.remove('hidden');
         };
 
         const updateStatistics = () => {
@@ -1187,6 +1193,7 @@
             sortedRecords.forEach(record => {
                 const row = transactionTableBody.insertRow();
                 const value = (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2);
+                const typeLabel = record.type === 'Input' ? 'Output' : 'Issue';
 
                 row.innerHTML = `
                     <td>${record.date}</td>
@@ -1197,11 +1204,12 @@
                     <td>₹${parseFloat(record.rate).toFixed(2)}</td>
                     <td class="font-bold">₹${Number(value).toLocaleString()}</td>
                     <td>${record.vendorName}</td>
-                    <td>${record.remarks || ''}</td>
                     <td>
-                        <span class="${record.type === 'Input' ? 'status-input' : 'status-output'} px-3 py-1 rounded-full text-xs font-semibold">
-                            <i class="fas fa-${record.type === 'Input' ? 'arrow-down' : 'arrow-up'} mr-1"></i>
-                            ${record.type}
+                        <div class="line-clamp-1" title="${record.remarks || ''}">${record.remarks || ''}</div>
+                    </td>
+                    <td>
+                        <span class="${record.type === 'Input' ? 'status-output' : 'status-issue'} px-3 py-1 rounded-full text-xs font-semibold">
+                            ${typeLabel}
                         </span>
                     </td>
                     <td class="flex items-center gap-2">
@@ -1327,7 +1335,7 @@
                     (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2),
                     record.vendorName,
                     record.remarks || '',
-                    record.type
+                    record.type === 'Input' ? 'Output' : 'Issue'
                 ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')) // Handle commas and quotes in data
             ].join('\n');
 
@@ -1423,7 +1431,6 @@
                 vendorSelectDropdown = null;
                 skuSelectDropdown = null;
                 challanSelectDropdown = null;
-
             } else { // Output mode
                 // Create vendor dropdown
                 const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].sort();
@@ -1542,7 +1549,7 @@
                     // Calculate remaining stock for this specific challan
                     let inputQtyForChallan = relevantInputRecord.qty;
                     let outputQtyFromThisChallan = allRecords
-                        .filter(r => r.type === 'Output' && r.sku === selectedSku && r.color === relevantInputRecord.color && r.challanNo === selectedChallan)
+                        .filter(r => (r.type === 'Output') && r.sku === selectedSku && r.color === relevantInputRecord.color && r.challanNo === selectedChallan)
                         .reduce((sum, r) => sum + r.qty, 0);
 
                     const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
@@ -1607,7 +1614,7 @@
 
                     <table class="details">
                         <tr>
-                            <td style="width: 50%;"><b>No.</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${recordToPrint.challanNo}</td>
+                            <td style="width: 50%;"><b>Challan No.</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${recordToPrint.challanNo}</td>
                             <td style="width: 50%; text-align: right;"><b>Dated:</b>&nbsp;${dateFormatted}</td>
                         </tr>
                         <tr>
@@ -1677,7 +1684,7 @@
         // Event listeners
         inputBtn.addEventListener('click', () => {
             currentEntryType = 'Input';
-            formTitle.innerHTML = '<i class="fas fa-plus mr-2"></i>Record Input Material';
+            formTitle.innerHTML = '<i class="fas fa-plus mr-2"></i>Record Output Material';
             inputBtn.classList.add('active');
             inputBtn.classList.remove('inactive');
             outputBtn.classList.remove('active');
@@ -1686,8 +1693,8 @@
         });
 
         outputBtn.addEventListener('click', () => {
-            currentEntryType = 'Output';
-            formTitle.innerHTML = '<i class="fas fa-minus mr-2"></i>Record Output Material';
+            currentEntryType = 'Output'; // Keep it as 'Output' in the logic for consistency
+            formTitle.innerHTML = '<i class="fas fa-minus mr-2"></i>Record Issued Material';
             outputBtn.classList.add('active');
             outputBtn.classList.remove('inactive');
             inputBtn.classList.remove('active');
@@ -1713,7 +1720,7 @@
             record.qty = parseInt(qtyInput.value);
             record.rate = parseFloat(rateInput.value);
             record.remarks = remarksInput.value.trim();
-            record.type = currentEntryType;
+            record.type = currentEntryType; // 'Input' or 'Output'
             record.timestamp = new Date().toISOString(); // Add timestamp for ordering
 
             if (currentEntryType === 'Input') {
@@ -1768,7 +1775,7 @@
 
                 let inputQtyForChallan = relevantInputRecord.qty;
                 let outputQtyFromThisChallan = allRecords
-                    .filter(r => r.type === 'Output' && r.sku === record.sku && r.color === record.color && r.challanNo === selectedChallan)
+                    .filter(r => (r.type === 'Output') && r.sku === record.sku && r.color === record.color && r.challanNo === selectedChallan)
                     .reduce((sum, r) => sum + r.qty, 0);
 
                 const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
