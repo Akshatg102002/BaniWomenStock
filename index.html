@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Material Record System - Bani Women</title>
+    <title>Material Record System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="https://baniwomen.com/cdn/shop/files/baniwomen-icon.png" type="image/x-icon">
     <style>
         * {
             box-sizing: border-box;
@@ -635,7 +634,7 @@
                 <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4" style="margin: 0 auto;">
                     <i class="fas fa-boxes text-black text-2xl"></i>
                 </div>
-                <h1 class="text-3xl font-bold text-white mb-2">Material Record System - BW</h1>
+                <h1 class="text-3xl font-bold text-white mb-2">Material Record System</h1>
                 <p class="text-gray-400">Secure inventory management</p>
             </div>
 
@@ -675,7 +674,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <h1 class="text-4xl font-bold mb-2">
-                            <i class="fas fa-warehouse mr-3"></i>Material Record System - BW
+                            <i class="fas fa-warehouse mr-3"></i>Material Record System
                         </h1>
                         <p class="text-gray-300">Advanced inventory management dashboard</p>
                     </div>
@@ -710,7 +709,7 @@
                 <div class="stats-card input">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-400">Total Input</p>
+                            <p class="text-sm font-medium text-gray-400">Total Issued</p>
                             <p class="text-2xl font-bold text-red-400" id="totalOutput">0</p>
                         </div>
                         <div class="text-red-400 text-3xl">
@@ -738,7 +737,7 @@
                         <i class="fas fa-plus mr-2"></i>Output Material
                     </button>
                     <button id="outputBtn" class="btn-toggle inactive">
-                        <i class="fas fa-minus mr-2"></i>Input Material
+                        <i class="fas fa-minus mr-2"></i>Issue Material
                     </button>
                 </div>
 
@@ -840,16 +839,17 @@
                             <tr>
                                 <th scope="col"><i class="fas fa-barcode mr-2"></i>SKU</th>
                                 <th scope="col"><i class="fas fa-palette mr-2"></i>Color</th>
+                                <th scope="col"><i class="fas fa-receipt mr-2"></i>Challan No</th>
                                 <th scope="col"><i class="fas fa-store mr-2"></i>Vendor</th>
                                 <th scope="col"><i class="fas fa-rupee-sign mr-2"></i>Latest Rate</th>
                                 <th scope="col"><i class="fas fa-arrow-down mr-2"></i>Total Output Qty</th>
-                                <th scope="col"><i class="fas fa-arrow-up mr-2"></i>Total Input Qty</th>
+                                <th scope="col"><i class="fas fa-arrow-up mr-2"></i>Total Issued Qty</th>
                                 <th scope="col"><i class="fas fa-boxes mr-2"></i>Remaining Stock</th>
                             </tr>
                         </thead>
                         <tbody id="aggregatedRecordsTableBody">
                             <tr>
-                                <td colspan="7" class="text-center py-8 text-gray-400">
+                                <td colspan="8" class="text-center py-8 text-gray-400">
                                     <i class="fas fa-spinner fa-spin mr-2"></i>Loading records...
                                 </td>
                             </tr>
@@ -1106,6 +1106,7 @@
                     tempAggregatedStock[key] = {
                         sku: record.sku,
                         color: record.color,
+                        challanNo: record.challanNo, // New challanNo field
                         vendorName: record.vendorName, // Will be updated by latest input
                         latestRate: 0, // Will be updated by latest input
                         inputQty: 0,
@@ -1120,6 +1121,7 @@
                     if (!tempAggregatedStock[key].timestamp || new Date(record.timestamp) > new Date(tempAggregatedStock[key].timestamp)) {
                         tempAggregatedStock[key].latestRate = record.rate;
                         tempAggregatedStock[key].vendorName = record.vendorName;
+                        tempAggregatedStock[key].challanNo = record.challanNo; // Update challanNo
                         tempAggregatedStock[key].timestamp = record.timestamp;
                     }
                 } else if (record.type === 'Output') {
@@ -1137,7 +1139,7 @@
             if (Object.keys(stockToDisplay).length === 0) {
                 aggregatedRecordsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="text-center py-8 text-gray-400">
+                        <td colspan="8" class="text-center py-8 text-gray-400">
                             <i class="fas fa-inbox text-4xl mb-4 block"></i>
                             No records found.
                         </td>
@@ -1163,6 +1165,7 @@
                 row.innerHTML = `
                     <td><span style="font-family: monospace; font-size: 0.75rem;">${item.sku}</span></td>
                     <td>${item.color || 'N/A'}</td>
+                    <td>${item.challanNo || 'N/A'}</td>
                     <td>${item.vendorName}</td>
                     <td>₹${parseFloat(item.latestRate).toFixed(2)}</td>
                     <td class="font-semibold text-green-400">${item.inputQty.toLocaleString()}</td>
@@ -1194,7 +1197,7 @@
             sortedRecords.forEach(record => {
                 const row = transactionTableBody.insertRow();
                 const value = (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2);
-                const typeLabel = record.type === 'Input' ? 'Output' : 'Input';
+                const typeLabel = record.type === 'Input' ? 'Output' : 'Issue';
 
                 row.innerHTML = `
                     <td>${record.date}</td>
@@ -1209,7 +1212,7 @@
                         <div class="line-clamp-1" title="${record.remarks || ''}">${record.remarks || ''}</div>
                     </td>
                     <td>
-                        <span class="${record.type === 'Input' ? 'status-output' : 'status-input'} px-3 py-1 rounded-full text-xs font-semibold">
+                        <span class="${record.type === 'Input' ? 'status-output' : 'status-issue'} px-3 py-1 rounded-full text-xs font-semibold">
                             ${typeLabel}
                         </span>
                     </td>
@@ -1336,7 +1339,7 @@
                     (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2),
                     record.vendorName,
                     record.remarks || '',
-                    record.type === 'Input' ? 'Output' : 'Input'
+                    record.type === 'Input' ? 'Output' : 'Issue'
                 ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')) // Handle commas and quotes in data
             ].join('\n');
 
@@ -1615,7 +1618,7 @@
 
                     <table class="details">
                         <tr>
-                            <td style="width: 50%;"><b>Challan No.</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${recordToPrint.challanNo}</td>
+                            <td style="width: 50%;"><b>No.</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${recordToPrint.challanNo}</td>
                             <td style="width: 50%; text-align: right;"><b>Dated:</b>&nbsp;${dateFormatted}</td>
                         </tr>
                         <tr>
@@ -1695,7 +1698,7 @@
 
         outputBtn.addEventListener('click', () => {
             currentEntryType = 'Output'; // Keep it as 'Output' in the logic for consistency
-            formTitle.innerHTML = '<i class="fas fa-minus mr-2"></i>Record Input Material';
+            formTitle.innerHTML = '<i class="fas fa-minus mr-2"></i>Record Issued Material';
             outputBtn.classList.add('active');
             outputBtn.classList.remove('inactive');
             inputBtn.classList.remove('active');
