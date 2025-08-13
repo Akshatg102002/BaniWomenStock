@@ -21,20 +21,11 @@
             padding: 0;
         }
 
-        /* Custom CSS without @apply directives */
         .glass-morphism {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
-        }
-
-        .glass-morphism-light {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
-            color: #000000;
         }
 
         .container {
@@ -52,7 +43,6 @@
         }
 
         .form-input {
-            margin-top: 0.25rem;
             display: block;
             width: 100%;
             padding: 0.75rem 1rem;
@@ -78,8 +68,6 @@
             padding: 0.75rem 1.5rem;
             border-radius: 0.75rem;
             font-weight: 600;
-            color: #000000;
-            background-color: #ffffff;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease-in-out;
@@ -91,10 +79,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
             background-color: #f0f0f0;
-        }
-
-        .btn:active {
-            transform: translateY(0);
         }
 
         .btn-primary {
@@ -231,6 +215,9 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             border-bottom: 2px solid #333333;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         td {
@@ -244,7 +231,7 @@
             background: rgba(255, 255, 255, 0.05);
             transition: background-color 0.2s ease;
         }
-
+        
         .message-box {
             padding: 1rem;
             margin-top: 1rem;
@@ -295,15 +282,6 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        .slide-in {
-            animation: slideIn 0.4s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
         }
 
         .user-profile {
@@ -383,198 +361,13 @@
             display: none !important;
         }
 
-        /* Responsive utilities */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .grid-cols-3 {
-                grid-template-columns: 1fr;
-            }
-
-            .lg\:col-span-3 {
-                grid-column: span 1;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .md\:grid-cols-2 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .md\:grid-cols-3 {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .lg\:grid-cols-3 {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .lg\:col-span-3 {
-                grid-column: span 3;
-            }
-
-            .lg\:flex-row {
-                flex-direction: row;
-            }
-
-            .lg\:items-center {
-                align-items: center;
-            }
-
-            .lg\:w-auto {
-                width: auto;
-            }
-        }
-
-        .grid {
-            display: grid;
-        }
-
-        .grid-cols-1 {
-            grid-template-columns: repeat(1, 1fr);
-        }
-
-        .gap-4 {
-            gap: 1rem;
-        }
-
-        .gap-6 {
-            gap: 1.5rem;
-        }
-
-        .gap-8 {
-            gap: 2rem;
-        }
-
-        .flex {
-            display: flex;
-        }
-
-        .flex-col {
-            flex-direction: column;
-        }
-
-        .items-center {
-            align-items: center;
-        }
-
-        .justify-center {
-            justify-content: center;
-        }
-
-        .justify-between {
-            justify-content: space-between;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
-        .mb-8 { margin-bottom: 2rem; }
-        .mt-4 { margin-top: 1rem; }
-        .mt-6 { margin-top: 1.5rem; }
-
-        .w-full { width: 100%; }
-        .w-16 { width: 4rem; }
-        .h-16 { height: 4rem; }
-
-        .text-xs { font-size: 0.75rem; }
-        .text-sm { font-size: 0.875rem; }
-        .text-lg { font-size: 1.125rem; }
-        .text-xl { font-size: 1.25rem; }
-        .text-2xl { font-size: 1.5rem; }
-        .text-3xl { font-size: 1.875rem; }
-        .text-4xl { font-size: 2.25rem; }
-
-        .font-medium { font-weight: 500; }
-        .font-semibold { font-weight: 600; }
-        .font-bold { font-weight: 700; }
-
-        .rounded-full { border-radius: 9999px; }
-        .rounded-lg { border-radius: 0.5rem; }
-        .rounded-xl { border-radius: 0.75rem; }
-        .rounded-2xl { border-radius: 1rem; }
-
-        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
-        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-        .px-4 { padding-left: 1rem; padding-right: 1rem; }
-        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-        .px-8 { padding-left: 2rem; padding-right: 2rem; }
-
-        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
-
-        .p-6 { padding: 1.5rem; }
-        .p-8 { padding: 2rem; }
-
-        .space-y-6 > * + * { margin-top: 1.5rem; }
-
-        .overflow-x-auto {
-            overflow-x: auto;
-        }
-
-        .min-h-screen {
-            min-height: 100vh;
-        }
-
-        /* Status badge styles */
-        .status-output {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid #10b981;
-        }
-
-        .status-issue {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid #ef4444;
-        }
-
-        .delete-btn {
-            color: #ef4444;
-            transition: color 0.2s ease;
-            cursor: pointer;
-            padding: 0.25rem;
-        }
-
-        .delete-btn:hover {
-            color: #dc2626;
-        }
-        
-        .print-btn {
-            color: #ffffff;
-            background-color: #059669;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            transition: background-color 0.2s ease;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-        
-        .print-btn:hover {
-            background-color: #047857;
-        }
-
-        /* Form styling for light theme elements */
         .form-section {
             background: rgba(26, 26, 26, 0.8);
             border-radius: 1rem;
             padding: 2rem;
             border: 1px solid #333333;
         }
-        
-        /* Utility for line-clamp */
+
         .line-clamp-1 {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -582,7 +375,42 @@
             overflow: hidden;
         }
 
-        /* Print styles for challan */
+        .status-output {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-issue {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .delete-btn, .edit-btn, .print-btn {
+            font-size: 1rem;
+            transition: color 0.2s ease;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .delete-btn { color: #ef4444; }
+        .delete-btn:hover { color: #dc2626; }
+        .edit-btn { color: #3b82f6; }
+        .edit-btn:hover { color: #2563eb; }
+        .print-btn { color: #059669; }
+        .print-btn:hover { color: #047857; }
+
         @media print {
             body > *:not(.print-challan) {
                 display: none;
@@ -615,8 +443,6 @@
 </head>
 <body>
     <script>
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const __firebase_config = JSON.stringify({
             apiKey: "AIzaSyCZV-AReOyDWnmnhIKgDvmpUlO8GdJ6xWg",
             authDomain: "bani-40b68.firebaseapp.com",
@@ -631,39 +457,28 @@
     <div id="loginScreen" class="min-h-screen flex items-center justify-center">
         <div class="login-container glass-morphism rounded-2xl fade-in">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4" style="margin: 0 auto;">
+                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 mx-auto">
                     <i class="fas fa-boxes text-black text-2xl"></i>
                 </div>
                 <h1 class="text-3xl font-bold text-white mb-2">Material Record System</h1>
                 <p class="text-gray-400">Secure inventory management</p>
             </div>
-
             <form id="loginForm" class="space-y-6">
                 <div>
-                    <label for="username" class="form-label">
-                        <i class="fas fa-user mr-2"></i>Username
-                    </label>
+                    <label for="username" class="form-label"><i class="fas fa-user mr-2"></i>Username</label>
                     <input type="text" id="username" class="form-input" placeholder="Enter your username" required>
                 </div>
-
                 <div>
-                    <label for="password" class="form-label">
-                        <i class="fas fa-lock mr-2"></i>Password
-                    </label>
+                    <label for="password" class="form-label"><i class="fas fa-lock mr-2"></i>Password</label>
                     <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
                 </div>
-
-                <button type="submit" class="btn btn-primary w-full">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
-                </button>
-
+                <button type="submit" class="btn btn-primary w-full"><i class="fas fa-sign-in-alt mr-2"></i>Sign In</button>
                 <div class="text-center">
-                    <button type="button" id="demoLoginBtn" class="text-white hover:text-gray-300 font-medium" style="color: #ffffff; background: none; border: none; cursor: pointer;">
+                    <button type="button" id="demoLoginBtn" class="text-white hover:text-gray-300 font-medium" style="background: none; border: none; cursor: pointer;">
                         <i class="fas fa-play mr-1"></i>Try Demo Account
                     </button>
                 </div>
             </form>
-
             <div id="loginMessage" class="message-box hidden"></div>
         </div>
     </div>
@@ -671,11 +486,9 @@
     <div id="mainDashboard" class="hidden min-h-screen">
         <div class="container">
             <div class="dashboard-header rounded-2xl mb-8 fade-in">
-                <div class="flex justify-between items-center">
+                <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
                     <div>
-                        <h1 class="text-4xl font-bold mb-2">
-                            <i class="fas fa-warehouse mr-3"></i>Material Record System
-                        </h1>
+                        <h1 class="text-4xl font-bold mb-2"><i class="fas fa-warehouse mr-3"></i>Material Record System</h1>
                         <p class="text-gray-300">Advanced inventory management dashboard</p>
                     </div>
                     <div class="flex items-center gap-4">
@@ -686,9 +499,7 @@
                                 <div class="text-sm text-gray-300" id="userIdDisplay">Loading...</div>
                             </div>
                         </div>
-                        <button id="logoutBtn" class="btn btn-danger">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                        </button>
+                        <button id="logoutBtn" class="btn btn-danger"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button>
                     </div>
                 </div>
             </div>
@@ -700,101 +511,67 @@
                             <p class="text-sm font-medium text-gray-400">Total Output</p>
                             <p class="text-2xl font-bold text-green-400" id="totalInput">0</p>
                         </div>
-                        <div class="text-green-400 text-3xl">
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
+                        <div class="text-green-400 text-3xl"><i class="fas fa-arrow-down"></i></div>
                     </div>
                 </div>
-
                 <div class="stats-card input">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Total Issued</p>
                             <p class="text-2xl font-bold text-red-400" id="totalOutput">0</p>
                         </div>
-                        <div class="text-red-400 text-3xl">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
+                        <div class="text-red-400 text-3xl"><i class="fas fa-arrow-up"></i></div>
                     </div>
                 </div>
-
                 <div class="stats-card total">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-400">Current Stock</p>
                             <p class="text-2xl font-bold text-blue-400" id="currentStock">0</p>
                         </div>
-                        <div class="text-blue-400 text-3xl">
-                            <i class="fas fa-boxes"></i>
-                        </div>
+                        <div class="text-blue-400 text-3xl"><i class="fas fa-boxes"></i></div>
                     </div>
                 </div>
             </div>
 
             <div class="glass-morphism rounded-2xl p-8 mb-8 fade-in">
                 <div class="flex justify-center gap-6 mb-8">
-                    <button id="inputBtn" class="btn-toggle active">
-                        <i class="fas fa-plus mr-2"></i>Output Material
-                    </button>
-                    <button id="outputBtn" class="btn-toggle inactive">
-                        <i class="fas fa-minus mr-2"></i>Issue Material
-                    </button>
+                    <button id="inputBtn" class="btn-toggle active"><i class="fas fa-plus mr-2"></i>Output Material</button>
+                    <button id="outputBtn" class="btn-toggle inactive"><i class="fas fa-minus mr-2"></i>Issue Material</button>
                 </div>
-
                 <div class="form-section">
-                    <h2 id="formTitle" class="text-2xl font-bold text-white mb-6 text-center">
-                        <i class="fas fa-edit mr-2"></i>Record Output Material
-                    </h2>
+                    <h2 id="formTitle" class="text-2xl font-bold text-white mb-6 text-center"><i class="fas fa-edit mr-2"></i>Record Output Material</h2>
                     <form id="materialForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div>
-                            <label for="date" class="form-label">
-                                <i class="fas fa-calendar mr-2"></i>Date
-                            </label>
+                            <label for="date" class="form-label"><i class="fas fa-calendar mr-2"></i>Date</label>
                             <input type="date" id="date" class="form-input" required>
                         </div>
                         <div>
-                            <label for="challanNo" class="form-label">
-                                <i class="fas fa-receipt mr-2"></i>Challan No
-                            </label>
+                            <label for="challanNo" class="form-label"><i class="fas fa-receipt mr-2"></i>Challan No</label>
                             <input type="text" id="challanNo" class="form-input" placeholder="e.g., CHN-2025-001" required>
                         </div>
-                        <div id="skuInputContainer">
-                            </div>
+                        <div id="skuInputContainer"></div>
                         <div>
-                            <label for="color" class="form-label">
-                                <i class="fas fa-palette mr-2"></i>Color
-                            </label>
+                            <label for="color" class="form-label"><i class="fas fa-palette mr-2"></i>Color</label>
                             <input type="text" id="color" class="form-input" placeholder="e.g., Blue">
                         </div>
                         <div>
-                            <label for="qty" class="form-label">
-                                <i class="fas fa-sort-numeric-up mr-2"></i>Quantity
-                            </label>
+                            <label for="qty" class="form-label"><i class="fas fa-sort-numeric-up mr-2"></i>Quantity</label>
                             <input type="number" id="qty" class="form-input" min="1" required>
                         </div>
                         <div>
-                            <label for="rate" class="form-label">
-                                <i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)
-                            </label>
+                            <label for="rate" class="form-label"><i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)</label>
                             <input type="number" id="rate" class="form-input" step="0.01" min="0" required>
                         </div>
-                        <div id="vendorNameInputContainer" class="lg:col-span-3">
-                            </div>
+                        <div id="vendorNameInputContainer" class="lg:col-span-3"></div>
                         <div>
-                            <label for="remarks" class="form-label">
-                                <i class="fas fa-sticky-note mr-2"></i>Remarks
-                            </label>
+                            <label for="remarks" class="form-label"><i class="fas fa-sticky-note mr-2"></i>Remarks</label>
                             <textarea id="remarks" class="form-input" placeholder="e.g., Damaged item, Urgent order, etc." rows="2"></textarea>
                         </div>
-                        <div id="challanSelectContainer" class="lg:col-span-3" style="display: none;">
-                            </div>
+                        <div id="challanSelectContainer" class="lg:col-span-3" style="display: none;"></div>
                         <div class="lg:col-span-3 flex justify-center flex-col md:flex-row gap-4 mt-6">
-                            <button type="submit" class="btn btn-primary text-lg px-8 py-4">
-                                <i class="fas fa-save mr-2"></i>Add Record
-                            </button>
-                            <button type="button" id="printChallanBtn" class="btn btn-primary text-lg px-8 py-4">
-                                <i class="fas fa-print mr-2"></i>Print Challan
-                            </button>
+                            <button type="submit" class="btn btn-primary text-lg px-8 py-4"><i class="fas fa-save mr-2"></i>Add Record</button>
+                            <button type="button" id="printChallanBtn" class="btn btn-primary text-lg px-8 py-4"><i class="fas fa-print mr-2"></i>Print Challan</button>
                         </div>
                     </form>
                     <div id="messageBox" class="message-box hidden"></div>
@@ -803,9 +580,7 @@
 
             <div class="glass-morphism rounded-2xl p-8 fade-in">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                    <h2 class="text-3xl font-bold text-white">
-                        <i class="fas fa-table mr-3"></i>Stock
-                    </h2>
+                    <h2 class="text-3xl font-bold text-white"><i class="fas fa-table mr-3"></i>Stock</h2>
                     <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                         <div class="flex flex-col sm:flex-row gap-2">
                             <div>
@@ -817,24 +592,16 @@
                                 <input type="date" id="endDate" class="form-input w-full sm:w-auto">
                             </div>
                         </div>
-
-                        <select id="vendorFilter" class="form-input w-full sm:w-auto">
-                            <option value="all">All Vendors</option>
-                        </select>
-
+                        <select id="vendorFilter" class="form-input w-full sm:w-auto"><option value="all">All Vendors</option></select>
                         <div class="search-box w-full sm:w-auto">
                             <input type="text" id="searchInput" class="search-input" placeholder="Search...">
                             <i class="fas fa-search search-icon"></i>
                         </div>
-
-                        <button id="exportBtn" class="export-btn w-full sm:w-auto">
-                            <i class="fas fa-download"></i>Export CSV
-                        </button>
+                        <button id="exportBtn" class="export-btn w-full sm:w-auto"><i class="fas fa-download"></i>Export CSV</button>
                     </div>
                 </div>
-
-                <div class="overflow-x-auto mb-12">
-                    <table id="aggregatedRecordsTable">
+                <div class="overflow-x-auto mb-12 h-[300px] overflow-y-auto rounded-lg shadow-lg">
+                    <table id="aggregatedRecordsTable" class="w-full">
                         <thead>
                             <tr>
                                 <th scope="col"><i class="fas fa-barcode mr-2"></i>SKU</th>
@@ -849,19 +616,15 @@
                         </thead>
                         <tbody id="aggregatedRecordsTableBody">
                             <tr>
-                                <td colspan="8" class="text-center py-8 text-gray-400">
-                                    <i class="fas fa-spinner fa-spin mr-2"></i>Loading records...
-                                </td>
+                                <td colspan="8" class="text-center py-8 text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading records...</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <h2 class="text-3xl font-bold text-white mb-6 text-center">
-                    <i class="fas fa-history mr-3"></i>Transactions
-                </h2>
-                <div class="overflow-x-auto">
-                    <table id="transactionTable">
+                <h2 class="text-3xl font-bold text-white mb-6 text-center"><i class="fas fa-history mr-3"></i>Transactions</h2>
+                <div class="overflow-x-auto h-[400px] overflow-y-auto rounded-lg shadow-lg">
+                    <table id="transactionTable" class="w-full">
                         <thead>
                             <tr>
                                 <th scope="col"><i class="fas fa-calendar mr-2"></i>Date</th>
@@ -879,9 +642,7 @@
                         </thead>
                         <tbody id="transactionTableBody">
                             <tr>
-                                <td colspan="11" class="text-center py-8 text-gray-400">
-                                    <i class="fas fa-spinner fa-spin mr-2"></i>Loading transactions...
-                                </td>
+                                <td colspan="11" class="text-center py-8 text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading transactions...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -890,30 +651,75 @@
         </div>
     </div>
 
-    <script type="module">
-        // Firebase imports (only Firestore related)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, onSnapshot, orderBy, serverTimestamp, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
+        <div class="glass-morphism rounded-2xl p-8 w-11/12 max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold"><i class="fas fa-edit mr-2"></i>Edit Record</h2>
+                <button id="closeEditModalBtn" class="text-white text-2xl hover:text-gray-400">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <input type="hidden" id="editRecordId">
+                <div>
+                    <label for="editDate" class="form-label"><i class="fas fa-calendar mr-2"></i>Date</label>
+                    <input type="date" id="editDate" class="form-input" required>
+                </div>
+                <div>
+                    <label for="editChallanNo" class="form-label"><i class="fas fa-receipt mr-2"></i>Challan No</label>
+                    <input type="text" id="editChallanNo" class="form-input" required>
+                </div>
+                <div>
+                    <label for="editSku" class="form-label"><i class="fas fa-barcode mr-2"></i>SKU</label>
+                    <input type="text" id="editSku" class="form-input" required>
+                </div>
+                <div>
+                    <label for="editColor" class="form-label"><i class="fas fa-palette mr-2"></i>Color</label>
+                    <input type="text" id="editColor" class="form-input">
+                </div>
+                <div>
+                    <label for="editQty" class="form-label"><i class="fas fa-sort-numeric-up mr-2"></i>Quantity</label>
+                    <input type="number" id="editQty" class="form-input" required>
+                </div>
+                <div>
+                    <label for="editRate" class="form-label"><i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)</label>
+                    <input type="number" id="editRate" class="form-input" step="0.01" min="0" required>
+                </div>
+                <div>
+                    <label for="editVendorName" class="form-label"><i class="fas fa-store mr-2"></i>Vendor Name</label>
+                    <input type="text" id="editVendorName" class="form-input" required>
+                </div>
+                <div class="lg:col-span-3">
+                    <label for="editRemarks" class="form-label"><i class="fas fa-sticky-note mr-2"></i>Remarks</label>
+                    <textarea id="editRemarks" class="form-input" rows="2"></textarea>
+                </div>
+                <div class="lg:col-span-3 flex justify-center gap-4 mt-6">
+                    <button type="submit" class="btn btn-success text-lg px-8 py-4"><i class="fas fa-save mr-2"></i>Save Changes</button>
+                    <button type="button" id="cancelEditBtn" class="btn btn-secondary text-lg px-8 py-4"><i class="fas fa-times mr-2"></i>Cancel</button>
+                </div>
+            </form>
+            <div id="editMessage" class="message-box hidden mt-4"></div>
+        </div>
+    </div>
 
-        // Firebase variables
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, onSnapshot, orderBy, deleteDoc, doc, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
         let app;
         let db;
-        let userId = null; // Initialize userId to null
-
-        // User management (hardcoded for manual login)
+        let userId = null;
         const users = {
             'admin': { password: 'admin123', name: 'Administrator', id: 'admin_001' },
             'user': { password: 'user123', name: 'Standard User', id: 'user_001' },
             'demo': { password: 'demo', name: 'Demo User', id: 'demo_001' },
-            'Manish': { password: 'Manish@Bani999', name: 'Manish', id: 'manish_user_id' } // New user
+            'Manish': { password: 'Manish@Bani999', name: 'Manish', id: 'manish_user_id' }
         };
-
-        let currentUser = null; // Stores the currently logged-in user's local profile
-        let allRecords = []; // Stores all individual transaction records from Firestore
-        let aggregatedStock = {}; // Stores aggregated stock by SKU-Color for statistics
+        let currentUser = null;
+        let allRecords = [];
+        let aggregatedStock = {};
         let currentEntryType = 'Input';
 
-        // UI Elements
         const loginScreen = document.getElementById('loginScreen');
         const mainDashboard = document.getElementById('mainDashboard');
         const loginForm = document.getElementById('loginForm');
@@ -937,11 +743,9 @@
         const exportBtn = document.getElementById('exportBtn');
         const printChallanBtn = document.getElementById('printChallanBtn');
 
-        // Date filter inputs
         const startDateInput = document.getElementById('startDate');
         const endDateInput = document.getElementById('endDate');
 
-        // Form fields (global references for dynamic access)
         let dateInput = document.getElementById('date');
         let challanNoInput = document.getElementById('challanNo');
         let colorInput = document.getElementById('color');
@@ -949,50 +753,55 @@
         let rateInput = document.getElementById('rate');
         let remarksInput = document.getElementById('remarks');
 
-        // Dynamic form field containers
         const skuInputContainer = document.getElementById('skuInputContainer');
         const vendorNameInputContainer = document.getElementById('vendorNameInputContainer');
         const challanSelectContainer = document.getElementById('challanSelectContainer');
 
-        // Dynamic form field references (will be assigned when elements are created)
-        let skuInputText = null; // For Input mode (text input)
-        let vendorInputText = null; // For Input mode (text input)
-        let vendorSelectDropdown = null; // For Output mode (dropdown)
-        let skuSelectDropdown = null; // For Output mode (dropdown)
-        let challanSelectDropdown = null; // For Output mode (dropdown)
+        let skuInputText = null;
+        let vendorInputText = null;
+        let vendorSelectDropdown = null;
+        let skuSelectDropdown = null;
+        let challanSelectDropdown = null;
 
-
-        // Statistics elements
         const totalInputDisplay = document.getElementById('totalInput');
         const totalOutputDisplay = document.getElementById('totalOutput');
         const currentStockDisplay = document.getElementById('currentStock');
 
-        // --- Firebase Initialization (without Auth) ---
+        const editModal = document.getElementById('editModal');
+        const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+        const editForm = document.getElementById('editForm');
+        const editRecordIdInput = document.getElementById('editRecordId');
+        const editDateInput = document.getElementById('editDate');
+        const editChallanNoInput = document.getElementById('editChallanNo');
+        const editSkuInput = document.getElementById('editSku');
+        const editColorInput = document.getElementById('editColor');
+        const editQtyInput = document.getElementById('editQty');
+        const editRateInput = document.getElementById('editRate');
+        const editVendorNameInput = document.getElementById('editVendorName');
+        const editRemarksInput = document.getElementById('editRemarks');
+        const editMessage = document.getElementById('editMessage');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+
         const initializeFirebase = async () => {
             try {
-                // Ensure __firebase_config is defined globally from the script tag above
                 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-
                 if (!firebaseConfig.projectId) {
                     console.error("Firebase 'projectId' not provided in __firebase_config.");
                     showMessage('Firebase configuration error: Project ID missing.', 'error');
                     showLogin();
                     return;
                 }
-
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
-
                 console.log("Firebase Firestore initialized.");
 
-                // Check for a saved user and show dashboard if found
                 const savedUser = localStorage.getItem('currentUser');
                 if (savedUser) {
                     try {
                         currentUser = JSON.parse(savedUser);
-                        userId = currentUser.id; // Set userId from the loaded currentUser
+                        userId = currentUser.id;
                         console.log("Loaded user from localStorage:", currentUser);
-                        showDashboard(); // This will call setupRealtimeListener and addDemoData
+                        showDashboard();
                     } catch (error) {
                         console.error('Error parsing saved user from localStorage:', error);
                         localStorage.removeItem('currentUser');
@@ -1000,9 +809,8 @@
                     }
                 } else {
                     console.log("No user found in localStorage. Showing login screen.");
-                    showLogin(); // Show login if no user saved
+                    showLogin();
                 }
-
             } catch (error) {
                 console.error("Error initializing Firebase Firestore:", error);
                 showMessage('Error initializing application. Please try again.', 'error');
@@ -1011,7 +819,6 @@
             }
         };
 
-        // Authentication functions (manual login)
         const showMessage = (message, type, elementId = 'messageBox') => {
             const element = document.getElementById(elementId);
             element.textContent = message;
@@ -1025,7 +832,7 @@
         const handleLogin = (username, password) => {
             if (users[username] && users[username].password === password) {
                 currentUser = { username, ...users[username] };
-                userId = currentUser.id; // Set the global userId for Firestore operations
+                userId = currentUser.id;
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 console.log("Login successful. currentUser:", currentUser, "userId:", userId);
                 showDashboard();
@@ -1038,31 +845,33 @@
 
         const logout = () => {
             currentUser = null;
-            userId = null; // Clear userId on logout
+            userId = null;
             localStorage.removeItem('currentUser');
             showLogin();
+        };
+
+        const showLogin = () => {
+            loginScreen.classList.remove('hidden');
+            mainDashboard.classList.add('hidden');
         };
 
         const showDashboard = () => {
             loginScreen.classList.add('hidden');
             mainDashboard.classList.remove('hidden');
-
             userDisplayName.textContent = currentUser.name;
             userIdDisplay.textContent = currentUser.id;
             userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
 
-            // Ensure userId is set before attempting to set up listener or add demo data
             if (userId && db) {
                 setupRealtimeListener();
                 addDemoData();
             } else {
                 console.error("Cannot setup dashboard: userId or db is not ready.");
                 showMessage("Dashboard data could not be loaded. Please re-login.", "error");
-                showLogin(); // Force re-login if somehow in this state
+                showLogin();
             }
         };
 
-        // Material form functions
         const clearForm = () => {
             dateInput.value = new Date().toISOString().split('T')[0];
             challanNoInput.value = '';
@@ -1070,98 +879,74 @@
             qtyInput.value = '';
             rateInput.value = '';
             remarksInput.value = '';
-
-            // Ensure these are updated if they exist
             if (document.getElementById('sku')) document.getElementById('sku').value = '';
             if (document.getElementById('vendorName')) document.getElementById('vendorName').value = '';
             if (document.getElementById('vendorSelect')) document.getElementById('vendorSelect').value = 'Select Vendor...';
             if (document.getElementById('skuSelect')) document.getElementById('skuSelect').innerHTML = '<option value="Select SKU...">Select SKU...</option>';
             if (document.getElementById('challanSelect')) document.getElementById('challanSelect').innerHTML = '<option value="Select Challan...">Select Challan...</option>';
-            challanSelectContainer.style.display = 'none'; // Hide challan dropdown initially
+            challanSelectContainer.style.display = 'none';
         };
 
         const updateStatistics = () => {
             let totalInputQty = 0;
             let totalOutputQty = 0;
-
             for (const key in aggregatedStock) {
                 totalInputQty += aggregatedStock[key].inputQty;
                 totalOutputQty += aggregatedStock[key].outputQty;
             }
-
             const stockQty = totalInputQty - totalOutputQty;
-
             totalInputDisplay.textContent = totalInputQty.toLocaleString();
             totalOutputDisplay.textContent = totalOutputQty.toLocaleString();
             currentStockDisplay.textContent = stockQty.toLocaleString();
         };
 
-        // This function calculates aggregated stock for the statistics cards and aggregated table
         const calculateAggregatedStock = (records) => {
             const tempAggregatedStock = {};
-
             records.forEach(record => {
-                const key = `${record.sku}-${record.color}`; // Unique key for SKU and Color
+                const key = `${record.sku}-${record.color}`;
                 if (!tempAggregatedStock[key]) {
                     tempAggregatedStock[key] = {
                         sku: record.sku,
                         color: record.color,
-                        challanNo: record.challanNo, // New challanNo field
-                        vendorName: record.vendorName, // Will be updated by latest input
-                        latestRate: 0, // Will be updated by latest input
+                        challanNo: '',
+                        vendorName: '',
+                        latestRate: 0,
                         inputQty: 0,
                         outputQty: 0,
-                        timestamp: null // To track the latest record for rate/vendor
+                        timestamp: null
                     };
                 }
-
                 if (record.type === 'Input') {
                     tempAggregatedStock[key].inputQty += record.qty;
-                    // Update with latest input rate and vendor for this SKU-Color based on timestamp
                     if (!tempAggregatedStock[key].timestamp || new Date(record.timestamp) > new Date(tempAggregatedStock[key].timestamp)) {
                         tempAggregatedStock[key].latestRate = record.rate;
                         tempAggregatedStock[key].vendorName = record.vendorName;
-                        tempAggregatedStock[key].challanNo = record.challanNo; // Update challanNo
+                        tempAggregatedStock[key].challanNo = record.challanNo;
                         tempAggregatedStock[key].timestamp = record.timestamp;
                     }
                 } else if (record.type === 'Output') {
                     tempAggregatedStock[key].outputQty += record.qty;
                 }
             });
-
             aggregatedStock = tempAggregatedStock;
         };
 
-        // Renders the AGGREGATED records table
         const renderAggregatedRecordsTable = (stockToDisplay) => {
-            aggregatedRecordsTableBody.innerHTML = ''; // Clear existing rows
-
+            aggregatedRecordsTableBody.innerHTML = '';
             if (Object.keys(stockToDisplay).length === 0) {
-                aggregatedRecordsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="text-center py-8 text-gray-400">
-                            <i class="fas fa-inbox text-4xl mb-4 block"></i>
-                            No records found.
-                        </td>
-                    </tr>
-                `;
+                aggregatedRecordsTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-400"><i class="fas fa-inbox text-4xl mb-4 block"></i>No records found.</td></tr>`;
                 return;
             }
-
             const sortedStock = Object.values(stockToDisplay).sort((a, b) => {
-                // Sort by SKU, then Color
                 if (a.sku < b.sku) return -1;
                 if (a.sku > b.sku) return 1;
                 if (a.color < b.color) return -1;
                 if (a.color > b.color) return 1;
                 return 0;
             });
-
-
             sortedStock.forEach(item => {
                 const remaining = item.inputQty - item.outputQty;
                 const row = aggregatedRecordsTableBody.insertRow();
-
                 row.innerHTML = `
                     <td><span style="font-family: monospace; font-size: 0.75rem;">${item.sku}</span></td>
                     <td>${item.color || 'N/A'}</td>
@@ -1175,30 +960,17 @@
             });
         };
 
-        // Renders the TRANSACTION LOG table
         const renderTransactionTable = (recordsToDisplay) => {
-            transactionTableBody.innerHTML = ''; // Clear existing rows
-
+            transactionTableBody.innerHTML = '';
             if (recordsToDisplay.length === 0) {
-                transactionTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="11" class="text-center py-8 text-gray-400">
-                            <i class="fas fa-inbox text-4xl mb-4 block"></i>
-                            No transactions found.
-                        </td>
-                    </tr>
-                `;
+                transactionTableBody.innerHTML = `<tr><td colspan="11" class="text-center py-8 text-gray-400"><i class="fas fa-inbox text-4xl mb-4 block"></i>No transactions found.</td></tr>`;
                 return;
             }
-
-            // Sort by timestamp (latest first) for transaction log
             const sortedRecords = recordsToDisplay.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
             sortedRecords.forEach(record => {
                 const row = transactionTableBody.insertRow();
                 const value = (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2);
                 const typeLabel = record.type === 'Input' ? 'Output' : 'Issue';
-
                 row.innerHTML = `
                     <td>${record.date}</td>
                     <td><span style="font-family: monospace; font-size: 0.75rem; background: #333; color: #fff; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">${record.challanNo}</span></td>
@@ -1208,30 +980,19 @@
                     <td>₹${parseFloat(record.rate).toFixed(2)}</td>
                     <td class="font-bold">₹${Number(value).toLocaleString()}</td>
                     <td>${record.vendorName}</td>
-                    <td>
-                        <div class="line-clamp-1" title="${record.remarks || ''}">${record.remarks || ''}</div>
-                    </td>
-                    <td>
-                        <span class="${record.type === 'Input' ? 'status-output' : 'status-issue'} px-3 py-1 rounded-full text-xs font-semibold">
-                            ${typeLabel}
-                        </span>
-                    </td>
+                    <td><div class="line-clamp-1" title="${record.remarks || ''}">${record.remarks || ''}</div></td>
+                    <td><span class="${record.type === 'Input' ? 'status-output' : 'status-issue'}">${typeLabel}</span></td>
                     <td class="flex items-center gap-2">
-                        <button onclick="printChallanFromRecord('${record.id}')" class="print-btn">
-                            <i class="fas fa-print"></i>
-                        </button>
-                        <button onclick="deleteRecord('${record.id}')" class="delete-btn">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <button onclick="editRecord('${record.id}')" class="edit-btn"><i class="fas fa-edit"></i></button>
+                        <button onclick="printChallanFromRecord('${record.id}')" class="print-btn"><i class="fas fa-print"></i></button>
+                        <button onclick="deleteRecord('${record.id}')" class="delete-btn"><i class="fas fa-trash"></i></button>
                     </td>
                 `;
             });
         };
 
-
         const updateVendorFilterOptions = (records) => {
-            // Populate vendor filter with all vendors from all records (input/output)
-            const uniqueVendors = [...new Set(records.map(r => r.vendorName))].sort(); // Sort alphabetically
+            const uniqueVendors = [...new Set(records.map(r => r.vendorName))].sort();
             vendorFilter.innerHTML = '<option value="all">All Vendors</option>';
             uniqueVendors.forEach(vendor => {
                 const option = document.createElement('option');
@@ -1239,7 +1000,6 @@
                 option.textContent = vendor;
                 vendorFilter.appendChild(option);
             });
-            // Keep current filter selection
             const currentFilter = vendorFilter.value;
             if (uniqueVendors.includes(currentFilter)) {
                 vendorFilter.value = currentFilter;
@@ -1251,8 +1011,6 @@
             const searchTerm = searchInput.value.toLowerCase();
             const start = startDateInput.value ? new Date(startDateInput.value).setHours(0,0,0,0) : null;
             const end = endDateInput.value ? new Date(endDateInput.value).setHours(23,59,59,999) : null;
-
-            // Filter raw records first for date and vendor/search
             let filteredRawRecords = allRecords.filter(record => {
                 const recordDate = new Date(record.date).setHours(0,0,0,0);
                 const matchesDate = (!start || recordDate >= start) && (!end || recordDate <= end);
@@ -1268,18 +1026,12 @@
                 );
                 return matchesDate && matchesVendor && matchesSearch;
             });
-
-            // Re-calculate aggregated stock based on filtered raw records for the summary table
             calculateAggregatedStock(filteredRawRecords);
-            renderAggregatedRecordsTable(aggregatedStock); // Render aggregated table
-
-            // Render the transaction log table with filtered raw records
+            renderAggregatedRecordsTable(aggregatedStock);
             renderTransactionTable(filteredRawRecords);
         };
 
-
-        const deleteRecord = async (recordId) => {
-            // Using a custom confirmation dialog instead of alert/confirm
+        window.deleteRecord = async (recordId) => {
             const confirmDelete = await new Promise(resolve => {
                 const modal = document.createElement('div');
                 modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
@@ -1294,25 +1046,13 @@
                     </div>
                 `;
                 document.body.appendChild(modal);
-
-                document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
-                    document.body.removeChild(modal);
-                    resolve(false);
-                });
-                document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-                    document.body.removeChild(modal);
-                    resolve(true);
-                });
+                document.getElementById('cancelDeleteBtn').addEventListener('click', () => { document.body.removeChild(modal); resolve(false); });
+                document.getElementById('confirmDeleteBtn').addEventListener('click', () => { document.body.removeChild(modal); resolve(true); });
             });
-
-
             if (confirmDelete) {
                 try {
-                    if (!db || !userId) {
-                        showMessage('Database not ready or user not logged in.', 'error');
-                        return;
-                    }
-                    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+                    if (!db || !userId) { showMessage('Database not ready or user not logged in.', 'error'); return; }
+                    const firebaseConfig = JSON.parse(__firebase_config);
                     const appId = firebaseConfig.appId || 'default-app-id';
                     const recordRef = doc(db, `artifacts/${appId}/users/${userId}/material_records`, recordId);
                     await deleteDoc(recordRef);
@@ -1325,7 +1065,6 @@
         };
 
         const exportToCSV = () => {
-            // Exporting all individual records, not just aggregated stock
             const headers = ['Date', 'Challan No', 'SKU', 'Color', 'Quantity', 'Rate', 'Value', 'Vendor Name', 'Remarks', 'Type'];
             const csvContent = [
                 headers.join(','),
@@ -1340,9 +1079,8 @@
                     record.vendorName,
                     record.remarks || '',
                     record.type === 'Input' ? 'Output' : 'Issue'
-                ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')) // Handle commas and quotes in data
+                ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
             ].join('\n');
-
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1355,33 +1093,27 @@
         const setupRealtimeListener = () => {
             if (!db || !userId) {
                 console.log("Firestore or User ID not ready for listener setup. Retrying in 500ms.");
-                setTimeout(setupRealtimeListener, 500); // Retry if not ready
+                setTimeout(setupRealtimeListener, 500);
                 return;
             }
-
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+            const firebaseConfig = JSON.parse(__firebase_config);
             const appId = firebaseConfig.appId || 'default-app-id';
             const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
-            const q = query(recordsCollectionRef, orderBy('timestamp', 'desc')); // Order by timestamp for consistency
-
+            const q = query(recordsCollectionRef, orderBy('timestamp', 'desc'));
             onSnapshot(q, (snapshot) => {
-                allRecords = []; // Clear previous records
-                snapshot.forEach((doc) => {
-                    allRecords.push({ id: doc.id, ...doc.data() });
-                });
-                // Recalculate and render everything based on the fresh data
-                calculateAggregatedStock(allRecords); // Pass allRecords to calculate
+                allRecords = [];
+                snapshot.forEach((doc) => { allRecords.push({ id: doc.id, ...doc.data() }); });
+                calculateAggregatedStock(allRecords);
                 updateStatistics();
-                updateVendorFilterOptions(allRecords); // Pass allRecords to update options
-                updateFormFieldsForEntryType(); // Re-render form for current type (especially for output dropdowns)
-                filterRecords(); // Apply current filters and render both tables
+                updateVendorFilterOptions(allRecords);
+                updateFormFieldsForEntryType();
+                filterRecords();
             }, (error) => {
                 console.error("Error fetching real-time updates:", error);
                 showMessage('Error fetching records. Please refresh the page.', 'error');
             });
         };
 
-        // --- Dynamic Form Field Management for Input/Output ---
         const createSelectElement = (id, labelText, options, onChangeHandler, isRequired = false) => {
             const div = document.createElement('div');
             const label = document.createElement('label');
@@ -1389,13 +1121,11 @@
             label.className = 'form-label';
             label.innerHTML = `<i class="fas fa-${id.includes('vendor') ? 'store' : (id.includes('sku') ? 'barcode' : 'receipt')} mr-2"></i>${labelText}`;
             div.appendChild(label);
-
             const select = document.createElement('select');
             select.id = id;
             select.className = 'form-input';
             if (isRequired) select.required = true;
             select.addEventListener('change', onChangeHandler);
-
             options.forEach(optionValue => {
                 const option = document.createElement('option');
                 option.value = optionValue;
@@ -1407,61 +1137,36 @@
         };
 
         const updateFormFieldsForEntryType = () => {
-            clearForm(); // Clear current input fields
-
-            // Reset containers
+            clearForm();
             skuInputContainer.innerHTML = '';
             vendorNameInputContainer.innerHTML = '';
-            challanSelectContainer.style.display = 'none'; // Hide challan container by default
+            challanSelectContainer.style.display = 'none';
             challanSelectContainer.innerHTML = '';
-
             if (currentEntryType === 'Input') {
-                // Revert to text inputs for Input mode
-                skuInputContainer.innerHTML = `
-                    <label for="sku" class="form-label">
-                        <i class="fas fa-barcode mr-2"></i>SKU
-                    </label>
-                    <input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>
-                `;
-                vendorNameInputContainer.innerHTML = `
-                    <label for="vendorName" class="form-label">
-                        <i class="fas fa-store mr-2"></i>Vendor Name
-                    </label>
-                    <input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>
-                `;
-                // Re-assign references after innerHTML update
+                skuInputContainer.innerHTML = `<label for="sku" class="form-label"><i class="fas fa-barcode mr-2"></i>SKU</label><input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>`;
+                vendorNameInputContainer.innerHTML = `<label for="vendorName" class="form-label"><i class="fas fa-store mr-2"></i>Vendor Name</label><input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>`;
                 skuInputText = document.getElementById('sku');
                 vendorInputText = document.getElementById('vendorName');
                 vendorSelectDropdown = null;
                 skuSelectDropdown = null;
                 challanSelectDropdown = null;
-            } else { // Output mode
-                // Create vendor dropdown
+            } else {
                 const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].sort();
                 const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', ['Select Vendor...', ...uniqueInputVendors], handleVendorSelectChange, true);
                 vendorNameInputContainer.appendChild(vendorSelectDiv);
-                vendorSelectDropdown = document.getElementById('vendorSelect'); // Global reference
-
-                // Create SKU dropdown (initially empty or 'Select SKU...')
+                vendorSelectDropdown = document.getElementById('vendorSelect');
                 const skuSelectDiv = createSelectElement('skuSelect', 'SKU', ['Select SKU...'], handleSkuSelectChange, true);
                 skuInputContainer.appendChild(skuSelectDiv);
-                skuSelectDropdown = document.getElementById('skuSelect'); // Global reference
-
-                // Create Challan dropdown (initially empty or 'Select Challan...')
+                skuSelectDropdown = document.getElementById('skuSelect');
                 const challanSelectDiv = createSelectElement('challanSelect', 'Challan No', ['Select Challan...'], handleChallanSelectChange, true);
                 challanSelectContainer.appendChild(challanSelectDiv);
-                challanSelectDropdown = document.getElementById('challanSelect'); // Global reference
-
-                // Hide direct text input fields
+                challanSelectDropdown = document.getElementById('challanSelect');
                 skuInputText = null;
                 vendorInputText = null;
-
-                // Set initial state for dropdowns
                 if (uniqueInputVendors.length === 0) {
                     showMessage('No input records found to select vendors/SKUs from for output.', 'error');
                 }
             }
-            // Set today's date
             dateInput.value = new Date().toISOString().split('T')[0];
         };
 
@@ -1469,15 +1174,9 @@
             const selectedVendor = vendorSelectDropdown.value;
             const skuOptions = ['Select SKU...'];
             if (selectedVendor !== 'Select Vendor...') {
-                const uniqueSkusForVendor = [...new Set(
-                    allRecords
-                        .filter(r => r.type === 'Input' && r.vendorName === selectedVendor)
-                        .map(r => r.sku)
-                )].sort(); // Sort alphabetically
+                const uniqueSkusForVendor = [...new Set(allRecords.filter(r => r.type === 'Input' && r.vendorName === selectedVendor).map(r => r.sku))].sort();
                 skuOptions.push(...uniqueSkusForVendor);
             }
-
-            // Clear and repopulate SKU dropdown
             skuSelectDropdown.innerHTML = '';
             skuOptions.forEach(optionValue => {
                 const option = document.createElement('option');
@@ -1485,38 +1184,27 @@
                 option.textContent = optionValue;
                 skuSelectDropdown.appendChild(option);
             });
-            skuSelectDropdown.value = 'Select SKU...'; // Reset SKU selection
-
-            // Clear and hide challan dropdown
+            skuSelectDropdown.value = 'Select SKU...';
             challanSelectDropdown.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
             challanSelectContainer.style.display = 'none';
-
-            // Clear other fields
             colorInput.value = '';
             qtyInput.value = '';
             rateInput.value = '';
             qtyInput.max = '';
-            challanNoInput.value = ''; // Clear challan text input
+            challanNoInput.value = '';
         };
 
         const handleSkuSelectChange = () => {
             const selectedSku = skuSelectDropdown.value;
             const selectedVendor = vendorSelectDropdown.value;
             const challanOptions = ['Select Challan...'];
-
             if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...') {
-                const uniqueChallansForSku = [...new Set(
-                    allRecords
-                        .filter(r => r.type === 'Input' && r.vendorName === selectedVendor && r.sku === selectedSku)
-                        .map(r => r.challanNo)
-                )].sort(); // Sort alphabetically
+                const uniqueChallansForSku = [...new Set(allRecords.filter(r => r.type === 'Input' && r.vendorName === selectedVendor && r.sku === selectedSku).map(r => r.challanNo))].sort();
                 challanOptions.push(...uniqueChallansForSku);
-                challanSelectContainer.style.display = 'block'; // Show challan dropdown
+                challanSelectContainer.style.display = 'block';
             } else {
-                challanSelectContainer.style.display = 'none'; // Hide if no SKU/Vendor selected
+                challanSelectContainer.style.display = 'none';
             }
-
-            // Clear and repopulate Challan dropdown
             challanSelectDropdown.innerHTML = '';
             challanOptions.forEach(optionValue => {
                 const option = document.createElement('option');
@@ -1524,50 +1212,37 @@
                 option.textContent = optionValue;
                 challanSelectDropdown.appendChild(option);
             });
-            challanSelectDropdown.value = 'Select Challan...'; // Reset Challan selection
-
-            // Clear other fields
+            challanSelectDropdown.value = 'Select Challan...';
             colorInput.value = '';
             qtyInput.value = '';
             rateInput.value = '';
             qtyInput.max = '';
-            challanNoInput.value = ''; // Clear challan text input
+            challanNoInput.value = '';
         };
 
         const handleChallanSelectChange = () => {
             const selectedSku = skuSelectDropdown.value;
             const selectedVendor = vendorSelectDropdown.value;
             const selectedChallan = challanSelectDropdown.value;
-
             if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...' && selectedChallan !== 'Select Challan...') {
-                // Find the specific input record for this combination
-                const relevantInputRecord = allRecords
-                    .filter(r => r.type === 'Input' && r.sku === selectedSku && r.vendorName === selectedVendor && r.challanNo === selectedChallan)
-                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]; // Get the latest one if multiple inputs for same challan
-
+                const relevantInputRecord = allRecords.filter(r => r.type === 'Input' && r.sku === selectedSku && r.vendorName === selectedVendor && r.challanNo === selectedChallan).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
                 if (relevantInputRecord) {
                     colorInput.value = relevantInputRecord.color || '';
                     rateInput.value = parseFloat(relevantInputRecord.rate).toFixed(2);
-                    challanNoInput.value = relevantInputRecord.challanNo; // Autofill Challan No text input
-
-                    // Calculate remaining stock for this specific challan
+                    challanNoInput.value = relevantInputRecord.challanNo;
                     let inputQtyForChallan = relevantInputRecord.qty;
-                    let outputQtyFromThisChallan = allRecords
-                        .filter(r => (r.type === 'Output') && r.sku === selectedSku && r.color === relevantInputRecord.color && r.challanNo === selectedChallan)
-                        .reduce((sum, r) => sum + r.qty, 0);
-
+                    let outputQtyFromThisChallan = allRecords.filter(r => (r.type === 'Output') && r.sku === selectedSku && r.color === relevantInputRecord.color && r.challanNo === selectedChallan).reduce((sum, r) => sum + r.qty, 0);
                     const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
-
-                    qtyInput.value = availableQty > 0 ? availableQty : 0; // Autofill with available quantity
-                    qtyInput.max = availableQty; // Set max attribute for validation
-                    qtyInput.min = 1; // Ensure minimum is 1 for output
+                    qtyInput.value = availableQty > 0 ? availableQty : 0;
+                    qtyInput.max = availableQty;
+                    qtyInput.min = 1;
                     showMessage(`Available stock from Challan ${selectedChallan} for ${selectedSku} (${relevantInputRecord.color}): ${availableQty}`, 'success');
                 } else {
                     colorInput.value = '';
                     qtyInput.value = '';
                     rateInput.value = '';
                     qtyInput.max = '';
-                    challanNoInput.value = ''; // Clear challan text input
+                    challanNoInput.value = '';
                     showMessage('No matching input record found for this Challan.', 'error');
                 }
             } else {
@@ -1575,7 +1250,7 @@
                 qtyInput.value = '';
                 rateInput.value = '';
                 qtyInput.max = '';
-                challanNoInput.value = ''; // Clear challan text input
+                challanNoInput.value = '';
             }
         };
 
@@ -1585,10 +1260,8 @@
                 alert("Please allow pop-ups for this website to print the challan.");
                 return;
             }
-
             const totalValue = (recordToPrint.qty * recordToPrint.rate).toFixed(2);
             const dateFormatted = new Date(recordToPrint.date).toLocaleDateString('en-GB');
-
             const challanContent = `
                 <div class="print-challan" style="padding: 20px;">
                     <style>
@@ -1615,7 +1288,6 @@
                             </td>
                         </tr>
                     </table>
-
                     <table class="details">
                         <tr>
                             <td style="width: 50%;"><b>No.</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${recordToPrint.challanNo}</td>
@@ -1628,7 +1300,6 @@
                             <td colspan="2" style="height: 40px; border-bottom: 1px solid #000;"></td>
                         </tr>
                     </table>
-
                     <table class="items">
                         <thead>
                             <tr>
@@ -1655,7 +1326,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    
                     <table class="signatures">
                         <tr>
                             <td>Receiver Signature</td>
@@ -1668,14 +1338,13 @@
                     </table>
                 </div>
             `;
-
             printWindow.document.write(challanContent);
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
         };
 
-        const printChallanFromRecord = (recordId) => {
+        window.printChallanFromRecord = (recordId) => {
             const recordToPrint = allRecords.find(record => record.id === recordId);
             if (recordToPrint) {
                 printChallan(recordToPrint);
@@ -1684,8 +1353,30 @@
             }
         };
 
+        window.editRecord = (recordId) => {
+            const recordToEdit = allRecords.find(record => record.id === recordId);
+            if (recordToEdit) {
+                editRecordIdInput.value = recordToEdit.id;
+                editDateInput.value = recordToEdit.date;
+                editChallanNoInput.value = recordToEdit.challanNo;
+                editSkuInput.value = recordToEdit.sku;
+                editColorInput.value = recordToEdit.color;
+                editQtyInput.value = recordToEdit.qty;
+                editRateInput.value = recordToEdit.rate;
+                editVendorNameInput.value = recordToEdit.vendorName;
+                editRemarksInput.value = recordToEdit.remarks;
+                editModal.classList.remove('hidden');
+                editModal.classList.add('flex');
+            } else {
+                showMessage('Record not found for editing.', 'error');
+            }
+        };
 
-        // Event listeners
+        const closeEditModal = () => {
+            editModal.classList.add('hidden');
+            editModal.classList.remove('flex');
+        };
+
         inputBtn.addEventListener('click', () => {
             currentEntryType = 'Input';
             formTitle.innerHTML = '<i class="fas fa-plus mr-2"></i>Record Output Material';
@@ -1697,7 +1388,7 @@
         });
 
         outputBtn.addEventListener('click', () => {
-            currentEntryType = 'Output'; // Keep it as 'Output' in the logic for consistency
+            currentEntryType = 'Output';
             formTitle.innerHTML = '<i class="fas fa-minus mr-2"></i>Record Issued Material';
             outputBtn.classList.add('active');
             outputBtn.classList.remove('inactive');
@@ -1708,15 +1399,10 @@
 
         materialForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            console.log("Form submit attempt. currentUser:", currentUser, "userId:", userId);
-
             if (!db || !userId) {
                 showMessage('Database is not initialized or user ID is missing. Please refresh and try again.', 'error');
-                console.error("Attempted to add record but db or userId is missing. db:", db, "userId:", userId);
                 return;
             }
-
             let record = {};
             record.date = dateInput.value;
             record.challanNo = challanNoInput.value.trim();
@@ -1724,39 +1410,27 @@
             record.qty = parseInt(qtyInput.value);
             record.rate = parseFloat(rateInput.value);
             record.remarks = remarksInput.value.trim();
-            record.type = currentEntryType; // 'Input' or 'Output'
-            record.timestamp = new Date().toISOString(); // Add timestamp for ordering
+            record.type = currentEntryType;
+            record.timestamp = new Date().toISOString();
 
             if (currentEntryType === 'Input') {
                 const skuInput = document.getElementById('sku');
                 const vendorInput = document.getElementById('vendorName');
-
-                if (!skuInput || !vendorInput) {
-                    showMessage('SKU or Vendor Name input field not found. Please try switching input/output mode.', 'error');
-                    console.error("Input fields (SKU or Vendor) are null during form submission.");
-                    return;
-                }
+                if (!skuInput || !vendorInput) { showMessage('SKU or Vendor Name input field not found.', 'error'); return; }
                 record.sku = skuInput.value.trim();
                 record.vendorName = vendorInput.value.trim();
-            } else { // Output mode
+            } else {
                 const skuSelect = document.getElementById('skuSelect');
                 const vendorSelect = document.getElementById('vendorSelect');
                 const challanSelect = document.getElementById('challanSelect');
-
-                if (!skuSelect || !vendorSelect || !challanSelect) {
-                    showMessage('SKU, Vendor, or Challan dropdown not found. Please try switching input/output mode.', 'error');
-                    console.error("Output dropdowns (SKU, Vendor, or Challan) are null during form submission.");
-                    return;
-                }
-
+                if (!skuSelect || !vendorSelect || !challanSelect) { showMessage('SKU, Vendor, or Challan dropdown not found.', 'error'); return; }
                 record.sku = skuSelect.value;
                 record.vendorName = vendorSelect.value;
-                record.inputChallanNo = challanSelect.value;
+                record.challanNo = challanSelect.value;
             }
 
-            // Basic validation for all fields
             if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName ||
-                record.sku === 'Select SKU...' || record.vendorName === 'Select Vendor...' || (currentEntryType === 'Output' && record.inputChallanNo === 'Select Challan...')) {
+                record.sku === 'Select SKU...' || record.vendorName === 'Select Vendor...' || (currentEntryType === 'Output' && record.challanNo === 'Select Challan...')) {
                 showMessage('Please fill in all required fields and make valid selections.', 'error');
                 return;
             }
@@ -1764,43 +1438,62 @@
                 showMessage('Quantity must be positive and Rate cannot be negative.', 'error');
                 return;
             }
-
-            // Specific validation for output quantity against available stock from the selected challan
             if (currentEntryType === 'Output') {
-                const selectedChallan = document.getElementById('challanSelect').value; // Get current value
-                const relevantInputRecord = allRecords
-                    .filter(r => r.type === 'Input' && r.sku === record.sku && r.color === record.color && r.vendorName === record.vendorName && r.challanNo === selectedChallan)
-                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
-
+                const selectedChallan = document.getElementById('challanSelect').value;
+                const relevantInputRecord = allRecords.filter(r => r.type === 'Input' && r.sku === record.sku && r.color === record.color && r.vendorName === record.vendorName && r.challanNo === selectedChallan).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
                 if (!relevantInputRecord) {
                     showMessage('Could not find a matching input record for the selected Challan, SKU, Vendor, and Color.', 'error');
                     return;
                 }
-
                 let inputQtyForChallan = relevantInputRecord.qty;
-                let outputQtyFromThisChallan = allRecords
-                    .filter(r => (r.type === 'Output') && r.sku === record.sku && r.color === record.color && r.challanNo === selectedChallan)
-                    .reduce((sum, r) => sum + r.qty, 0);
-
+                let outputQtyFromThisChallan = allRecords.filter(r => (r.type === 'Output') && r.sku === record.sku && r.color === record.color && r.challanNo === selectedChallan).reduce((sum, r) => sum + r.qty, 0);
                 const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
-
                 if (record.qty > availableQty) {
                     showMessage(`Output quantity (${record.qty}) exceeds available stock (${availableQty}) from Challan ${selectedChallan} for ${record.sku} (${record.color}).`, 'error');
                     return;
                 }
             }
-
             try {
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+                const firebaseConfig = JSON.parse(__firebase_config);
                 const appId = firebaseConfig.appId || 'default-app-id';
                 const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
                 await addDoc(recordsCollectionRef, record);
                 showMessage('Record added successfully!', 'success');
                 clearForm();
-                // The onSnapshot listener will handle re-rendering after addDoc
             } catch (error) {
                 console.error('Error adding record:', error);
                 showMessage('Error adding record. Please try again.', 'error');
+            }
+        });
+
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const recordId = editRecordIdInput.value;
+            if (!recordId) { showMessage('Record ID missing.', 'error', 'editMessage'); return; }
+            const updatedRecord = {
+                date: editDateInput.value,
+                challanNo: editChallanNoInput.value.trim(),
+                sku: editSkuInput.value.trim(),
+                color: editColorInput.value.trim(),
+                qty: parseInt(editQtyInput.value),
+                rate: parseFloat(editRateInput.value),
+                vendorName: editVendorNameInput.value.trim(),
+                remarks: editRemarksInput.value.trim(),
+            };
+            if (updatedRecord.qty <= 0 || updatedRecord.rate < 0) {
+                showMessage('Quantity must be positive and Rate cannot be negative.', 'error', 'editMessage');
+                return;
+            }
+            try {
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const appId = firebaseConfig.appId || 'default-app-id';
+                const recordRef = doc(db, `artifacts/${appId}/users/${userId}/material_records`, recordId);
+                await updateDoc(recordRef, updatedRecord);
+                showMessage('Record updated successfully!', 'success', 'editMessage');
+                closeEditModal();
+            } catch (error) {
+                console.error('Error updating record:', error);
+                showMessage('Error updating record. Please try again.', 'error', 'editMessage');
             }
         });
 
@@ -1810,10 +1503,8 @@
         endDateInput.addEventListener('change', filterRecords);
         exportBtn.addEventListener('click', exportToCSV);
         logoutBtn.addEventListener('click', logout);
-        
-        // This button now prints the current form data, not a specific record
         printChallanBtn.addEventListener('click', () => {
-             const record = {
+            const record = {
                 date: dateInput.value,
                 challanNo: challanNoInput.value,
                 sku: document.getElementById('sku')?.value || document.getElementById('skuSelect')?.value,
@@ -1823,17 +1514,13 @@
                 vendorName: document.getElementById('vendorName')?.value || document.getElementById('vendorSelect')?.value,
                 remarks: remarksInput.value
             };
-
-            // Simple validation before printing
             if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName) {
                 showMessage('Please fill in all required fields before printing a challan.', 'error');
                 return;
             }
-
             printChallan(record);
         });
 
-        // Login form listeners
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const username = usernameInput.value;
@@ -1853,23 +1540,19 @@
             }
         });
 
-        // Make deleteRecord and printChallanFromRecord functions global
-        window.deleteRecord = deleteRecord;
-        window.printChallanFromRecord = printChallanFromRecord;
+        closeEditModalBtn.addEventListener('click', closeEditModal);
+        cancelEditBtn.addEventListener('click', closeEditModal);
 
-        // Initialize Firebase when the DOM content is loaded
         document.addEventListener('DOMContentLoaded', initializeFirebase);
 
-        // Add some demo data for testing (only if no records exist for the current user)
         const addDemoData = async () => {
-            if (currentUser && db && userId) { // Ensure currentUser, Firestore, and userId are ready
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+            if (currentUser && db && userId) {
+                const firebaseConfig = JSON.parse(__firebase_config);
                 const appId = firebaseConfig.appId || 'default-app-id';
                 const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
                 try {
                     const existingDocs = await getDocs(query(recordsCollectionRef));
-
-                    if (existingDocs.empty) { // Check if the snapshot is empty
+                    if (existingDocs.empty) {
                         const sampleRecords = [
                             { date: '2025-07-01', challanNo: 'IN-001', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 100, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: new Date('2025-07-01T10:00:00Z').toISOString(), remarks: 'Initial stock input' },
                             { date: '2025-07-05', challanNo: 'IN-002', sku: 'BW6085BLUE_DRS-L', color: 'Blue', qty: 50, rate: 1200.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: new Date('2025-07-05T11:00:00Z').toISOString(), remarks: 'New variant added' },
@@ -1880,10 +1563,7 @@
                             { date: '2025-07-25', challanNo: 'OUT-003', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 10, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Output', timestamp: new Date('2025-07-25T16:00:00Z').toISOString(), remarks: 'Urgent order' },
                             { date: '2025-07-28', challanNo: 'IN-005', sku: 'BW6083BLUE_DRS-L', color: 'Light Blue', qty: 40, rate: 950.00, vendorName: 'Flipkart - Retail', type: 'Input', timestamp: new Date('2025-07-28T09:00:00Z').toISOString(), remarks: 'New supplier batch' }
                         ];
-
-                        for (const record of sampleRecords) {
-                            await addDoc(recordsCollectionRef, record);
-                        }
+                        for (const record of sampleRecords) { await addDoc(recordsCollectionRef, record); }
                         console.log("Demo data added.");
                     }
                 } catch (error) {
