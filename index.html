@@ -563,7 +563,7 @@
                             <label for="rate" class="form-label"><i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)</label>
                             <input type="number" id="rate" class="form-input" step="0.01" min="0" required>
                         </div>
-                        <div id="vendorNameInputContainer" class="lg:col-span-3"></div>
+                        <div id="vendorInputContainer" class="lg:col-span-3"></div>
                         <div>
                             <label for="remarks" class="form-label"><i class="fas fa-sticky-note mr-2"></i>Remarks</label>
                             <textarea id="remarks" class="form-input" placeholder="e.g., Damaged item, Urgent order, etc." rows="2"></textarea>
@@ -754,7 +754,7 @@
         let remarksInput = document.getElementById('remarks');
 
         const skuInputContainer = document.getElementById('skuInputContainer');
-        const vendorNameInputContainer = document.getElementById('vendorNameInputContainer');
+        const vendorInputContainer = document.getElementById('vendorInputContainer');
         const challanSelectContainer = document.getElementById('challanSelectContainer');
 
         let skuInputText = null;
@@ -1139,33 +1139,39 @@
         const updateFormFieldsForEntryType = () => {
             clearForm();
             skuInputContainer.innerHTML = '';
-            vendorNameInputContainer.innerHTML = '';
+            vendorInputContainer.innerHTML = '';
             challanSelectContainer.style.display = 'none';
             challanSelectContainer.innerHTML = '';
+
             if (currentEntryType === 'Input') {
-                skuInputContainer.innerHTML = `<label for="sku" class="form-label"><i class="fas fa-barcode mr-2"></i>SKU</label><input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>`;
-                vendorNameInputContainer.innerHTML = `<label for="vendorName" class="form-label"><i class="fas fa-store mr-2"></i>Vendor Name</label><input type="text" id="vendorName" class="form-input" placeholder="e.g., Myntra - SJIT" required>`;
-                skuInputText = document.getElementById('sku');
-                vendorInputText = document.getElementById('vendorName');
-                vendorSelectDropdown = null;
-                skuSelectDropdown = null;
-                challanSelectDropdown = null;
-            } else {
-                const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].sort();
-                const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', ['Select Vendor...', ...uniqueInputVendors], handleVendorSelectChange, true);
-                vendorNameInputContainer.appendChild(vendorSelectDiv);
+                const uniqueVendors = [...new Set(allRecords.map(r => r.vendorName))].filter(Boolean).sort();
+                const vendorOptions = ['Select Vendor...', ...uniqueVendors, 'Add New Vendor...'];
+                const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', vendorOptions, () => {
+                    if (vendorSelectDropdown.value === 'Add New Vendor...') {
+                        vendorInputContainer.innerHTML = `<label for="vendorName" class="form-label"><i class="fas fa-store mr-2"></i>Vendor Name</label><input type="text" id="vendorName" class="form-input" placeholder="Enter new vendor name" required>`;
+                        vendorInputText = document.getElementById('vendorName');
+                        vendorSelectDropdown = null;
+                    }
+                }, true);
+                vendorInputContainer.appendChild(vendorSelectDiv);
                 vendorSelectDropdown = document.getElementById('vendorSelect');
+
+                skuInputContainer.innerHTML = `<label for="sku" class="form-label"><i class="fas fa-barcode mr-2"></i>SKU</label><input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>`;
+                skuInputText = document.getElementById('sku');
+            } else {
+                const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].filter(Boolean).sort();
+                const vendorOptions = ['Select Vendor...', ...uniqueInputVendors];
+                const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', vendorOptions, handleVendorSelectChange, true);
+                vendorInputContainer.appendChild(vendorSelectDiv);
+                vendorSelectDropdown = document.getElementById('vendorSelect');
+
                 const skuSelectDiv = createSelectElement('skuSelect', 'SKU', ['Select SKU...'], handleSkuSelectChange, true);
                 skuInputContainer.appendChild(skuSelectDiv);
                 skuSelectDropdown = document.getElementById('skuSelect');
+
                 const challanSelectDiv = createSelectElement('challanSelect', 'Challan No', ['Select Challan...'], handleChallanSelectChange, true);
                 challanSelectContainer.appendChild(challanSelectDiv);
                 challanSelectDropdown = document.getElementById('challanSelect');
-                skuInputText = null;
-                vendorInputText = null;
-                if (uniqueInputVendors.length === 0) {
-                    showMessage('No input records found to select vendors/SKUs from for output.', 'error');
-                }
             }
             dateInput.value = new Date().toISOString().split('T')[0];
         };
@@ -1198,7 +1204,7 @@
             const selectedSku = skuSelectDropdown.value;
             const selectedVendor = vendorSelectDropdown.value;
             const challanOptions = ['Select Challan...'];
-            if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...') {
+            if (selectedSku !== 'Select SKU...' && selectedVendor) {
                 const uniqueChallansForSku = [...new Set(allRecords.filter(r => r.type === 'Input' && r.vendorName === selectedVendor && r.sku === selectedSku).map(r => r.challanNo))].sort();
                 challanOptions.push(...uniqueChallansForSku);
                 challanSelectContainer.style.display = 'block';
@@ -1224,7 +1230,7 @@
             const selectedSku = skuSelectDropdown.value;
             const selectedVendor = vendorSelectDropdown.value;
             const selectedChallan = challanSelectDropdown.value;
-            if (selectedSku !== 'Select SKU...' && selectedVendor !== 'Select Vendor...' && selectedChallan !== 'Select Challan...') {
+            if (selectedSku !== 'Select SKU...' && selectedVendor && selectedChallan !== 'Select Challan...') {
                 const relevantInputRecord = allRecords.filter(r => r.type === 'Input' && r.sku === selectedSku && r.vendorName === selectedVendor && r.challanNo === selectedChallan).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
                 if (relevantInputRecord) {
                     colorInput.value = relevantInputRecord.color || '';
@@ -1260,7 +1266,6 @@
                 alert("Please allow pop-ups for this website to print the challan.");
                 return;
             }
-            const totalValue = (recordToPrint.qty * recordToPrint.rate).toFixed(2);
             const dateFormatted = new Date(recordToPrint.date).toLocaleDateString('en-GB');
             const challanContent = `
                 <div class="print-challan" style="padding: 20px;">
@@ -1413,24 +1418,36 @@
             record.type = currentEntryType;
             record.timestamp = new Date().toISOString();
 
+            let finalVendorName = '';
+            let finalSku = '';
+
             if (currentEntryType === 'Input') {
+                const vendorElement = document.getElementById('vendorSelect') || document.getElementById('vendorName');
                 const skuInput = document.getElementById('sku');
-                const vendorInput = document.getElementById('vendorName');
-                if (!skuInput || !vendorInput) { showMessage('SKU or Vendor Name input field not found.', 'error'); return; }
-                record.sku = skuInput.value.trim();
-                record.vendorName = vendorInput.value.trim();
-            } else {
+                if (!skuInput || !vendorElement) { showMessage('SKU or Vendor Name input field not found.', 'error'); return; }
+                if(vendorSelectDropdown && vendorSelectDropdown.value === 'Add New Vendor...') {
+                    finalVendorName = document.getElementById('vendorName').value.trim();
+                } else if(vendorSelectDropdown) {
+                    finalVendorName = vendorSelectDropdown.value;
+                } else {
+                    finalVendorName = vendorElement.value.trim();
+                }
+                finalSku = skuInput.value.trim();
+            } else { // 'Output'
                 const skuSelect = document.getElementById('skuSelect');
                 const vendorSelect = document.getElementById('vendorSelect');
                 const challanSelect = document.getElementById('challanSelect');
-                if (!skuSelect || !vendorSelect || !challanSelect) { showMessage('SKU, Vendor, or Challan dropdown not found.', 'error'); return; }
-                record.sku = skuSelect.value;
-                record.vendorName = vendorSelect.value;
+                if (!skuSelect || !vendorSelect || !challanSelect) { showMessage('Required form fields not found.', 'error'); return; }
+                finalSku = skuSelect.value;
+                finalVendorName = vendorSelect.value;
                 record.challanNo = challanSelect.value;
             }
+            
+            record.vendorName = finalVendorName;
+            record.sku = finalSku;
 
             if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName ||
-                record.sku === 'Select SKU...' || record.vendorName === 'Select Vendor...' || (currentEntryType === 'Output' && record.challanNo === 'Select Challan...')) {
+                record.vendorName === 'Select Vendor...' || (currentEntryType === 'Output' && record.challanNo === 'Select Challan...') || record.sku === 'Select SKU...') {
                 showMessage('Please fill in all required fields and make valid selections.', 'error');
                 return;
             }
@@ -1440,7 +1457,7 @@
             }
             if (currentEntryType === 'Output') {
                 const selectedChallan = document.getElementById('challanSelect').value;
-                const relevantInputRecord = allRecords.filter(r => r.type === 'Input' && r.sku === record.sku && r.color === record.color && r.vendorName === record.vendorName && r.challanNo === selectedChallan).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+                const relevantInputRecord = allRecords.find(r => r.type === 'Input' && r.sku === record.sku && r.color === record.color && r.vendorName === record.vendorName && r.challanNo === selectedChallan);
                 if (!relevantInputRecord) {
                     showMessage('Could not find a matching input record for the selected Challan, SKU, Vendor, and Color.', 'error');
                     return;
@@ -1507,11 +1524,11 @@
             const record = {
                 date: dateInput.value,
                 challanNo: challanNoInput.value,
-                sku: document.getElementById('sku')?.value || document.getElementById('skuSelect')?.value,
+                sku: currentEntryType === 'Input' ? skuInputText?.value : skuSelectDropdown?.value,
                 color: colorInput.value,
                 qty: parseInt(qtyInput.value),
                 rate: parseFloat(rateInput.value),
-                vendorName: document.getElementById('vendorName')?.value || document.getElementById('vendorSelect')?.value,
+                vendorName: currentEntryType === 'Input' ? (vendorSelectDropdown?.value === 'Add New Vendor...' ? vendorInputText?.value : vendorSelectDropdown?.value) : (vendorSelectDropdown?.value || vendorInputText?.value),
                 remarks: remarksInput.value
             };
             if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName) {
