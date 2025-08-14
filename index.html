@@ -375,6 +375,12 @@
             overflow: hidden;
         }
 
+        .scrollable-remarks {
+            max-width: 150px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
         .status-output {
             background: rgba(16, 185, 129, 0.2);
             color: #10b981;
@@ -410,6 +416,23 @@
         .edit-btn:hover { color: #2563eb; }
         .print-btn { color: #059669; }
         .print-btn:hover { color: #047857; }
+
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
 
         @media print {
             body > *:not(.print-challan) {
@@ -566,7 +589,7 @@
                         <div id="vendorInputContainer" class="lg:col-span-3"></div>
                         <div>
                             <label for="remarks" class="form-label"><i class="fas fa-sticky-note mr-2"></i>Remarks</label>
-                            <textarea id="remarks" class="form-input" placeholder="e.g., Damaged item, Urgent order, etc." rows="2"></textarea>
+                            <textarea id="remarks" class="form-input" placeholder="e.g., Damaged item, Urgent order, etc." rows="4"></textarea>
                         </div>
                         <div id="challanSelectContainer" class="lg:col-span-3" style="display: none;"></div>
                         <div class="lg:col-span-3 flex justify-center flex-col md:flex-row gap-4 mt-6">
@@ -645,6 +668,18 @@
                                 <td colspan="11" class="text-center py-8 text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading transactions...</td>
                             </tr>
                         </tbody>
+                        <tfoot id="transactionTableFooter">
+                            <tr class="bg-gray-900 font-bold">
+                                <td colspan="4" class="text-right">Totals:</td>
+                                <td id="totalOutputQty" class="text-green-400">0</td>
+                                <td id="totalIssuedQty" class="text-red-400">0</td>
+                                <td id="totalRemainingStock" class="text-blue-400">0</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -781,6 +816,10 @@
         const editRemarksInput = document.getElementById('editRemarks');
         const editMessage = document.getElementById('editMessage');
         const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const transactionTableFooter = document.getElementById('transactionTableFooter');
+        const totalOutputQtyFooter = document.getElementById('totalOutputQty');
+        const totalIssuedQtyFooter = document.getElementById('totalIssuedQty');
+        const totalRemainingStockFooter = document.getElementById('totalRemainingStock');
 
         const initializeFirebase = async () => {
             try {
@@ -962,15 +1001,25 @@
 
         const renderTransactionTable = (recordsToDisplay) => {
             transactionTableBody.innerHTML = '';
+            let totalInputQty = 0;
+            let totalOutputQty = 0;
             if (recordsToDisplay.length === 0) {
                 transactionTableBody.innerHTML = `<tr><td colspan="11" class="text-center py-8 text-gray-400"><i class="fas fa-inbox text-4xl mb-4 block"></i>No transactions found.</td></tr>`;
+                totalOutputQtyFooter.textContent = '0';
+                totalIssuedQtyFooter.textContent = '0';
+                totalRemainingStockFooter.textContent = '0';
                 return;
             }
             const sortedRecords = recordsToDisplay.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             sortedRecords.forEach(record => {
                 const row = transactionTableBody.insertRow();
-                const value = (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2);
+                const value = parseFloat(record.qty) * parseFloat(record.rate);
                 const typeLabel = record.type === 'Input' ? 'Output' : 'Issue';
+                if (record.type === 'Input') {
+                    totalInputQty += record.qty;
+                } else {
+                    totalOutputQty += record.qty;
+                }
                 row.innerHTML = `
                     <td>${record.date}</td>
                     <td><span style="font-family: monospace; font-size: 0.75rem; background: #333; color: #fff; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">${record.challanNo}</span></td>
@@ -980,7 +1029,7 @@
                     <td>₹${parseFloat(record.rate).toFixed(2)}</td>
                     <td class="font-bold">₹${Number(value).toLocaleString()}</td>
                     <td>${record.vendorName}</td>
-                    <td><div class="line-clamp-1" title="${record.remarks || ''}">${record.remarks || ''}</div></td>
+                    <td><div class="scrollable-remarks" title="${record.remarks || ''}">${record.remarks || ''}</div></td>
                     <td><span class="${record.type === 'Input' ? 'status-output' : 'status-issue'}">${typeLabel}</span></td>
                     <td class="flex items-center gap-2">
                         <button onclick="editRecord('${record.id}')" class="edit-btn"><i class="fas fa-edit"></i></button>
@@ -989,6 +1038,10 @@
                     </td>
                 `;
             });
+
+            totalOutputQtyFooter.textContent = totalInputQty.toLocaleString();
+            totalIssuedQtyFooter.textContent = totalOutputQty.toLocaleString();
+            totalRemainingStockFooter.textContent = (totalInputQty - totalOutputQty).toLocaleString();
         };
 
         const updateVendorFilterOptions = (records) => {
@@ -1198,6 +1251,7 @@
             rateInput.value = '';
             qtyInput.max = '';
             challanNoInput.value = '';
+            remarksInput.value = '';
         };
 
         const handleSkuSelectChange = () => {
@@ -1224,6 +1278,7 @@
             rateInput.value = '';
             qtyInput.max = '';
             challanNoInput.value = '';
+            remarksInput.value = '';
         };
 
         const handleChallanSelectChange = () => {
@@ -1236,6 +1291,7 @@
                     colorInput.value = relevantInputRecord.color || '';
                     rateInput.value = parseFloat(relevantInputRecord.rate).toFixed(2);
                     challanNoInput.value = relevantInputRecord.challanNo;
+                    remarksInput.value = relevantInputRecord.remarks || '';
                     let inputQtyForChallan = relevantInputRecord.qty;
                     let outputQtyFromThisChallan = allRecords.filter(r => (r.type === 'Output') && r.sku === selectedSku && r.color === relevantInputRecord.color && r.challanNo === selectedChallan).reduce((sum, r) => sum + r.qty, 0);
                     const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
@@ -1249,6 +1305,7 @@
                     rateInput.value = '';
                     qtyInput.max = '';
                     challanNoInput.value = '';
+                    remarksInput.value = '';
                     showMessage('No matching input record found for this Challan.', 'error');
                 }
             } else {
@@ -1257,6 +1314,7 @@
                 rateInput.value = '';
                 qtyInput.max = '';
                 challanNoInput.value = '';
+                remarksInput.value = '';
             }
         };
 
