@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bani Professional Manufacturing & Inventory System</title>
-    <link rel="icon" type="image/png"
-        href="https://baniwomen.com/cdn/shop/files/baniwomen-icon.png?crop=center&height=32&v=1706881484&width=32">
+    <title>BANI Professional Manufacturing & Inventory System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" type="image/png" href="//baniwomen.com/cdn/shop/files/baniwomen-icon.png?crop=center&height=32&v=1706881484&width=32">
     <style>
         :root {
             --primary-color: #3498db;
@@ -131,7 +130,7 @@
             border-collapse: collapse;
             font-size: 0.95rem;
         }
-
+        
         /* Fixed table header to prevent scrolling with content */
         thead tr {
             position: sticky;
@@ -365,7 +364,7 @@
             background-color: #e9ecef;
         }
 
-        .stage-header {
+        .stage-header{
             display: flex;
             justify-content: center;
         }
@@ -403,33 +402,29 @@
             border-color: var(--warning-color);
             background-color: #fffaf0;
         }
-
+        
         #auth-modal {
             display: none;
         }
-
+        
         #main-app-content {
             display: none;
         }
-
+        
         #auth-modal .modal-content {
             max-width: 400px;
             margin: 10% auto;
         }
-
-        #auth-modal h2 {
-            text-align: center;
-        }
-
+        
         #auth-form .form-group {
             margin-bottom: 15px;
         }
-
+        
         #auth-form button {
             width: 100%;
             margin-top: 10px;
         }
-
+        
         #auth-form p {
             text-align: center;
             margin-top: 15px;
@@ -440,8 +435,8 @@
 <body>
 
     <div class="container">
-        <h1>BANI Manufacturing & Inventory System</h1>
-
+        <h1>BANI Advanced Manufacturing & Inventory System</h1>
+        
         <div id="auth-buttons" style="text-align: right; margin-bottom: 20px;">
             <button id="sign-out-btn" style="background-color: #e74c3c; display:none;">Sign Out</button>
         </div>
@@ -450,12 +445,13 @@
             <div class="tabs">
                 <button class="tab-link active" id="home-tab">Home</button>
                 <button class="tab-link" id="record-output-tab">Record Output</button>
-                <button class="tab-link" id="wip-tab">Work in Progress</button>
+                <button class="tab-link" id="issue-to-vendor-tab">Issue to Vendor</button>
+                <button class="tab-link" id="receive-from-vendor-tab">Receive from Vendor</button>
                 <button class="tab-link" id="record-receiving-tab">Record Receiving</button>
                 <button class="tab-link" id="manage-vendors-tab">Manage Vendors</button>
                 <button class="tab-link" id="transactions-tab">Transactions</button>
             </div>
-
+    
             <div id="Home" class="tab-content active">
                 <div class="home-dashboard">
                     <div class="dashboard-card">
@@ -486,25 +482,23 @@
                                 <th>WIP</th>
                                 <th>Finished</th>
                                 <th>Received</th>
-                                <th>Date Issued</th>
+                                <th>Last Input Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
-
+    
                 <hr style="margin: 30px 0;">
-
+    
                 <h2>SKU Progress Visualization</h2>
                 <div style="margin-bottom: 20px;">
-                    <input type="text" id="sku-search-input" placeholder="Search by SKU..."
-                        style="width: 250px; padding: 10px;">
+                    <input type="text" id="sku-search-input" placeholder="Search by SKU..." style="width: 250px; padding: 10px;">
                     <button id="sku-search-btn" style="padding: 10px;">Search</button>
                 </div>
-
-                <div id="visualization-container"
-                    style="display: none; padding: 20px; background: #f8f9fa; border: 1px solid #e9ecef;">
+                
+                <div id="visualization-container" style="display: none; padding: 20px; background: #f8f9fa; border: 1px solid #e9ecef;">
                     <h3>Progress for SKU: <span id="visualization-sku-title"></span></h3>
                     <div style="max-height: 400px;">
                         <canvas id="challanProgressChart"></canvas>
@@ -525,7 +519,7 @@
                     </div>
                 </div>
             </div>
-
+    
             <div id="RecordOutput" class="tab-content">
                 <h2>Record Output Material</h2>
                 <form id="outputForm" class="form-grid">
@@ -537,81 +531,87 @@
                             <option value="Dress">Dress</option>
                             <option value="Dupatta">Dupatta</option>
                             <option value="Custom">Add Custom...</option>
-                        </select><input type="text" id="customItemType" placeholder="Specify custom type"
-                            style="display:none; margin-top:10px;"></div>
+                        </select><input type="text" id="customItemType" placeholder="Specify custom type" style="display:none; margin-top:10px;"></div>
                     <div class="form-group"><label for="color">Color</label><select id="color" required>
-                            <option value="">Select Color</option>
-                            <option value="Custom">Add New Color...</option>
-                        </select><input type="text" id="customColor" placeholder="Specify new color"
-                            style="display:none; margin-top:10px;"></div>
-                    <div class="form-group"><label for="challanNo">Challan No</label><input type="text" id="challanNo"
-                            required></div>
-                    <div class="form-group"><label for="rate">Rate (per item)</label><input type="number" id="rate"
-                            step="0.01" required></div>
-                    <div class="form-group"><label for="outputVendor">Vendor for Cutting</label><select
-                            id="outputVendor" required></select></div>
-                    <div class="form-group"><label for="date-issued">Date Issued</label><input type="date"
-                            id="date-issued" required></div>
+                        <option value="">Select Color</option>
+                        <option value="Custom">Add New Color...</option>
+                        </select><input type="text" id="customColor" placeholder="Specify new color" style="display:none; margin-top:10px;"></div>
+                    <div class="form-group"><label for="challanNo">Challan No</label><input type="text" id="challanNo" required></div>
+                    <div class="form-group"><label for="rate">Rate (per item)</label><input type="number" id="rate" step="0.01" required></div>
+                    <div class="form-group"><label for="outputVendor">Vendor for Cutting</label><select id="outputVendor" required></select></div>
+                    <div class="form-group"><label for="date-issued">Date Issued</label><input type="date" id="date-issued" required></div>
                     <div class="form-group"><label for="remarks">Remarks</label><input type="text" id="remarks"></div>
                     <div class="size-quantity-section">
                         <h3>Size-wise Quantities</h3>
                         <div id="size-quantity-container" class="size-quantity-container"></div>
                         <div style="margin-top: 15px; display:flex; align-items:center; gap:20px;">
-                            <button type="button" class="add-size-btn" id="add-output-size-btn"><i
-                                    class="fas fa-plus"></i> Add Size</button>
+                            <button type="button" class="add-size-btn" id="add-output-size-btn"><i class="fas fa-plus"></i> Add Size</button>
                             <strong id="total-qty-display">Total Quantity: 0</strong>
                         </div>
                     </div>
-                    <button type="submit" style="grid-column: 1 / -1; padding: 15px; font-size: 1.1rem;">Issue for
-                        Cutting</button>
+                    <button type="submit" style="grid-column: 1 / -1; padding: 15px; font-size: 1.1rem;">Issue for Cutting</button>
                 </form>
             </div>
-
-            <div id="WIP" class="tab-content">
-                <h2>Update Work in Progress</h2>
-                <form id="wipForm">
-                    <div id="wip-workflow-container">
+    
+            <div id="IssueToVendor" class="tab-content">
+                <h2>Issue to Vendor</h2>
+                <form id="issueForm">
+                    <div id="issue-workflow-container">
                         <div class="form-group">
-                            <label for="wipChallan">1. Select Challan to Update</label>
-                            <select id="wipChallan" required></select>
+                            <label for="issueChallan">1. Select Challan to Update</label>
+                            <select id="issueChallan" required></select>
                         </div>
-                        <div id="wip-details-box" style="display: none;">
-                            <div class="info-box">Current Stage: <strong id="wipCurrentStage"></strong> | Available Qty:
-                                <strong id="wipAvailableQty"></strong></div>
+                        <div id="issue-details-box" style="display: none;">
+                            <div class="info-box">Current Stage: <strong id="issueCurrentStage"></strong> | Available Qty: <strong id="issueAvailableQty"></strong></div>
                             <div class="wip-grid" style="margin-top: 20px;">
-                                <div class="form-group"><label for="wipNextStage">2. Move to Stage</label><select
-                                        id="wipNextStage" required></select></div>
-                                <div class="form-group"><label for="wipVendor">3. Assign to Vendor</label><select
-                                        id="wipVendor" required></select></div>
-                                <div class="form-group"><label for="date-updated">4. Date Updated</label><input
-                                        type="date" id="date-updated" required></div>
+                                <div class="form-group"><label for="issueNextStage">2. Move to Stage</label><select id="issueNextStage" required></select></div>
+                                <div class="form-group"><label for="issueVendor">3. Assign to Vendor</label><select id="issueVendor" required></select></div>
+                                <div class="form-group"><label for="date-issued-wip">4. Date Issued</label><input type="date" id="date-issued-wip" required></div>
                             </div>
                         </div>
                     </div>
-                    <div id="wip-size-section" class="size-quantity-section" style="display: none;">
+                    <div id="issue-size-section" class="size-quantity-section" style="display: none;">
                         <h4>Quantities to Update by Size</h4>
-                        <div id="wip-size-container" class="size-quantity-container"></div>
+                        <div id="issue-size-container" class="size-quantity-container"></div>
                     </div>
                     <div class="form-group" style="margin-top:20px;">
-                        <label for="wipNewChallan">New Challan No (Optional)</label>
-                        <input type="text" id="wipNewChallan" placeholder="Leave blank to use existing challan number">
+                        <label for="issueNewChallan">New Challan No (Optional)</label>
+                        <input type="text" id="issueNewChallan" placeholder="Leave blank to use existing challan number">
                     </div>
-                    <button type="submit" style="margin-top: 20px; width:100%; padding: 15px; font-size: 1.1rem;">Update
-                        Progress</button>
+                    <button type="submit" style="margin-top: 20px; width:100%; padding: 15px; font-size: 1.1rem;">Issue Material</button>
                 </form>
             </div>
 
+            <div id="ReceiveFromVendor" class="tab-content">
+                <h2>Receive from Vendor</h2>
+                <form id="receiveForm">
+                    <div class="form-group">
+                        <label for="receiveChallan">1. Select Challan to Receive</label>
+                        <select id="receiveChallan" required></select>
+                    </div>
+                    <div id="receive-details-box" style="display: none;">
+                        <div class="info-box">Current Stage: <strong id="receiveCurrentStage"></strong> | Vendor: <strong id="receiveVendor"></strong></div>
+                        <div class="wip-grid" style="margin-top: 20px;">
+                            <div class="form-group"><label for="receiveNewChallan">New Challan No (Optional)</label><input type="text" id="receiveNewChallan" placeholder="Leave blank to use existing challan number"></div>
+                            <div class="form-group"><label for="date-received-wip">Date Received</label><input type="date" id="date-received-wip" required></div>
+                        </div>
+                    </div>
+                    <div id="receive-size-section" class="size-quantity-section" style="display: none;">
+                        <h4>Quantities to Receive by Size</h4>
+                        <div id="receive-size-container" class="size-quantity-container"></div>
+                    </div>
+                    <button type="submit" style="margin-top: 20px; width:100%; padding: 15px; font-size: 1.1rem;">Record Received Material</button>
+                </form>
+            </div>
+    
             <div id="RecordReceiving" class="tab-content">
                 <h2>Record Receiving Material</h2>
                 <form id="receivingForm">
-                    <div class="form-group"><label for="recChallan">Select Challan to Receive</label><select
-                            id="recChallan" required></select></div>
+                    <div class="form-group"><label for="recChallan">Select Challan to Receive</label><select id="recChallan" required></select></div>
                     <div id="rec-details-box" style="display:none;">
-                        <p class="info-box"><strong>SKU:</strong> <span id="recSku"></span> | <strong>Color:</strong>
-                            <span id="recColor"></span> | <strong>Vendor:</strong> <span id="recVendor"></span></p>
+                        <p class="info-box"><strong>SKU:</strong> <span id="recSku"></span> | <strong>Color:</strong> <span id="recColor"></span> | <strong>Vendor:</strong> <span id="recVendor"></span></p>
                     </div>
-                    <div class="form-group"><label for="date-received">Date Received</label><input type="date"
-                            id="date-received" required></div>
+                    <div class="form-group"><label for="date-received">Date Received</label><input type="date" id="date-received" required></div>
                     <div id="rec-size-section" class="size-quantity-section" style="display: none;">
                         <h3>Quantities to Receive by Size</h3>
                         <div id="rec-size-container" class="size-quantity-container"></div>
@@ -619,15 +619,13 @@
                     <button type="submit" style="margin-top:20px; width:100%; padding: 15px;">Mark as Received</button>
                 </form>
             </div>
-
+    
             <div id="ManageVendors" class="tab-content">
                 <h2>Manage Vendors</h2>
                 <form id="vendorForm">
-                    <div class="form-group"><label for="vendorName">Vendor Name</label><input type="text"
-                            id="vendorName" required></div>
+                    <div class="form-group"><label for="vendorName">Vendor Name</label><input type="text" id="vendorName" required></div>
                     <div class="form-group"><label>Job Types (Select all that apply)</label>
-                        <div id="jobTypesContainer"
-                            style="display:flex; flex-wrap:wrap; gap: 15px; padding: 10px; border: 1px solid #ced4da;">
+                        <div id="jobTypesContainer" style="display:flex; flex-wrap:wrap; gap: 15px; padding: 10px; border: 1px solid #ced4da;">
                         </div>
                     </div>
                     <button type="submit">Register Vendor</button>
@@ -647,7 +645,7 @@
                     </table>
                 </div>
             </div>
-
+    
             <div id="Transactions" class="tab-content">
                 <h2>Transactions Log</h2>
                 <div class="table-container">
@@ -672,7 +670,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Auth Modal -->
     <div id="auth-modal" class="modal">
         <div class="modal-content">
@@ -694,7 +692,7 @@
             </form>
         </div>
     </div>
-
+    
     <!-- Vendor Edit Modal -->
     <div id="vendorEditModal" class="modal">
         <div class="modal-content">
@@ -710,8 +708,7 @@
                 </div>
                 <div class="form-group">
                     <label>Job Types</label>
-                    <div id="editJobTypesContainer"
-                        style="display:flex; flex-wrap:wrap; gap: 15px; padding: 10px; border: 1px solid #ced4da;">
+                    <div id="editJobTypesContainer" style="display:flex; flex-wrap:wrap; gap: 15px; padding: 10px; border: 1px solid #ced4da;">
                     </div>
                 </div>
                 <button type="submit" style="margin-top: 20px;">Save Changes</button>
@@ -729,34 +726,26 @@
             <form id="editMaterialForm">
                 <input type="hidden" id="editMaterialId">
                 <div class="form-grid">
-                    <div class="form-group"><label for="editSku">SKU</label><input type="text" id="editSku" required>
-                    </div>
-                    <div class="form-group"><label for="editItemType">Item Type</label><select id="editItemType"
-                            required>
+                    <div class="form-group"><label for="editSku">SKU</label><input type="text" id="editSku" required></div>
+                    <div class="form-group"><label for="editItemType">Item Type</label><select id="editItemType" required>
                             <option value="">Select Type</option>
                             <option value="Co-ord">Co-ord</option>
                             <option value="SKD">SKD</option>
                             <option value="Dress">Dress</option>
                             <option value="Dupatta">Dupatta</option>
-                        </select><input type="text" id="editCustomItemType" placeholder="Specify custom type"
-                            style="display:none; margin-top:10px;"></div>
-                    <div class="form-group"><label for="editColor">Color</label><input type="text" id="editColor"
-                            required></div>
-                    <div class="form-group"><label for="editRate">Rate (per item)</label><input type="number"
-                            id="editRate" step="0.01" required></div>
+                        </select><input type="text" id="editCustomItemType" placeholder="Specify custom type" style="display:none; margin-top:10px;"></div>
+                    <div class="form-group"><label for="editColor">Color</label><input type="text" id="editColor" required></div>
+                    <div class="form-group"><label for="editRate">Rate (per item)</label><input type="number" id="editRate" step="0.01" required></div>
                     <div class="size-quantity-section" style="grid-column: 1 / -1;">
                         <h3>Size-wise Initial Quantities</h3>
                         <div id="edit-size-quantity-container" class="size-quantity-container"></div>
                         <div style="margin-top: 15px; display:flex; align-items:center; gap:20px;">
-                            <button type="button" class="add-size-btn" id="add-edit-size-btn"><i
-                                    class="fas fa-plus"></i> Add Size</button>
+                            <button type="button" class="add-size-btn" id="add-edit-size-btn"><i class="fas fa-plus"></i> Add Size</button>
                             <strong id="edit-total-qty-display">Total Quantity: 0</strong>
                         </div>
                     </div>
                 </div>
-                <button type="submit"
-                    style="grid-column: 1 / -1; padding: 15px; font-size: 1.1rem; margin-top: 20px;">Save
-                    Changes</button>
+                <button type="submit" style="grid-column: 1 / -1; padding: 15px; font-size: 1.1rem; margin-top: 20px;">Save Changes</button>
             </form>
         </div>
     </div>
@@ -797,7 +786,9 @@
                                     <th>Qty</th>
                                     <th>Stage</th>
                                     <th>Vendor</th>
-                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Date Issued</th>
+                                    <th>Date Received</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -807,7 +798,7 @@
             </div>
         </div>
     </div>
-
+    
     <div id="custom-alert" class="modal">
         <div class="modal-content" style="max-width: 300px; text-align: center; padding: 20px;">
             <p id="alert-message" style="margin: 0;"></p>
@@ -834,7 +825,7 @@
         // Global variables provided by the environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
+        
         // This variable is now correctly loaded from the environment
         const firebaseConfig = {
             apiKey: "AIzaSyCa9ujZAkO8d7_QLv1KWOOEJ3ww8rFddh0",
@@ -845,7 +836,7 @@
             appId: "1:921264942139:web:7e53870dc9a48cd406401e",
             measurementId: "G-3FVJTK0MX0"
         };
-
+        
 
         let db;
         let auth;
@@ -858,6 +849,7 @@
         let myChart;
 
         const STAGES = ["Cutting", "Embroidery", "Printing", "Stitching", "Button Work", "Finishing"];
+        const INDEPENDENT_STAGES = ["Alteration", "Repress"];
         const FINAL_STAGE = STAGES[STAGES.length - 1];
         const DEFAULT_SIZES = ["S", "M", "L", "XL"];
         const collections = {
@@ -865,7 +857,7 @@
             vendors: "vendors",
             transactions: "transactions"
         };
-
+        
         // Custom Alert/Confirmation
         function showAlert(message) {
             document.getElementById('alert-message').textContent = message;
@@ -921,7 +913,7 @@
                 if (!material) return;
 
                 const transactionCollection = collection(db, `artifacts/${appId}/users/${userId}/${collections.transactions}`);
-
+                
                 Object.keys(data.quantities).forEach(size => {
                     addDoc(transactionCollection, {
                         date: data.date,
@@ -954,7 +946,7 @@
             materials.forEach(materialDoc => {
                 const material = materialDoc.data;
                 const docId = materialDoc.id;
-
+                
                 if (!skus[material.sku]) {
                     skus[material.sku] = {
                         materials: [],
@@ -963,14 +955,15 @@
                         totalFinished: 0,
                         totalReceived: 0,
                         earliestDate: null,
+                        latestInputDate: null,
                     };
                 }
-
+                
                 const skuData = skus[material.sku];
                 skuData.materials.push(materialDoc);
                 skuData.totalInitial += sumQuantities(material.initialQuantities);
                 skuData.totalReceived += sumQuantities(material.receivedQuantities);
-
+                
                 let latestStageIndex = -1;
                 material.challans.forEach(c => {
                     const challanQty = sumQuantities(c.quantities);
@@ -978,16 +971,19 @@
                     if (stageIndex > latestStageIndex) latestStageIndex = stageIndex;
                     if (c.stage === FINAL_STAGE) skuData.totalFinished += challanQty;
                     else skuData.totalWIP += challanQty;
-
-                    const challanDate = new Date(c.date);
+                    
+                    const challanDate = new Date(c.date_issued);
                     if (!skuData.earliestDate || challanDate < new Date(skuData.earliestDate)) {
-                        skuData.earliestDate = c.date;
+                        skuData.earliestDate = c.date_issued;
+                    }
+                    if (c.date_received && (!skuData.latestInputDate || new Date(c.date_received) > new Date(skuData.latestInputDate))) {
+                        skuData.latestInputDate = c.date_received;
                     }
                 });
-
+                
                 skuData.currentStage = latestStageIndex > -1 ? STAGES[latestStageIndex] : 'Not Started';
             });
-
+            
             Object.keys(skus).forEach(sku => {
                 const skuData = skus[sku];
                 const totalStock = skuData.totalInitial - skuData.totalWIP - skuData.totalFinished - skuData.totalReceived;
@@ -995,30 +991,30 @@
                 workInProgress += skuData.totalWIP;
                 finishedAwaiting += skuData.totalFinished;
                 totalReceived += skuData.totalReceived;
-
+                
                 const row = stockTbody.insertRow();
                 row.style.cursor = 'pointer';
                 row.addEventListener('click', () => showSkuModal(sku));
                 row.innerHTML = `<td>${sku}</td><td>${skuData.totalInitial}</td>
                                  <td>${skuData.currentStage}</td><td>${skuData.totalWIP}</td><td>${skuData.totalFinished}</td><td>${skuData.totalReceived}</td>
-                                 <td>${skuData.earliestDate}</td>
+                                 <td>${skuData.latestInputDate || 'N/A'}</td>
                                  <td>
                                      <button class="edit-btn" data-sku="${sku}">Edit</button>
                                      <button class="delete-btn" data-sku="${sku}">Delete</button>
                                  </td>`;
             });
-
+            
             document.getElementById('stockOnHand').textContent = stockOnHand;
             document.getElementById('workInProgress').textContent = workInProgress;
             document.getElementById('finishedAwaiting').textContent = finishedAwaiting;
             document.getElementById('totalReceived').textContent = totalReceived;
-
+            
             document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 // To be implemented: an edit modal that handles all material documents for a given SKU
                 showAlert("Editing all records for this SKU is not yet implemented.");
             }));
-
+            
             document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 showConfirm("Are you sure you want to delete this material record? All associated WIP and transaction history will also be deleted.", async (confirmed) => {
@@ -1026,12 +1022,12 @@
                         const sku = e.target.dataset.sku;
                         const materialDocsToDelete = materials.filter(m => m.data.sku === sku);
                         for (const doc of materialDocsToDelete) {
-                            await deleteMaterial(doc.id);
+                           await deleteMaterial(doc.id);
                         }
                     }
                 });
             }));
-
+            
             // Render default chart
             if (Object.keys(skus).length > 0) {
                 const firstSku = Object.keys(skus)[0];
@@ -1039,7 +1035,7 @@
                 visualizeSkuProgress(firstSku);
             }
         }
-
+        
         function renderVendorTable() {
             const tbody = document.querySelector("#vendorTable tbody");
             tbody.innerHTML = '';
@@ -1170,7 +1166,7 @@
         }
 
         // --- Form Population & Event Handlers ---
-        document.getElementById('vendorForm').addEventListener('submit', async function (e) {
+        document.getElementById('vendorForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('vendorName').value;
             const jobTypes = Array.from(document.querySelectorAll('#jobTypesContainer input:checked')).map(cb => cb.value);
@@ -1193,7 +1189,7 @@
         function populateJobTypes(containerId, selectedJobs = []) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
-            STAGES.forEach(stage => {
+            [...STAGES, ...INDEPENDENT_STAGES].forEach(stage => {
                 const checked = selectedJobs.includes(stage) ? 'checked' : '';
                 container.innerHTML += `<label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" value="${stage}" ${checked}> ${stage}</label>`;
             });
@@ -1210,8 +1206,8 @@
                 select.appendChild(option);
             });
         }
-
-        document.getElementById('color').addEventListener('change', function () {
+        
+        document.getElementById('color').addEventListener('change', function() {
             document.getElementById('customColor').style.display = (this.value === 'Custom') ? 'block' : 'none';
         });
 
@@ -1224,7 +1220,7 @@
             document.getElementById('vendorEditModal').style.display = 'block';
         }
 
-        document.getElementById('editVendorForm').addEventListener('submit', async function (e) {
+        document.getElementById('editVendorForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const docId = document.getElementById('editVendorId').value;
             const newName = document.getElementById('editVendorName').value;
@@ -1243,11 +1239,11 @@
             }
         });
 
-        document.getElementById('itemType').addEventListener('change', function () {
+        document.getElementById('itemType').addEventListener('change', function() {
             document.getElementById('customItemType').style.display = (this.value === 'Custom') ? 'block' : 'none';
         });
 
-        document.getElementById('editItemType').addEventListener('change', function () {
+        document.getElementById('editItemType').addEventListener('change', function() {
             document.getElementById('editCustomItemType').style.display = (this.value === 'Custom') ? 'block' : 'none';
         });
 
@@ -1274,7 +1270,7 @@
             }
         }
 
-        document.getElementById('outputForm').addEventListener('submit', async function (e) {
+        document.getElementById('outputForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const { quantities, total } = getQuantitiesFromContainer('size-quantity-container');
             if (total === 0) {
@@ -1312,15 +1308,17 @@
                     challanNo,
                     vendor: document.getElementById('outputVendor').value,
                     stage: STAGES[0],
+                    status: 'received',
                     quantities: quantities,
-                    date: dateIssued
+                    date_issued: dateIssued,
+                    date_received: dateIssued
                 };
                 const updatedChallans = [...existingMaterialDoc.data.challans, newChallanData];
                 const newInitialQuantities = { ...existingMaterialDoc.data.initialQuantities };
                 Object.keys(quantities).forEach(size => {
                     newInitialQuantities[size] = (newInitialQuantities[size] || 0) + quantities[size];
                 });
-                const updateData = {
+                const updateData = { 
                     challans: updatedChallans,
                     initialQuantities: newInitialQuantities,
                 };
@@ -1340,8 +1338,10 @@
                     challanNo,
                     vendor: document.getElementById('outputVendor').value,
                     stage: STAGES[0],
+                    status: 'received',
                     quantities: quantities,
-                    date: dateIssued
+                    date_issued: dateIssued,
+                    date_received: dateIssued
                 };
                 const newMaterial = {
                     sku,
@@ -1364,7 +1364,7 @@
             }
         });
 
-        document.getElementById('editMaterialForm').addEventListener('submit', async function (e) {
+        document.getElementById('editMaterialForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const docId = document.getElementById('editMaterialId').value;
             const { quantities, total } = getQuantitiesFromContainer('edit-size-quantity-container');
@@ -1392,7 +1392,7 @@
                 return c;
             });
             const received = existingMaterial.receivedQuantities;
-
+            
             const totalInitial = sumQuantities(quantities);
             const totalReceived = sumQuantities(received);
 
@@ -1400,7 +1400,7 @@
                 showAlert('The number of received items cannot exceed the new total initial quantity.');
                 return;
             }
-
+            
             const updateData = {
                 ...updatedMaterial,
                 challans,
@@ -1436,19 +1436,31 @@
             document.getElementById('materialEditModal').style.display = 'block';
         }
 
-        function populateWipChallanDropdown() {
-            const select = document.getElementById('wipChallan');
+        function populateIssueChallanDropdown() {
+            const select = document.getElementById('issueChallan');
             select.innerHTML = '<option value="">-- Select a Challan --</option>';
             materials.forEach(mDoc => {
                 const m = mDoc.data;
-                m.challans.filter(c => sumQuantities(c.quantities) > 0)
-                    .forEach(c => select.add(new Option(`Challan ${c.challanNo} (${m.color}, Stage: ${c.stage})`, `${mDoc.id}|${c.challanNo}`)));
+                m.challans.filter(c => sumQuantities(c.quantities) > 0 && c.status === 'received').forEach(c => {
+                    select.add(new Option(`Challan ${c.challanNo} (${m.color}, Stage: ${c.stage})`, `${mDoc.id}|${c.challanNo}`));
+                });
             });
         }
-
-        document.getElementById('wipChallan').addEventListener('change', function () {
-            const detailsBox = document.getElementById('wip-details-box');
-            const sizeSection = document.getElementById('wip-size-section');
+        
+        function populateReceiveChallanDropdown() {
+            const select = document.getElementById('receiveChallan');
+            select.innerHTML = '<option value="">-- Select a Challan --</option>';
+            materials.forEach(mDoc => {
+                const m = mDoc.data;
+                m.challans.filter(c => sumQuantities(c.quantities) > 0 && c.status === 'sent').forEach(c => {
+                    select.add(new Option(`Challan ${c.challanNo} (${m.color}, Stage: ${c.stage})`, `${mDoc.id}|${c.challanNo}`));
+                });
+            });
+        }
+        
+        document.getElementById('issueChallan').addEventListener('change', function() {
+            const detailsBox = document.getElementById('issue-details-box');
+            const sizeSection = document.getElementById('issue-size-section');
             if (!this.value) {
                 detailsBox.style.display = 'none';
                 sizeSection.style.display = 'none';
@@ -1459,16 +1471,17 @@
             const [docId, challanNo] = this.value.split('|');
             const material = materials.find(m => m.id === docId).data;
             const challan = material.challans.find(c => c.challanNo === challanNo);
-            document.getElementById('wipCurrentStage').textContent = challan.stage;
-            document.getElementById('wipAvailableQty').textContent = sumQuantities(challan.quantities);
-            const nextStageSelect = document.getElementById('wipNextStage');
+            document.getElementById('issueCurrentStage').textContent = challan.stage;
+            document.getElementById('issueAvailableQty').textContent = sumQuantities(challan.quantities);
+            const nextStageSelect = document.getElementById('issueNextStage');
             nextStageSelect.innerHTML = '<option value="">-- Select Next Stage --</option>';
             STAGES.slice(STAGES.indexOf(challan.stage) + 1).forEach(stage => nextStageSelect.add(new Option(stage, stage)));
-            document.getElementById('wipVendor').innerHTML = '<option value="">-- Select Stage First --</option>';
-            const sizeContainer = document.getElementById('wip-size-container');
+            INDEPENDENT_STAGES.forEach(stage => nextStageSelect.add(new Option(stage, stage)));
+            document.getElementById('issueVendor').innerHTML = '<option value="">-- Select Stage First --</option>';
+            const sizeContainer = document.getElementById('issue-size-container');
             sizeContainer.innerHTML = '';
             Object.entries(challan.quantities).forEach(([size, qty]) => {
-                const input = createSizeInputField(size, 'wip-size-container', qty);
+                const input = createSizeInputField(size, 'issue-size-container', qty);
                 input.setAttribute('max', qty);
             });
             const firstInput = sizeContainer.querySelector('input');
@@ -1478,22 +1491,22 @@
             }
         });
 
-        document.getElementById('wipNextStage').addEventListener('change', function () {
+        document.getElementById('issueNextStage').addEventListener('change', function() {
             if (!this.value) {
-                document.getElementById('wipVendor').innerHTML = '<option value="">-- Select Stage First --</option>';
+                document.getElementById('issueVendor').innerHTML = '<option value="">-- Select Stage First --</option>';
                 return;
             }
-            populateVendorDropdown('wipVendor', this.value);
+            populateVendorDropdown('issueVendor', this.value);
         });
 
-        document.getElementById('wipForm').addEventListener('submit', async function (e) {
+        document.getElementById('issueForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const selectedId = document.getElementById('wipChallan').value;
+            const selectedId = document.getElementById('issueChallan').value;
             if (!selectedId) {
                 showAlert('Please select a challan.');
                 return;
             }
-            const { quantities: quantitiesToUpdate, total } = getQuantitiesFromContainer('wip-size-container');
+            const { quantities: quantitiesToUpdate, total } = getQuantitiesFromContainer('issue-size-container');
             if (total === 0) {
                 showAlert('Please specify quantity for at least one size.');
                 return;
@@ -1502,43 +1515,59 @@
             const materialDocRef = doc(db, `artifacts/${appId}/users/${userId}/${collections.materials}`, docId);
             const materialData = (await getDoc(materialDocRef)).data();
             const sourceChallan = materialData.challans.find(c => c.challanNo === challanNo);
+            const nextStage = document.getElementById('issueNextStage').value;
+            const dateIssued = document.getElementById('date-issued-wip').value;
+            const issueVendor = document.getElementById('issueVendor').value;
 
-            Object.keys(quantitiesToUpdate).forEach(size => {
-                sourceChallan.quantities[size] -= quantitiesToUpdate[size];
-                if (sourceChallan.quantities[size] === 0) delete sourceChallan.quantities[size];
+            // Split the source challan
+            const remainingQuantities = {};
+            let remainingTotal = 0;
+            const newChallanQuantities = {};
+            let newChallanTotal = 0;
+            
+            Object.keys(sourceChallan.quantities).forEach(size => {
+                const issuedQty = quantitiesToUpdate[size] || 0;
+                const remainingQty = sourceChallan.quantities[size] - issuedQty;
+                if (remainingQty > 0) {
+                    remainingQuantities[size] = remainingQty;
+                    remainingTotal += remainingQty;
+                }
+                if (issuedQty > 0) {
+                    newChallanQuantities[size] = issuedQty;
+                    newChallanTotal += issuedQty;
+                }
             });
-            if (Object.keys(sourceChallan.quantities).length === 0) materialData.challans = materialData.challans.filter(c => c !== sourceChallan);
+
+            // Update original challan with remaining quantities or delete if empty
+            if (remainingTotal === 0) {
+                materialData.challans = materialData.challans.filter(c => c.challanNo !== challanNo);
+            } else {
+                sourceChallan.quantities = remainingQuantities;
+            }
+
+            // Create new challan for the issued items
             const newChallanData = {
-                challanNo: document.getElementById('wipNewChallan').value.trim() || sourceChallan.challanNo,
-                vendor: document.getElementById('wipVendor').value,
-                stage: document.getElementById('wipNextStage').value,
-                quantities: quantitiesToUpdate,
-                date: document.getElementById('date-updated').value
+                challanNo: document.getElementById('issueNewChallan').value.trim() || `${challanNo}-${nextStage.toLowerCase()}`,
+                vendor: issueVendor,
+                stage: nextStage,
+                status: 'sent',
+                quantities: newChallanQuantities,
+                date_issued: dateIssued
             };
             materialData.challans.push(newChallanData);
+            
             if (await updateMaterial(docId, materialData)) {
-                await addTransaction({ ...newChallanData, sku: materialData.sku, color: materialData.color }, `Moved from ${sourceChallan.stage}`);
+                await addTransaction({ ...newChallanData, sku: materialData.sku, color: materialData.color }, `Issued for ${nextStage}`);
                 this.reset();
-                document.getElementById('wip-details-box').style.display = 'none';
-                document.getElementById('wip-size-section').style.display = 'none';
-                console.log('WIP updated successfully!');
+                document.getElementById('issue-details-box').style.display = 'none';
+                document.getElementById('issue-size-section').style.display = 'none';
+                showAlert('Material issued successfully!');
             }
         });
 
-        function populateRecChallanDropdown() {
-            const select = document.getElementById('recChallan');
-            select.innerHTML = '<option value="">-- Select a Challan --</option>';
-            materials.forEach(mDoc => {
-                const m = mDoc.data;
-                m.challans.filter(c => sumQuantities(c.quantities) > 0)
-                    .sort((a, b) => (b.stage === FINAL_STAGE) - (a.stage === FINAL_STAGE))
-                    .forEach(c => select.add(new Option(`Challan ${c.challanNo} (${m.color}, Stage: ${c.stage})`, `${mDoc.id}|${c.challanNo}`)));
-            });
-        }
-
-        document.getElementById('recChallan').addEventListener('change', function () {
-            const detailsBox = document.getElementById('rec-details-box');
-            const sizeSection = document.getElementById('rec-size-section');
+        document.getElementById('receiveChallan').addEventListener('change', function() {
+            const detailsBox = document.getElementById('receive-details-box');
+            const sizeSection = document.getElementById('receive-size-section');
             if (!this.value) {
                 detailsBox.style.display = 'none';
                 sizeSection.style.display = 'none';
@@ -1549,10 +1578,9 @@
             const [docId, challanNo] = this.value.split('|');
             const material = materials.find(m => m.id === docId).data;
             const challan = material.challans.find(c => c.challanNo === challanNo);
-            document.getElementById('recSku').textContent = material.sku;
-            document.getElementById('recColor').textContent = material.color;
-            document.getElementById('recVendor').textContent = challan.vendor;
-            const sizeContainer = document.getElementById('rec-size-container');
+            document.getElementById('receiveCurrentStage').textContent = challan.stage;
+            document.getElementById('receiveVendor').textContent = challan.vendor;
+            const sizeContainer = document.getElementById('receive-size-container');
             sizeContainer.innerHTML = '';
             Object.entries(challan.quantities).forEach(([size, qty]) => {
                 if (qty > 0) {
@@ -1564,7 +1592,40 @@
             });
         });
 
-        document.getElementById('receivingForm').addEventListener('submit', async function (e) {
+        document.getElementById('receiveForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const selectedId = document.getElementById('receiveChallan').value;
+            if (!selectedId) {
+                showAlert('Please select a challan.');
+                return;
+            }
+            const { quantities: quantitiesToReceive, total } = getQuantitiesFromContainer('receive-size-container');
+            if (total === 0) {
+                showAlert('Please specify quantity to receive.');
+                return;
+            }
+            const [docId, challanNo] = selectedId.split('|');
+            const materialDocRef = doc(db, `artifacts/${appId}/users/${userId}/${collections.materials}`, docId);
+            const materialData = (await getDoc(materialDocRef)).data();
+            const sourceChallan = materialData.challans.find(c => c.challanNo === challanNo);
+            const dateReceived = document.getElementById('date-received-wip').value;
+            const newChallanNo = document.getElementById('receiveNewChallan').value.trim() || sourceChallan.challanNo;
+
+            // Update the challan status and date
+            sourceChallan.status = 'received';
+            sourceChallan.date_received = dateReceived;
+            sourceChallan.challanNo = newChallanNo;
+
+            if (await updateMaterial(docId, materialData)) {
+                await addTransaction({ ...sourceChallan, date: dateReceived, sku: materialData.sku, color: materialData.color, quantities: quantitiesToReceive }, `Received from ${sourceChallan.stage} job.`);
+                this.reset();
+                document.getElementById('receive-details-box').style.display = 'none';
+                document.getElementById('receive-size-section').style.display = 'none';
+                showAlert('Items received successfully!');
+            }
+        });
+
+        document.getElementById('receivingForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const selectedId = document.getElementById('recChallan').value;
             if (!selectedId) {
@@ -1595,7 +1656,7 @@
                 this.reset();
                 document.getElementById('rec-details-box').style.display = 'none';
                 document.getElementById('rec-size-section').style.display = 'none';
-                console.log('Items received successfully!');
+                showAlert('Items received successfully!');
             }
         });
 
@@ -1606,31 +1667,38 @@
                 select.add(new Option(vendor.data.name, vendor.data.name));
             });
         }
-
+        
         function showSkuModal(sku) {
             const skuMaterials = materials.filter(m => m.data.sku === sku);
             if (skuMaterials.length === 0) return;
-
+            
             let totalOutput = 0;
             let totalReceived = 0;
             let totalWIP = 0;
             let totalFinished = 0;
             let allChallans = [];
             const uniqueColors = new Set();
-
+            
             skuMaterials.forEach(mDoc => {
                 const material = mDoc.data;
                 totalOutput += sumQuantities(material.initialQuantities);
                 totalReceived += sumQuantities(material.receivedQuantities);
-
+                
                 if (material.color) {
                     uniqueColors.add(material.color);
                 }
 
                 material.challans.forEach(c => {
                     const challanQty = sumQuantities(c.quantities);
-                    if (c.stage === FINAL_STAGE) totalFinished += challanQty;
-                    else totalWIP += challanQty;
+                    if (c.stage === FINAL_STAGE) {
+                        totalFinished += challanQty;
+                    } else if (INDEPENDENT_STAGES.includes(c.stage) && c.status === 'sent') {
+                        totalWIP += challanQty; // Sent for independent job (50% progress)
+                    } else if (INDEPENDENT_STAGES.includes(c.stage) && c.status === 'received') {
+                         totalWIP += challanQty; // Received from independent job (100% progress)
+                    } else if (c.status === 'sent') {
+                        totalWIP += challanQty;
+                    }
                     allChallans.push({
                         ...c,
                         color: material.color,
@@ -1638,9 +1706,9 @@
                     });
                 });
             });
-
+            
             const progressPercent = totalOutput > 0 ? (totalReceived / totalOutput) * 100 : 0;
-
+            
             document.getElementById('modal-title-sku').textContent = sku;
             document.getElementById('modal-sku').textContent = sku;
             document.getElementById('modal-type').textContent = skuMaterials[0].data.type;
@@ -1652,12 +1720,12 @@
             const progressBar = document.getElementById('modal-progress-bar');
             progressBar.style.width = `${progressPercent}%`;
             progressBar.textContent = `${Math.round(progressPercent)}%`;
-
+            
             const challanTableBody = document.querySelector('#challanProgressTable tbody');
             challanTableBody.innerHTML = '';
-
-            allChallans.sort((a, b) => new Date(a.date) - new Date(b.date));
-
+            
+            allChallans.sort((a, b) => new Date(a.date_issued) - new Date(b.date_issued));
+            
             allChallans.forEach(c => {
                 const row = challanTableBody.insertRow();
                 const totalQty = sumQuantities(c.quantities);
@@ -1667,7 +1735,9 @@
                     <td>${totalQty}</td>
                     <td>${c.stage}</td>
                     <td>${c.vendor}</td>
-                    <td>${c.date}</td>
+                    <td>${c.status}</td>
+                    <td>${c.date_issued || 'N/A'}</td>
+                    <td>${c.date_received || 'N/A'}</td>
                 `;
             });
 
@@ -1688,7 +1758,7 @@
                 }
             });
         };
-
+        
         document.getElementById('alert-ok-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             closeModal('custom-alert');
@@ -1699,7 +1769,7 @@
             const materialDocs = materials.filter(m => m.data.sku === sku);
             const visContainer = document.getElementById('visualization-container');
             const title = document.getElementById('visualization-sku-title');
-
+            
             if (materialDocs.length === 0) {
                 visContainer.style.display = 'none';
                 showAlert('No data found for this SKU.');
@@ -1776,14 +1846,14 @@
                 }
             });
         }
-
+        
         // --- Firebase Setup ---
         async function setupFirebase() {
             try {
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
-
+                
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         userId = user.uid;
@@ -1806,15 +1876,15 @@
                 console.error("Error setting up Firebase: ", e);
             }
         }
-
+        
         // Handle auth form submission
-        document.getElementById('auth-form').addEventListener('submit', async function (e) {
+        document.getElementById('auth-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
             const errorMessage = document.getElementById('auth-error-message');
             errorMessage.textContent = '';
-
+            
             try {
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {
@@ -1824,13 +1894,13 @@
         });
 
         // Handle sign up button click
-        document.getElementById('sign-up-btn').addEventListener('click', async function (e) {
+        document.getElementById('sign-up-btn').addEventListener('click', async function(e) {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
             const errorMessage = document.getElementById('auth-error-message');
             errorMessage.textContent = '';
-
+            
             if (password.length < 6) {
                 errorMessage.textContent = 'Password should be at least 6 characters.';
                 return;
@@ -1848,7 +1918,7 @@
                 }
             }
         });
-
+        
         // Handle sign out button click
         document.getElementById('sign-out-btn').addEventListener('click', async () => {
             try {
@@ -1905,8 +1975,8 @@
             }
             renderHomePage();
             renderVendorTable();
-            populateWipChallanDropdown();
-            populateRecChallanDropdown();
+            populateIssueChallanDropdown();
+            populateReceiveChallanDropdown();
             populateVendorDropdown('outputVendor', 'Cutting');
             populateColorDropdown('color');
             renderTransactionsTable();
@@ -1916,7 +1986,8 @@
             setupFirebase();
             document.getElementById('home-tab').addEventListener('click', (e) => openTab(e, 'Home'));
             document.getElementById('record-output-tab').addEventListener('click', (e) => openTab(e, 'RecordOutput'));
-            document.getElementById('wip-tab').addEventListener('click', (e) => openTab(e, 'WIP'));
+            document.getElementById('issue-to-vendor-tab').addEventListener('click', (e) => openTab(e, 'IssueToVendor'));
+            document.getElementById('receive-from-vendor-tab').addEventListener('click', (e) => openTab(e, 'ReceiveFromVendor'));
             document.getElementById('record-receiving-tab').addEventListener('click', (e) => openTab(e, 'RecordReceiving'));
             document.getElementById('manage-vendors-tab').addEventListener('click', (e) => openTab(e, 'ManageVendors'));
             document.getElementById('transactions-tab').addEventListener('click', (e) => openTab(e, 'Transactions'));
@@ -1935,7 +2006,8 @@
 
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('date-issued').value = today;
-            document.getElementById('date-updated').value = today;
+            document.getElementById('date-issued-wip').value = today;
+            document.getElementById('date-received-wip').value = today;
             document.getElementById('date-received').value = today;
         });
     </script>
