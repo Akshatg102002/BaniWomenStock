@@ -1,1652 +1,1944 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Material Record System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Bani Professional Manufacturing & Inventory System</title>
+    <link rel="icon" type="image/png"
+        href="https://baniwomen.com/cdn/shop/files/baniwomen-icon.png?crop=center&height=32&v=1706881484&width=32">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        * {
-            box-sizing: border-box;
+        :root {
+            --primary-color: #3498db;
+            --dark-bg: #2c3e50;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #000000 100%);
-            min-height: 100vh;
-            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: #343a40;
             margin: 0;
-            padding: 0;
-        }
-
-        .glass-morphism {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+            padding: 20px;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
+            max-width: 1600px;
+            margin: auto;
+            background: var(--card-bg);
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .form-label {
-            display: block;
-            font-size: 0.875rem;
+        h1 {
+            color: var(--dark-bg);
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: var(--dark-bg);
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .home-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background-color: #f1f3f5;
+            padding: 25px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .dashboard-card h3 {
+            margin: 10px 0 0;
+            font-size: 1rem;
+            color: #555;
             font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-input {
-            display: block;
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #333333;
-            border-radius: 0.75rem;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            transition: all 0.2s ease-in-out;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .form-input::placeholder {
-            color: #666666;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            transform: translateY(0);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-            background-color: #f0f0f0;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #ffffff, #e0e0e0);
-            color: #000000;
-        }
-
-        .btn-secondary {
-            background: #333333;
-            color: #ffffff;
-        }
-
-        .btn-secondary:hover {
-            background: #555555;
-        }
-
-        .btn-danger {
-            background: linear-gradient(45deg, #ffffff, #f0f0f0);
-            color: #dc2626;
-            border: 1px solid #dc2626;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-            color: #ffffff;
-        }
-
-        .btn-success {
-            background: linear-gradient(45deg, #ffffff, #f0f0f0);
-            color: #059669;
-            border: 1px solid #059669;
-        }
-
-        .btn-success:hover {
-            background: #059669;
-            color: #ffffff;
-        }
-
-        .btn-toggle {
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            font-weight: 700;
-            font-size: 1.125rem;
-            transition: all 0.3s ease-in-out;
-            border: 2px solid transparent;
-        }
-
-        .btn-toggle.active {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .btn-toggle.inactive {
-            background: transparent;
-            color: #ffffff;
-            border-color: #333333;
-        }
-
-        .btn-toggle.inactive:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #ffffff;
-        }
-
-        .login-container {
-            max-width: 400px;
-            margin: 10vh auto;
-            padding: 2rem;
-        }
-
-        .dashboard-header {
-            background: linear-gradient(135deg, #000000 0%, #333333 100%);
-            color: #ffffff;
-            padding: 2rem;
-            border-radius: 1rem 1rem 0 0;
-            border: 1px solid #333333;
-        }
-
-        .stats-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            border: 1px solid #333333;
-            transition: all 0.3s ease-in-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stats-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: #ffffff;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.1);
-        }
-
-        .stats-card.input::before {
-            background: #10b981;
-        }
-
-        .stats-card.output::before {
-            background: #ef4444;
-        }
-
-        .stats-card.total::before {
-            background: #3b82f6;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #000000;
-            border-radius: 0.75rem;
-            overflow: hidden;
-            border: 1px solid #333333;
-        }
-
-        th {
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            padding: 1rem 1.5rem;
-            text-align: left;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #ffffff;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 2px solid #333333;
-            position: sticky;
-            top: 0;
-            z-index: 10;
         }
 
-        td {
-            padding: 1rem 1.5rem;
-            font-size: 0.875rem;
-            color: #ffffff;
-            border-bottom: 1px solid #1a1a1a;
+        .dashboard-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-bg);
         }
 
-        tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transition: background-color 0.2s ease;
-        }
-        
-        .message-box {
-            padding: 1rem;
-            margin-top: 1rem;
-            border-radius: 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 500;
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
         }
 
-        .message-success {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid #10b981;
+        .tab-link {
+            padding: 12px 22px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            margin-bottom: -2px;
+            color: #6c757d;
+            transition: all 0.2s;
         }
 
-        .message-error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid #ef4444;
+        .tab-link.active {
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: 600;
+            color: #343a40;
         }
 
-        .loading-spinner {
-            border: 3px solid #333333;
-            border-top: 3px solid #ffffff;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 8px;
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease-in-out;
+        .tab-content.active {
+            display: block;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Added new styling for tables to enable scrolling */
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
         }
 
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background: #ffffff;
-            color: #000000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
         }
 
-        .export-btn {
-            background: #059669;
-            color: #ffffff;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
+        /* Fixed table header to prevent scrolling with content */
+        thead tr {
+            position: sticky;
+            top: 0;
+            background-color: var(--dark-bg);
+            z-index: 10;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--dark-bg);
+            color: white;
             font-weight: 600;
-            transition: all 0.2s ease;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-bg);
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .form-group {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        input,
+        select,
+        button {
+            padding: 12px;
+            border: 1px solid #ced4da;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, .25);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
             border: none;
             cursor: pointer;
+            font-weight: 600;
         }
 
-        .export-btn:hover {
-            background: #047857;
-            transform: translateY(-1px);
+        #vendorForm {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
-        .search-box {
-            position: relative;
+        .info-box {
+            background-color: #eaf5ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 10px 0;
+            font-weight: 500;
         }
 
-        .search-input {
-            padding-left: 2.5rem;
-            padding-right: 1rem;
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
-            border: 2px solid #333333;
-            border-radius: 0.75rem;
+        #wip-workflow-container,
+        #rec-workflow-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        #wip-details-box,
+        #rec-details-box {
+            background: #f1f3f5;
+            padding: 20px;
+        }
+
+        .wip-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .size-quantity-section {
+            grid-column: 1 / -1;
+            background: #fbfdff;
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .size-quantity-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .size-input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .size-input-group input {
+            width: 80px;
+            text-align: center;
+        }
+
+        .size-input-group .size-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .add-size-btn {
+            background-color: #28a745;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            margin-right: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
             width: 100%;
-            background: #1a1a1a;
-            color: #ffffff;
-            transition: all 0.2s ease;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
         }
 
-        .search-input:focus {
-            border-color: #ffffff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        .modal-content {
+            background-color: #fff;
+            color: #343a40;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #ccc;
+            width: 90%;
+            max-width: 950px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .search-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666666;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        .hidden {
-            display: none !important;
+        .modal-header h2 {
+            color: var(--dark-bg);
+            border: none;
+            margin: 0;
         }
 
-        .form-section {
-            background: rgba(26, 26, 26, 0.8);
-            border-radius: 1rem;
-            padding: 2rem;
-            border: 1px solid #333333;
-        }
-
-        .line-clamp-1 {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 1;
-            overflow: hidden;
-        }
-
-        .scrollable-remarks {
-            max-width: 150px;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .status-output {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid #10b981;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .status-issue {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid #ef4444;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .delete-btn, .edit-btn, .print-btn {
-            font-size: 1rem;
-            transition: color 0.2s ease;
-            cursor: pointer;
+        .close-button {
+            color: #888;
+            font-size: 32px;
+            font-weight: bold;
             background: none;
             border: none;
-            padding: 0.5rem;
+            cursor: pointer;
         }
 
-        .delete-btn { color: #ef4444; }
-        .delete-btn:hover { color: #dc2626; }
-        .edit-btn { color: #3b82f6; }
-        .edit-btn:hover { color: #2563eb; }
-        .print-btn { color: #059669; }
-        .print-btn:hover { color: #047857; }
-
-        /* Custom scrollbar styles */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #333;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        @media print {
-            body > *:not(.print-challan) {
-                display: none;
-            }
-            .print-challan {
-                display: block;
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                font-family: 'Arial', sans-serif;
-                color: #000;
-                background-color: #fff;
-            }
-            .print-challan-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-            }
-            .print-challan-table th, .print-challan-table td {
-                border: 1px solid #000;
-                padding: 8px;
-                text-align: left;
-                font-size: 12px;
-            }
-            .no-border td {
-                border: none !important;
-            }
+        .modal-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 20px;
+        }
+
+        .modal-card h3 {
+            color: var(--dark-bg);
+            margin-top: 0;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+
+        .modal-card p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .modal-card strong {
+            color: #555;
+            margin-right: 8px;
+        }
+
+        .progress-section {
+            grid-column: 1 / -1;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e9ecef;
+        }
+
+        .stage-header {
+            display: flex;
+            justify-content: center;
+        }
+
+        .progress-bar-fill {
+            height: 25px;
+            background: var(--success-color);
+            text-align: center;
+            line-height: 25px;
+            font-weight: bold;
+            color: #fff;
+            transition: width 0.5s ease;
+        }
+
+        .stages-list {
+            list-style: none;
+            padding: 0;
+            grid-column: 1 / -1;
+        }
+
+        .stage-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-left: 5px solid #bdc3c7;
+        }
+
+        .stage-item.completed {
+            border-color: var(--success-color);
+            background-color: #f0fff4;
+        }
+
+        .stage-item.in-progress {
+            border-color: var(--warning-color);
+            background-color: #fffaf0;
+        }
+
+        #auth-modal {
+            display: none;
+        }
+
+        #main-app-content {
+            display: none;
+        }
+
+        #auth-modal .modal-content {
+            max-width: 400px;
+            margin: 10% auto;
+        }
+
+        #auth-modal h2 {
+            text-align: center;
+        }
+
+        #auth-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        #auth-form button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #auth-form p {
+            text-align: center;
+            margin-top: 15px;
         }
     </style>
 </head>
+
 <body>
-    <script>
-        const __firebase_config = JSON.stringify({
-            apiKey: "AIzaSyCZV-AReOyDWnmnhIKgDvmpUlO8GdJ6xWg",
-            authDomain: "bani-40b68.firebaseapp.com",
-            projectId: "bani-40b68",
-            storageBucket: "bani-40b68.firebasestorage.app",
-            messagingSenderId: "971923274030",
-            appId: "1:971923274030:web:f122e5b124d08fc44a62bf",
-            measurementId: "G-2WNYB3WNNY"
-        });
-    </script>
 
-    <div id="loginScreen" class="min-h-screen flex items-center justify-center">
-        <div class="login-container glass-morphism rounded-2xl fade-in">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 mx-auto">
-                    <i class="fas fa-boxes text-black text-2xl"></i>
-                </div>
-                <h1 class="text-3xl font-bold text-white mb-2">Material Record System</h1>
-                <p class="text-gray-400">Secure inventory management</p>
-            </div>
-            <form id="loginForm" class="space-y-6">
-                <div>
-                    <label for="username" class="form-label"><i class="fas fa-user mr-2"></i>Username</label>
-                    <input type="text" id="username" class="form-input" placeholder="Enter your username" required>
-                </div>
-                <div>
-                    <label for="password" class="form-label"><i class="fas fa-lock mr-2"></i>Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-full"><i class="fas fa-sign-in-alt mr-2"></i>Sign In</button>
-                <div class="text-center">
-                    <button type="button" id="demoLoginBtn" class="text-white hover:text-gray-300 font-medium" style="background: none; border: none; cursor: pointer;">
-                        <i class="fas fa-play mr-1"></i>Try Demo Account
-                    </button>
-                </div>
-            </form>
-            <div id="loginMessage" class="message-box hidden"></div>
+    <div class="container">
+        <h1>BANI Manufacturing & Inventory System</h1>
+
+        <div id="auth-buttons" style="text-align: right; margin-bottom: 20px;">
+            <button id="sign-out-btn" style="background-color: #e74c3c; display:none;">Sign Out</button>
         </div>
-    </div>
 
-    <div id="mainDashboard" class="hidden min-h-screen">
-        <div class="container">
-            <div class="dashboard-header rounded-2xl mb-8 fade-in">
-                <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
-                    <div>
-                        <h1 class="text-4xl font-bold mb-2"><i class="fas fa-warehouse mr-3"></i>Material Record System</h1>
-                        <p class="text-gray-300">BANI inventory management dashboard</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="user-profile">
-                            <div class="avatar" id="userAvatar">U</div>
-                            <div>
-                                <div class="font-semibold" id="userDisplayName">User</div>
-                                <div class="text-sm text-gray-300" id="userIdDisplay">Loading...</div>
-                            </div>
-                        </div>
-                        <button id="logoutBtn" class="btn btn-danger"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button>
-                    </div>
-                </div>
+        <div id="main-app-content">
+            <div class="tabs">
+                <button class="tab-link active" id="home-tab">Home</button>
+                <button class="tab-link" id="record-output-tab">Record Output</button>
+                <button class="tab-link" id="wip-tab">Work in Progress</button>
+                <button class="tab-link" id="record-receiving-tab">Record Receiving</button>
+                <button class="tab-link" id="manage-vendors-tab">Manage Vendors</button>
+                <button class="tab-link" id="transactions-tab">Transactions</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="stats-card output">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-400">Total Output</p>
-                            <p class="text-2xl font-bold text-green-400" id="totalInput">0</p>
-                        </div>
-                        <div class="text-green-400 text-3xl"><i class="fas fa-arrow-down"></i></div>
+            <div id="Home" class="tab-content active">
+                <div class="home-dashboard">
+                    <div class="dashboard-card">
+                        <div class="value" id="stockOnHand">0</div>
+                        <h3>Stock on Hand</h3>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="value" id="workInProgress">0</div>
+                        <h3>Work in Progress</h3>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="value" id="finishedAwaiting">0</div>
+                        <h3>Finished (Awaiting Receipt)</h3>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="value" id="totalReceived">0</div>
+                        <h3>Total Received</h3>
                     </div>
                 </div>
-                <div class="stats-card input">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-400">Total Issued</p>
-                            <p class="text-2xl font-bold text-red-400" id="totalOutput">0</p>
-                        </div>
-                        <div class="text-red-400 text-3xl"><i class="fas fa-arrow-up"></i></div>
-                    </div>
-                </div>
-                <div class="stats-card total">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-400">Current Stock</p>
-                            <p class="text-2xl font-bold text-blue-400" id="currentStock">0</p>
-                        </div>
-                        <div class="text-blue-400 text-3xl"><i class="fas fa-boxes"></i></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-morphism rounded-2xl p-8 mb-8 fade-in">
-                <div class="flex justify-center gap-6 mb-8">
-                    <button id="inputBtn" class="btn-toggle active"><i class="fas fa-plus mr-2"></i>Output Material</button>
-                    <button id="outputBtn" class="btn-toggle inactive"><i class="fas fa-minus mr-2"></i>Issue Material</button>
-                </div>
-                <div class="form-section">
-                    <h2 id="formTitle" class="text-2xl font-bold text-white mb-6 text-center"><i class="fas fa-edit mr-2"></i>Record Output Material</h2>
-                    <form id="materialForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div>
-                            <label for="date" class="form-label"><i class="fas fa-calendar mr-2"></i>Date</label>
-                            <input type="date" id="date" class="form-input" required>
-                        </div>
-                        <div>
-                            <label for="challanNo" class="form-label"><i class="fas fa-receipt mr-2"></i>Challan No</label>
-                            <input type="text" id="challanNo" class="form-input" placeholder="e.g., CHN-2025-001" required>
-                        </div>
-                        <div id="skuInputContainer"></div>
-                        <div>
-                            <label for="color" class="form-label"><i class="fas fa-palette mr-2"></i>Color</label>
-                            <input type="text" id="color" class="form-input" placeholder="e.g., Blue">
-                        </div>
-                        <div>
-                            <label for="qty" class="form-label"><i class="fas fa-sort-numeric-up mr-2"></i>Quantity</label>
-                            <input type="number" id="qty" class="form-input" min="1" required>
-                        </div>
-                        <div>
-                            <label for="rate" class="form-label"><i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)</label>
-                            <input type="number" id="rate" class="form-input" step="0.01" min="0" required>
-                        </div>
-                        <div id="vendorInputContainer" class="lg:col-span-3"></div>
-                        <div>
-                            <label for="remarks" class="form-label"><i class="fas fa-sticky-note mr-2"></i>Remarks</label>
-                            <textarea id="remarks" class="form-input" placeholder="e.g., Damaged item, Urgent order, etc." rows="4"></textarea>
-                        </div>
-                        <div id="challanSelectContainer" class="lg:col-span-3" style="display: none;"></div>
-                        <div class="lg:col-span-3 flex justify-center flex-col md:flex-row gap-4 mt-6">
-                            <button type="submit" class="btn btn-primary text-lg px-8 py-4"><i class="fas fa-save mr-2"></i>Add Record</button>
-                            <button type="button" id="printChallanBtn" class="btn btn-primary text-lg px-8 py-4"><i class="fas fa-print mr-2"></i>Print Challan</button>
-                        </div>
-                    </form>
-                    <div id="messageBox" class="message-box hidden"></div>
-                </div>
-            </div>
-
-            <div class="glass-morphism rounded-2xl p-8 fade-in">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                    <h2 class="text-3xl font-bold text-white"><i class="fas fa-table mr-3"></i>Stock</h2>
-                    <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                        <div class="flex flex-col sm:flex-row gap-2">
-                            <div>
-                                <label for="startDate" class="form-label hidden sm:block">Start Date</label>
-                                <input type="date" id="startDate" class="form-input w-full sm:w-auto">
-                            </div>
-                            <div>
-                                <label for="endDate" class="form-label hidden sm:block">End Date</label>
-                                <input type="date" id="endDate" class="form-input w-full sm:w-auto">
-                            </div>
-                        </div>
-                        <select id="vendorFilter" class="form-input w-full sm:w-auto"><option value="all">All Vendors</option></select>
-                        <div class="search-box w-full sm:w-auto">
-                            <input type="text" id="searchInput" class="search-input" placeholder="Search...">
-                            <i class="fas fa-search search-icon"></i>
-                        </div>
-                        <button id="exportBtn" class="export-btn w-full sm:w-auto"><i class="fas fa-download"></i>Export CSV</button>
-                    </div>
-                </div>
-                <div class="overflow-x-auto mb-12 h-[300px] overflow-y-auto rounded-lg shadow-lg">
-                    <table id="aggregatedRecordsTable" class="w-full">
+                <h2>Inventory Dashboard</h2>
+                <div class="table-container">
+                    <table id="stockTable">
                         <thead>
                             <tr>
-                                <th scope="col"><i class="fas fa-barcode mr-2"></i>SKU</th>
-                                <th scope="col"><i class="fas fa-palette mr-2"></i>Color</th>
-                                <th scope="col"><i class="fas fa-receipt mr-2"></i>Challan No</th>
-                                <th scope="col"><i class="fas fa-store mr-2"></i>Vendor</th>
-                                <th scope="col"><i class="fas fa-rupee-sign mr-2"></i>Latest Rate</th>
-                                <th scope="col"><i class="fas fa-arrow-down mr-2"></i>Total Output Qty</th>
-                                <th scope="col"><i class="fas fa-arrow-up mr-2"></i>Total Issued Qty</th>
-                                <th scope="col"><i class="fas fa-boxes mr-2"></i>Remaining Stock</th>
+                                <th>SKU</th>
+                                <th>Total Qty</th>
+                                <th>Current Stage</th>
+                                <th>WIP</th>
+                                <th>Finished</th>
+                                <th>Received</th>
+                                <th>Date Issued</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="aggregatedRecordsTableBody">
-                            <tr>
-                                <td colspan="8" class="text-center py-8 text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading records...</td>
-                            </tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
 
-                <h2 class="text-3xl font-bold text-white mb-6 text-center"><i class="fas fa-history mr-3"></i>Transactions</h2>
-                <div class="overflow-x-auto h-[400px] overflow-y-auto rounded-lg shadow-lg">
-                    <table id="transactionTable" class="w-full">
-                        <thead>
-                            <tr>
-                                <th scope="col"><i class="fas fa-calendar mr-2"></i>Date</th>
-                                <th scope="col"><i class="fas fa-receipt mr-2"></i>Challan No</th>
-                                <th scope="col"><i class="fas fa-barcode mr-2"></i>SKU</th>
-                                <th scope="col"><i class="fas fa-palette mr-2"></i>Color</th>
-                                <th scope="col"><i class="fas fa-sort-numeric-up mr-2"></i>Qty</th>
-                                <th scope="col"><i class="fas fa-rupee-sign mr-2"></i>Rate</th>
-                                <th scope="col"><i class="fas fa-calculator mr-2"></i>Value</th>
-                                <th scope="col"><i class="fas fa-store mr-2"></i>Vendor</th>
-                                <th scope="col" style="max-width: 150px;"><i class="fas fa-sticky-note mr-2"></i>Remarks</th>
-                                <th scope="col"><i class="fas fa-tag mr-2"></i>Type</th>
-                                <th scope="col"><i class="fas fa-cog mr-2"></i>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactionTableBody">
-                            <tr>
-                                <td colspan="11" class="text-center py-8 text-gray-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading transactions...</td>
-                            </tr>
-                        </tbody>
-                        <tfoot id="transactionTableFooter">
-                            <tr class="bg-gray-900 font-bold">
-                                <td colspan="4" class="text-right">Totals:</td>
-                                <td id="totalOutputQty" class="text-green-400">0</td>
-                                <td id="totalIssuedQty" class="text-red-400">0</td>
-                                <td id="totalRemainingStock" class="text-blue-400">0</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                <hr style="margin: 30px 0;">
+
+                <h2>SKU Progress Visualization</h2>
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="sku-search-input" placeholder="Search by SKU..."
+                        style="width: 250px; padding: 10px;">
+                    <button id="sku-search-btn" style="padding: 10px;">Search</button>
+                </div>
+
+                <div id="visualization-container"
+                    style="display: none; padding: 20px; background: #f8f9fa; border: 1px solid #e9ecef;">
+                    <h3>Progress for SKU: <span id="visualization-sku-title"></span></h3>
+                    <div style="max-height: 400px;">
+                        <canvas id="challanProgressChart"></canvas>
+                    </div>
+                    <h4 style="margin-top: 20px;">Challan Details</h4>
+                    <div class="table-container" style="max-height: 200px;">
+                        <table id="challanDetailsTable">
+                            <thead>
+                                <tr>
+                                    <th>Challan No</th>
+                                    <th>Quantity</th>
+                                    <th>Current Stage</th>
+                                    <th>Vendor</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
-        <div class="glass-morphism rounded-2xl p-8 w-11/12 max-w-4xl">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold"><i class="fas fa-edit mr-2"></i>Edit Record</h2>
-                <button id="closeEditModalBtn" class="text-white text-2xl hover:text-gray-400">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="editForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <input type="hidden" id="editRecordId">
-                <div>
-                    <label for="editDate" class="form-label"><i class="fas fa-calendar mr-2"></i>Date</label>
-                    <input type="date" id="editDate" class="form-input" required>
-                </div>
-                <div>
-                    <label for="editChallanNo" class="form-label"><i class="fas fa-receipt mr-2"></i>Challan No</label>
-                    <input type="text" id="editChallanNo" class="form-input" required>
-                </div>
-                <div>
-                    <label for="editSku" class="form-label"><i class="fas fa-barcode mr-2"></i>SKU</label>
-                    <input type="text" id="editSku" class="form-input" required>
-                </div>
-                <div>
-                    <label for="editColor" class="form-label"><i class="fas fa-palette mr-2"></i>Color</label>
-                    <input type="text" id="editColor" class="form-input">
-                </div>
-                <div>
-                    <label for="editQty" class="form-label"><i class="fas fa-sort-numeric-up mr-2"></i>Quantity</label>
-                    <input type="number" id="editQty" class="form-input" required>
-                </div>
-                <div>
-                    <label for="editRate" class="form-label"><i class="fas fa-rupee-sign mr-2"></i>Rate (per unit)</label>
-                    <input type="number" id="editRate" class="form-input" step="0.01" min="0" required>
-                </div>
-                <div>
-                    <label for="editVendorName" class="form-label"><i class="fas fa-store mr-2"></i>Vendor Name</label>
-                    <input type="text" id="editVendorName" class="form-input" required>
-                </div>
-                <div class="lg:col-span-3">
-                    <label for="editRemarks" class="form-label"><i class="fas fa-sticky-note mr-2"></i>Remarks</label>
-                    <textarea id="editRemarks" class="form-input" rows="2"></textarea>
-                </div>
-                <div class="lg:col-span-3 flex justify-center gap-4 mt-6">
-                    <button type="submit" class="btn btn-success text-lg px-8 py-4"><i class="fas fa-save mr-2"></i>Save Changes</button>
-                    <button type="button" id="cancelEditBtn" class="btn btn-secondary text-lg px-8 py-4"><i class="fas fa-times mr-2"></i>Cancel</button>
-                </div>
-            </form>
-            <div id="editMessage" class="message-box hidden mt-4"></div>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, onSnapshot, orderBy, deleteDoc, doc, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-        let app;
-        let db;
-        let userId = null;
-        const users = {
-            'admin': { password: 'admin123', name: 'Administrator', id: 'admin_001' },
-            'user': { password: 'user123', name: 'Standard User', id: 'user_001' },
-            'demo': { password: 'demo', name: 'Demo User', id: 'demo_001' },
-            'Manish': { password: 'Manish@Bani999', name: 'Manish', id: 'manish_user_id' }
-        };
-        let currentUser = null;
-        let allRecords = [];
-        let aggregatedStock = {};
-        let currentEntryType = 'Input';
-
-        const loginScreen = document.getElementById('loginScreen');
-        const mainDashboard = document.getElementById('mainDashboard');
-        const loginForm = document.getElementById('loginForm');
-        const demoLoginBtn = document.getElementById('demoLoginBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const userDisplayName = document.getElementById('userDisplayName');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-        const userAvatar = document.getElementById('userAvatar');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-
-        const inputBtn = document.getElementById('inputBtn');
-        const outputBtn = document.getElementById('outputBtn');
-        const formTitle = document.getElementById('formTitle');
-        const materialForm = document.getElementById('materialForm');
-        const messageBox = document.getElementById('messageBox');
-        const aggregatedRecordsTableBody = document.getElementById('aggregatedRecordsTableBody');
-        const transactionTableBody = document.getElementById('transactionTableBody');
-        const vendorFilter = document.getElementById('vendorFilter');
-        const searchInput = document.getElementById('searchInput');
-        const exportBtn = document.getElementById('exportBtn');
-        const printChallanBtn = document.getElementById('printChallanBtn');
-
-        const startDateInput = document.getElementById('startDate');
-        const endDateInput = document.getElementById('endDate');
-
-        let dateInput = document.getElementById('date');
-        let challanNoInput = document.getElementById('challanNo');
-        let colorInput = document.getElementById('color');
-        let qtyInput = document.getElementById('qty');
-        let rateInput = document.getElementById('rate');
-        let remarksInput = document.getElementById('remarks');
-
-        const skuInputContainer = document.getElementById('skuInputContainer');
-        const vendorInputContainer = document.getElementById('vendorInputContainer');
-        const challanSelectContainer = document.getElementById('challanSelectContainer');
-
-        let skuInputText = null;
-        let vendorInputText = null;
-        let vendorSelectDropdown = null;
-        let skuSelectDropdown = null;
-        let challanSelectDropdown = null;
-
-        const totalInputDisplay = document.getElementById('totalInput');
-        const totalOutputDisplay = document.getElementById('totalOutput');
-        const currentStockDisplay = document.getElementById('currentStock');
-
-        const editModal = document.getElementById('editModal');
-        const closeEditModalBtn = document.getElementById('closeEditModalBtn');
-        const editForm = document.getElementById('editForm');
-        const editRecordIdInput = document.getElementById('editRecordId');
-        const editDateInput = document.getElementById('editDate');
-        const editChallanNoInput = document.getElementById('editChallanNo');
-        const editSkuInput = document.getElementById('editSku');
-        const editColorInput = document.getElementById('editColor');
-        const editQtyInput = document.getElementById('editQty');
-        const editRateInput = document.getElementById('editRate');
-        const editVendorNameInput = document.getElementById('editVendorName');
-        const editRemarksInput = document.getElementById('editRemarks');
-        const editMessage = document.getElementById('editMessage');
-        const cancelEditBtn = document.getElementById('cancelEditBtn');
-        const transactionTableFooter = document.getElementById('transactionTableFooter');
-        const totalOutputQtyFooter = document.getElementById('totalOutputQty');
-        const totalIssuedQtyFooter = document.getElementById('totalIssuedQty');
-        const totalRemainingStockFooter = document.getElementById('totalRemainingStock');
-
-        const initializeFirebase = async () => {
-            try {
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-                if (!firebaseConfig.projectId) {
-                    console.error("Firebase 'projectId' not provided in __firebase_config.");
-                    showMessage('Firebase configuration error: Project ID missing.', 'error');
-                    showLogin();
-                    return;
-                }
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                console.log("Firebase Firestore initialized.");
-
-                const savedUser = localStorage.getItem('currentUser');
-                if (savedUser) {
-                    try {
-                        currentUser = JSON.parse(savedUser);
-                        userId = currentUser.id;
-                        console.log("Loaded user from localStorage:", currentUser);
-                        showDashboard();
-                    } catch (error) {
-                        console.error('Error parsing saved user from localStorage:', error);
-                        localStorage.removeItem('currentUser');
-                        showLogin();
-                    }
-                } else {
-                    console.log("No user found in localStorage. Showing login screen.");
-                    showLogin();
-                }
-            } catch (error) {
-                console.error("Error initializing Firebase Firestore:", error);
-                showMessage('Error initializing application. Please try again.', 'error');
-                userIdDisplay.textContent = 'Error';
-                showLogin();
-            }
-        };
-
-        const showMessage = (message, type, elementId = 'messageBox') => {
-            const element = document.getElementById(elementId);
-            element.textContent = message;
-            element.className = `message-box ${type === 'success' ? 'message-success' : 'message-error'}`;
-            element.classList.remove('hidden');
-            setTimeout(() => {
-                element.classList.add('hidden');
-            }, 5000);
-        };
-
-        const handleLogin = (username, password) => {
-            if (users[username] && users[username].password === password) {
-                currentUser = { username, ...users[username] };
-                userId = currentUser.id;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                console.log("Login successful. currentUser:", currentUser, "userId:", userId);
-                showDashboard();
-                showMessage('Login successful!', 'success', 'loginMessage');
-                return true;
-            }
-            console.log("Login failed for username:", username);
-            return false;
-        };
-
-        const logout = () => {
-            currentUser = null;
-            userId = null;
-            localStorage.removeItem('currentUser');
-            showLogin();
-        };
-
-        const showLogin = () => {
-            loginScreen.classList.remove('hidden');
-            mainDashboard.classList.add('hidden');
-        };
-
-        const showDashboard = () => {
-            loginScreen.classList.add('hidden');
-            mainDashboard.classList.remove('hidden');
-            userDisplayName.textContent = currentUser.name;
-            userIdDisplay.textContent = currentUser.id;
-            userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
-
-            if (userId && db) {
-                setupRealtimeListener();
-                addDemoData();
-            } else {
-                console.error("Cannot setup dashboard: userId or db is not ready.");
-                showMessage("Dashboard data could not be loaded. Please re-login.", "error");
-                showLogin();
-            }
-        };
-
-        const clearForm = () => {
-            dateInput.value = new Date().toISOString().split('T')[0];
-            challanNoInput.value = '';
-            colorInput.value = '';
-            qtyInput.value = '';
-            rateInput.value = '';
-            remarksInput.value = '';
-            if (document.getElementById('sku')) document.getElementById('sku').value = '';
-            if (document.getElementById('vendorName')) document.getElementById('vendorName').value = '';
-            if (document.getElementById('vendorSelect')) document.getElementById('vendorSelect').value = 'Select Vendor...';
-            if (document.getElementById('skuSelect')) document.getElementById('skuSelect').innerHTML = '<option value="Select SKU...">Select SKU...</option>';
-            if (document.getElementById('challanSelect')) document.getElementById('challanSelect').innerHTML = '<option value="Select Challan...">Select Challan...</option>';
-            challanSelectContainer.style.display = 'none';
-        };
-
-        const updateStatistics = () => {
-            let totalInputQty = 0;
-            let totalOutputQty = 0;
-            for (const key in aggregatedStock) {
-                totalInputQty += aggregatedStock[key].inputQty;
-                totalOutputQty += aggregatedStock[key].outputQty;
-            }
-            const stockQty = totalInputQty - totalOutputQty;
-            totalInputDisplay.textContent = totalInputQty.toLocaleString();
-            totalOutputDisplay.textContent = totalOutputQty.toLocaleString();
-            currentStockDisplay.textContent = stockQty.toLocaleString();
-        };
-
-        const calculateAggregatedStock = (records) => {
-            const tempAggregatedStock = {};
-            records.forEach(record => {
-                const key = `${record.sku}-${record.color}`;
-                if (!tempAggregatedStock[key]) {
-                    tempAggregatedStock[key] = {
-                        sku: record.sku,
-                        color: record.color,
-                        challanNo: '',
-                        vendorName: '',
-                        latestRate: 0,
-                        inputQty: 0,
-                        outputQty: 0,
-                        timestamp: null
-                    };
-                }
-                if (record.type === 'Input') {
-                    tempAggregatedStock[key].inputQty += record.qty;
-                    if (!tempAggregatedStock[key].timestamp || new Date(record.timestamp) > new Date(tempAggregatedStock[key].timestamp)) {
-                        tempAggregatedStock[key].latestRate = record.rate;
-                        tempAggregatedStock[key].vendorName = record.vendorName;
-                        tempAggregatedStock[key].challanNo = record.challanNo;
-                        tempAggregatedStock[key].timestamp = record.timestamp;
-                    }
-                } else if (record.type === 'Output') {
-                    tempAggregatedStock[key].outputQty += record.qty;
-                }
-            });
-            aggregatedStock = tempAggregatedStock;
-        };
-
-        const renderAggregatedRecordsTable = (stockToDisplay) => {
-            aggregatedRecordsTableBody.innerHTML = '';
-            if (Object.keys(stockToDisplay).length === 0) {
-                aggregatedRecordsTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-400"><i class="fas fa-inbox text-4xl mb-4 block"></i>No records found.</td></tr>`;
-                return;
-            }
-            const sortedStock = Object.values(stockToDisplay).sort((a, b) => {
-                if (a.sku < b.sku) return -1;
-                if (a.sku > b.sku) return 1;
-                if (a.color < b.color) return -1;
-                if (a.color > b.color) return 1;
-                return 0;
-            });
-            sortedStock.forEach(item => {
-                const remaining = item.inputQty - item.outputQty;
-                const row = aggregatedRecordsTableBody.insertRow();
-                row.innerHTML = `
-                    <td><span style="font-family: monospace; font-size: 0.75rem;">${item.sku}</span></td>
-                    <td>${item.color || 'N/A'}</td>
-                    <td>${item.challanNo || 'N/A'}</td>
-                    <td>${item.vendorName}</td>
-                    <td>₹${parseFloat(item.latestRate).toFixed(2)}</td>
-                    <td class="font-semibold text-green-400">${item.inputQty.toLocaleString()}</td>
-                    <td class="font-semibold text-red-400">${item.outputQty.toLocaleString()}</td>
-                    <td class="font-bold ${remaining < 0 ? 'text-red-500' : 'text-blue-400'}">${remaining.toLocaleString()}</td>
-                `;
-            });
-        };
-
-        const renderTransactionTable = (recordsToDisplay) => {
-            transactionTableBody.innerHTML = '';
-            let totalInputQty = 0;
-            let totalOutputQty = 0;
-            if (recordsToDisplay.length === 0) {
-                transactionTableBody.innerHTML = `<tr><td colspan="11" class="text-center py-8 text-gray-400"><i class="fas fa-inbox text-4xl mb-4 block"></i>No transactions found.</td></tr>`;
-                totalOutputQtyFooter.textContent = '0';
-                totalIssuedQtyFooter.textContent = '0';
-                totalRemainingStockFooter.textContent = '0';
-                return;
-            }
-            const sortedRecords = recordsToDisplay.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            sortedRecords.forEach(record => {
-                const row = transactionTableBody.insertRow();
-                const value = parseFloat(record.qty) * parseFloat(record.rate);
-                const typeLabel = record.type === 'Input' ? 'Output' : 'Issue';
-                if (record.type === 'Input') {
-                    totalInputQty += record.qty;
-                } else {
-                    totalOutputQty += record.qty;
-                }
-                row.innerHTML = `
-                    <td>${record.date}</td>
-                    <td><span style="font-family: monospace; font-size: 0.75rem; background: #333; color: #fff; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">${record.challanNo}</span></td>
-                    <td><span style="font-family: monospace; font-size: 0.75rem;">${record.sku}</span></td>
-                    <td>${record.color || 'N/A'}</td>
-                    <td class="font-semibold">${parseInt(record.qty).toLocaleString()}</td>
-                    <td>₹${parseFloat(record.rate).toFixed(2)}</td>
-                    <td class="font-bold">₹${Number(value).toLocaleString()}</td>
-                    <td>${record.vendorName}</td>
-                    <td><div class="scrollable-remarks" title="${record.remarks || ''}">${record.remarks || ''}</div></td>
-                    <td><span class="${record.type === 'Input' ? 'status-output' : 'status-issue'}">${typeLabel}</span></td>
-                    <td class="flex items-center gap-2">
-                        <button onclick="editRecord('${record.id}')" class="edit-btn"><i class="fas fa-edit"></i></button>
-                        <button onclick="printChallanFromRecord('${record.id}')" class="print-btn"><i class="fas fa-print"></i></button>
-                        <button onclick="deleteRecord('${record.id}')" class="delete-btn"><i class="fas fa-trash"></i></button>
-                    </td>
-                `;
-            });
-
-            totalOutputQtyFooter.textContent = totalInputQty.toLocaleString();
-            totalIssuedQtyFooter.textContent = totalOutputQty.toLocaleString();
-            totalRemainingStockFooter.textContent = (totalInputQty - totalOutputQty).toLocaleString();
-        };
-
-        const updateVendorFilterOptions = (records) => {
-            const uniqueVendors = [...new Set(records.map(r => r.vendorName))].sort();
-            vendorFilter.innerHTML = '<option value="all">All Vendors</option>';
-            uniqueVendors.forEach(vendor => {
-                const option = document.createElement('option');
-                option.value = vendor;
-                option.textContent = vendor;
-                vendorFilter.appendChild(option);
-            });
-            const currentFilter = vendorFilter.value;
-            if (uniqueVendors.includes(currentFilter)) {
-                vendorFilter.value = currentFilter;
-            }
-        };
-
-        const filterRecords = () => {
-            const selectedVendor = vendorFilter.value;
-            const searchTerm = searchInput.value.toLowerCase();
-            const start = startDateInput.value ? new Date(startDateInput.value).setHours(0,0,0,0) : null;
-            const end = endDateInput.value ? new Date(endDateInput.value).setHours(23,59,59,999) : null;
-            let filteredRawRecords = allRecords.filter(record => {
-                const recordDate = new Date(record.date).setHours(0,0,0,0);
-                const matchesDate = (!start || recordDate >= start) && (!end || recordDate <= end);
-                const matchesVendor = (selectedVendor === 'all' || record.vendorName === selectedVendor);
-                const matchesSearch = (
-                    record.challanNo.toLowerCase().includes(searchTerm) ||
-                    record.sku.toLowerCase().includes(searchTerm) ||
-                    record.vendorName.toLowerCase().includes(searchTerm) ||
-                    record.color?.toLowerCase().includes(searchTerm) ||
-                    record.type.toLowerCase().includes(searchTerm) ||
-                    record.date.includes(searchTerm) ||
-                    record.remarks?.toLowerCase().includes(searchTerm)
-                );
-                return matchesDate && matchesVendor && matchesSearch;
-            });
-            calculateAggregatedStock(filteredRawRecords);
-            renderAggregatedRecordsTable(aggregatedStock);
-            renderTransactionTable(filteredRawRecords);
-        };
-
-        window.deleteRecord = async (recordId) => {
-            const confirmDelete = await new Promise(resolve => {
-                const modal = document.createElement('div');
-                modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
-                modal.innerHTML = `
-                    <div class="bg-gray-800 p-8 rounded-lg shadow-lg text-center w-80">
-                        <p class="text-lg font-semibold mb-4">Are you sure?</p>
-                        <p class="text-gray-300 mb-6">This record will be permanently deleted and stock levels will be affected.</p>
-                        <div class="flex justify-center gap-4">
-                            <button id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
-                            <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+            <div id="RecordOutput" class="tab-content">
+                <h2>Record Output Material</h2>
+                <form id="outputForm" class="form-grid">
+                    <div class="form-group"><label for="sku">SKU</label><input type="text" id="sku" required></div>
+                    <div class="form-group"><label for="itemType">Item Type</label><select id="itemType" required>
+                            <option value="">Select Type</option>
+                            <option value="Co-ord">Co-ord</option>
+                            <option value="SKD">SKD</option>
+                            <option value="Dress">Dress</option>
+                            <option value="Dupatta">Dupatta</option>
+                            <option value="Custom">Add Custom...</option>
+                        </select><input type="text" id="customItemType" placeholder="Specify custom type"
+                            style="display:none; margin-top:10px;"></div>
+                    <div class="form-group"><label for="color">Color</label><select id="color" required>
+                            <option value="">Select Color</option>
+                            <option value="Custom">Add New Color...</option>
+                        </select><input type="text" id="customColor" placeholder="Specify new color"
+                            style="display:none; margin-top:10px;"></div>
+                    <div class="form-group"><label for="challanNo">Challan No</label><input type="text" id="challanNo"
+                            required></div>
+                    <div class="form-group"><label for="rate">Rate (per item)</label><input type="number" id="rate"
+                            step="0.01" required></div>
+                    <div class="form-group"><label for="outputVendor">Vendor for Cutting</label><select
+                            id="outputVendor" required></select></div>
+                    <div class="form-group"><label for="date-issued">Date Issued</label><input type="date"
+                            id="date-issued" required></div>
+                    <div class="form-group"><label for="remarks">Remarks</label><input type="text" id="remarks"></div>
+                    <div class="size-quantity-section">
+                        <h3>Size-wise Quantities</h3>
+                        <div id="size-quantity-container" class="size-quantity-container"></div>
+                        <div style="margin-top: 15px; display:flex; align-items:center; gap:20px;">
+                            <button type="button" class="add-size-btn" id="add-output-size-btn"><i
+                                    class="fas fa-plus"></i> Add Size</button>
+                            <strong id="total-qty-display">Total Quantity: 0</strong>
                         </div>
                     </div>
-                `;
-                document.body.appendChild(modal);
-                document.getElementById('cancelDeleteBtn').addEventListener('click', () => { document.body.removeChild(modal); resolve(false); });
-                document.getElementById('confirmDeleteBtn').addEventListener('click', () => { document.body.removeChild(modal); resolve(true); });
-            });
-            if (confirmDelete) {
-                try {
-                    if (!db || !userId) { showMessage('Database not ready or user not logged in.', 'error'); return; }
-                    const firebaseConfig = JSON.parse(__firebase_config);
-                    const appId = firebaseConfig.appId || 'default-app-id';
-                    const recordRef = doc(db, `artifacts/${appId}/users/${userId}/material_records`, recordId);
-                    await deleteDoc(recordRef);
-                    showMessage('Record deleted successfully!', 'success');
-                } catch (error) {
-                    console.error('Error deleting record:', error);
-                    showMessage('Error deleting record', 'error');
-                }
-            }
-        };
+                    <button type="submit" style="grid-column: 1 / -1; padding: 15px; font-size: 1.1rem;">Issue for
+                        Cutting</button>
+                </form>
+            </div>
 
-        const exportToCSV = () => {
-            const headers = ['Date', 'Challan No', 'SKU', 'Color', 'Quantity', 'Rate', 'Value', 'Vendor Name', 'Remarks', 'Type'];
-            const csvContent = [
-                headers.join(','),
-                ...allRecords.map(record => [
-                    record.date,
-                    record.challanNo,
-                    record.sku,
-                    record.color || '',
-                    record.qty,
-                    record.rate,
-                    (parseFloat(record.qty) * parseFloat(record.rate)).toFixed(2),
-                    record.vendorName,
-                    record.remarks || '',
-                    record.type === 'Input' ? 'Output' : 'Issue'
-                ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
-            ].join('\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `material_transactions_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        };
+            <div id="WIP" class="tab-content">
+                <h2>Update Work in Progress</h2>
+                <form id="wipForm">
+                    <div id="wip-workflow-container">
+                        <div class="form-group">
+                            <label for="wipChallan">1. Select Challan to Update</label>
+                            <select id="wipChallan" required></select>
+                        </div>
+                        <div id="wip-details-box" style="display: none;">
+                            <div class="info-box">Current Stage: <strong id="wipCurrentStage"></strong> | Available Qty:
+                                <strong id="wipAvailableQty"></strong></div>
+                            <div class="wip-grid" style="margin-top: 20px;">
+                                <div class="form-group"><label for="wipNextStage">2. Move to Stage</label><select
+                                        id="wipNextStage" required></select></div>
+                                <div class="form-group"><label for="wipVendor">3. Assign to Vendor</label><select
+                                        id="wipVendor" required></select></div>
+                                <div class="form-group"><label for="date-updated">4. Date Updated</label><input
+                                        type="date" id="date-updated" required></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="wip-size-section" class="size-quantity-section" style="display: none;">
+                        <h4>Quantities to Update by Size</h4>
+                        <div id="wip-size-container" class="size-quantity-container"></div>
+                    </div>
+                    <div class="form-group" style="margin-top:20px;">
+                        <label for="wipNewChallan">New Challan No (Optional)</label>
+                        <input type="text" id="wipNewChallan" placeholder="Leave blank to use existing challan number">
+                    </div>
+                    <button type="submit" style="margin-top: 20px; width:100%; padding: 15px; font-size: 1.1rem;">Update
+                        Progress</button>
+                </form>
+            </div>
 
-        const setupRealtimeListener = () => {
-            if (!db || !userId) {
-                console.log("Firestore or User ID not ready for listener setup. Retrying in 500ms.");
-                setTimeout(setupRealtimeListener, 500);
-                return;
-            }
-            const firebaseConfig = JSON.parse(__firebase_config);
-            const appId = firebaseConfig.appId || 'default-app-id';
-            const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
-            const q = query(recordsCollectionRef, orderBy('timestamp', 'desc'));
-            onSnapshot(q, (snapshot) => {
-                allRecords = [];
-                snapshot.forEach((doc) => { allRecords.push({ id: doc.id, ...doc.data() }); });
-                calculateAggregatedStock(allRecords);
-                updateStatistics();
-                updateVendorFilterOptions(allRecords);
-                updateFormFieldsForEntryType();
-                filterRecords();
-            }, (error) => {
-                console.error("Error fetching real-time updates:", error);
-                showMessage('Error fetching records. Please refresh the page.', 'error');
-            });
-        };
+            <div id="RecordReceiving" class="tab-content">
+                <h2>Record Receiving Material</h2>
+                <form id="receivingForm">
+                    <div class="form-group"><label for="recChallan">Select Challan to Receive</label><select
+                            id="recChallan" required></select></div>
+                    <div id="rec-details-box" style="display:none;">
+                        <p class="info-box"><strong>SKU:</strong> <span id="recSku"></span> | <strong>Color:</strong>
+                            <span id="recColor"></span> | <strong>Vendor:</strong> <span id="recVendor"></span></p>
+                    </div>
+                    <div class="form-group"><label for="date-received">Date Received</label><input type="date"
+                            id="date-received" required></div>
+                    <div id="rec-size-section" class="size-quantity-section" style="display: none;">
+                        <h3>Quantities to Receive by Size</h3>
+                        <div id="rec-size-container" class="size-quantity-container"></div>
+                    </div>
+                    <button type="submit" style="margin-top:20px; width:100%; padding: 15px;">Mark as Received</button>
+                </form>
+            </div>
 
-        const createSelectElement = (id, labelText, options, onChangeHandler, isRequired = false) => {
-            const div = document.createElement('div');
-            const label = document.createElement('label');
-            label.htmlFor = id;
-            label.className = 'form-label';
-            label.innerHTML = `<i class="fas fa-${id.includes('vendor') ? 'store' : (id.includes('sku') ? 'barcode' : 'receipt')} mr-2"></i>${labelText}`;
-            div.appendChild(label);
-            const select = document.createElement('select');
-            select.id = id;
-            select.className = 'form-input';
-            if (isRequired) select.required = true;
-            select.addEventListener('change', onChangeHandler);
-            options.forEach(optionValue => {
-                const option = document.createElement('option');
-                option.value = optionValue;
-                option.textContent = optionValue;
-                select.appendChild(option);
-            });
-            div.appendChild(select);
-            return div;
-        };
-
-        const updateFormFieldsForEntryType = () => {
-            clearForm();
-            skuInputContainer.innerHTML = '';
-            vendorInputContainer.innerHTML = '';
-            challanSelectContainer.style.display = 'none';
-            challanSelectContainer.innerHTML = '';
-
-            if (currentEntryType === 'Input') {
-                const uniqueVendors = [...new Set(allRecords.map(r => r.vendorName))].filter(Boolean).sort();
-                const vendorOptions = ['Select Vendor...', ...uniqueVendors, 'Add New Vendor...'];
-                const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', vendorOptions, () => {
-                    if (vendorSelectDropdown.value === 'Add New Vendor...') {
-                        vendorInputContainer.innerHTML = `<label for="vendorName" class="form-label"><i class="fas fa-store mr-2"></i>Vendor Name</label><input type="text" id="vendorName" class="form-input" placeholder="Enter new vendor name" required>`;
-                        vendorInputText = document.getElementById('vendorName');
-                        vendorSelectDropdown = null;
-                    }
-                }, true);
-                vendorInputContainer.appendChild(vendorSelectDiv);
-                vendorSelectDropdown = document.getElementById('vendorSelect');
-
-                skuInputContainer.innerHTML = `<label for="sku" class="form-label"><i class="fas fa-barcode mr-2"></i>SKU</label><input type="text" id="sku" class="form-input" placeholder="e.g., BW6085BLUE_DRS-S" required>`;
-                skuInputText = document.getElementById('sku');
-            } else {
-                const uniqueInputVendors = [...new Set(allRecords.filter(r => r.type === 'Input').map(r => r.vendorName))].filter(Boolean).sort();
-                const vendorOptions = ['Select Vendor...', ...uniqueInputVendors];
-                const vendorSelectDiv = createSelectElement('vendorSelect', 'Vendor Name', vendorOptions, handleVendorSelectChange, true);
-                vendorInputContainer.appendChild(vendorSelectDiv);
-                vendorSelectDropdown = document.getElementById('vendorSelect');
-
-                const skuSelectDiv = createSelectElement('skuSelect', 'SKU', ['Select SKU...'], handleSkuSelectChange, true);
-                skuInputContainer.appendChild(skuSelectDiv);
-                skuSelectDropdown = document.getElementById('skuSelect');
-
-                const challanSelectDiv = createSelectElement('challanSelect', 'Challan No', ['Select Challan...'], handleChallanSelectChange, true);
-                challanSelectContainer.appendChild(challanSelectDiv);
-                challanSelectDropdown = document.getElementById('challanSelect');
-            }
-            dateInput.value = new Date().toISOString().split('T')[0];
-        };
-
-        const handleVendorSelectChange = () => {
-            const selectedVendor = vendorSelectDropdown.value;
-            const skuOptions = ['Select SKU...'];
-            if (selectedVendor !== 'Select Vendor...') {
-                const uniqueSkusForVendor = [...new Set(allRecords.filter(r => r.type === 'Input' && r.vendorName === selectedVendor).map(r => r.sku))].sort();
-                skuOptions.push(...uniqueSkusForVendor);
-            }
-            skuSelectDropdown.innerHTML = '';
-            skuOptions.forEach(optionValue => {
-                const option = document.createElement('option');
-                option.value = optionValue;
-                option.textContent = optionValue;
-                skuSelectDropdown.appendChild(option);
-            });
-            skuSelectDropdown.value = 'Select SKU...';
-            challanSelectDropdown.innerHTML = '<option value="Select Challan...">Select Challan...</option>';
-            challanSelectContainer.style.display = 'none';
-            colorInput.value = '';
-            qtyInput.value = '';
-            rateInput.value = '';
-            qtyInput.max = '';
-            challanNoInput.value = '';
-            remarksInput.value = '';
-        };
-
-        const handleSkuSelectChange = () => {
-            const selectedSku = skuSelectDropdown.value;
-            const selectedVendor = vendorSelectDropdown.value;
-            const challanOptions = ['Select Challan...'];
-            if (selectedSku !== 'Select SKU...' && selectedVendor) {
-                const uniqueChallansForSku = [...new Set(allRecords.filter(r => r.type === 'Input' && r.vendorName === selectedVendor && r.sku === selectedSku).map(r => r.challanNo))].sort();
-                challanOptions.push(...uniqueChallansForSku);
-                challanSelectContainer.style.display = 'block';
-            } else {
-                challanSelectContainer.style.display = 'none';
-            }
-            challanSelectDropdown.innerHTML = '';
-            challanOptions.forEach(optionValue => {
-                const option = document.createElement('option');
-                option.value = optionValue;
-                option.textContent = optionValue;
-                challanSelectDropdown.appendChild(option);
-            });
-            challanSelectDropdown.value = 'Select Challan...';
-            colorInput.value = '';
-            qtyInput.value = '';
-            rateInput.value = '';
-            qtyInput.max = '';
-            challanNoInput.value = '';
-            remarksInput.value = '';
-        };
-
-        const handleChallanSelectChange = () => {
-            const selectedSku = skuSelectDropdown.value;
-            const selectedVendor = vendorSelectDropdown.value;
-            const selectedChallan = challanSelectDropdown.value;
-            if (selectedSku !== 'Select SKU...' && selectedVendor && selectedChallan !== 'Select Challan...') {
-                const relevantInputRecord = allRecords.filter(r => r.type === 'Input' && r.sku === selectedSku && r.vendorName === selectedVendor && r.challanNo === selectedChallan).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
-                if (relevantInputRecord) {
-                    colorInput.value = relevantInputRecord.color || '';
-                    rateInput.value = parseFloat(relevantInputRecord.rate).toFixed(2);
-                    challanNoInput.value = relevantInputRecord.challanNo;
-                    remarksInput.value = relevantInputRecord.remarks || '';
-                    let inputQtyForChallan = relevantInputRecord.qty;
-                    let outputQtyFromThisChallan = allRecords.filter(r => (r.type === 'Output') && r.sku === selectedSku && r.color === relevantInputRecord.color && r.challanNo === selectedChallan).reduce((sum, r) => sum + r.qty, 0);
-                    const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
-                    qtyInput.value = availableQty > 0 ? availableQty : 0;
-                    qtyInput.max = availableQty;
-                    qtyInput.min = 1;
-                    showMessage(`Available stock from Challan ${selectedChallan} for ${selectedSku} (${relevantInputRecord.color}): ${availableQty}`, 'success');
-                } else {
-                    colorInput.value = '';
-                    qtyInput.value = '';
-                    rateInput.value = '';
-                    qtyInput.max = '';
-                    challanNoInput.value = '';
-                    remarksInput.value = '';
-                    showMessage('No matching input record found for this Challan.', 'error');
-                }
-            } else {
-                colorInput.value = '';
-                qtyInput.value = '';
-                rateInput.value = '';
-                qtyInput.max = '';
-                challanNoInput.value = '';
-                remarksInput.value = '';
-            }
-        };
-
-        const printChallan = (recordToPrint) => {
-            const printWindow = window.open('', '_blank');
-            if (!printWindow) {
-                alert("Please allow pop-ups for this website to print the challan.");
-                return;
-            }
-            const dateFormatted = new Date(recordToPrint.date).toLocaleDateString('en-GB');
-            const challanContent = `
-                <div class="print-challan" style="padding: 20px;">
-                    <style>
-                        body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; }
-                        table { width: 100%; border-collapse: collapse; }
-                        .header, .footer, .details, .items { width: 100%; margin-bottom: 20px; }
-                        .header h1 { margin: 0; font-size: 24px; text-align: center; }
-                        .header p { margin: 2px 0; font-size: 10px; text-align: center; }
-                        .details td { padding: 5px; font-size: 12px; }
-                        .items th, .items td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
-                        .items th { background-color: #f2f2f2; }
-                        .items tfoot td { font-weight: bold; }
-                        .signatures { width: 100%; margin-top: 50px; }
-                        .signatures td { width: 50%; padding-top: 20px; text-align: center; font-size: 12px; }
-                    </style>
-                    <table class="header">
-                        <tr>
-                            <td colspan="2" style="text-align: center;">
-                                <p style="font-size: 8px; margin: 0;">GST NO.: 07AAICC7276K1Z5</p>
-                                <h1 style="font-size: 16px; margin: 5px 0;">Cheshtaa Apparels India Pvt. Ltd.</h1>
-                                <p style="font-size: 10px; margin: 0;">Manufacture & Exporter of Fashion Garments</p>
-                                <p style="font-size: 8px; margin: 0;">Plot no 78, Bijwasan Rd, near Sarovar Portico Hotel,</p>
-                                <p style="font-size: 8px; margin: 0;">Kapas Hera Extension, Kapas Hera, New Delhi, Delhi 110037</p>
-                            </td>
-                        </tr>
-                    </table>
-                    <table class="details">
-                        <tr>
-                            <td style="width: 50%;"><b>No.</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${recordToPrint.challanNo}</td>
-                            <td style="width: 50%; text-align: right;"><b>Dated:</b>&nbsp;${dateFormatted}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><b>M/s.</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${recordToPrint.vendorName}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="height: 40px; border-bottom: 1px solid #000;"></td>
-                        </tr>
-                    </table>
-                    <table class="items">
+            <div id="ManageVendors" class="tab-content">
+                <h2>Manage Vendors</h2>
+                <form id="vendorForm">
+                    <div class="form-group"><label for="vendorName">Vendor Name</label><input type="text"
+                            id="vendorName" required></div>
+                    <div class="form-group"><label>Job Types (Select all that apply)</label>
+                        <div id="jobTypesContainer"
+                            style="display:flex; flex-wrap:wrap; gap: 15px; padding: 10px; border: 1px solid #ced4da;">
+                        </div>
+                    </div>
+                    <button type="submit">Register Vendor</button>
+                </form>
+                <hr style="margin: 30px 0;">
+                <h3>Registered Vendors</h3>
+                <div class="table-container">
+                    <table id="vendorTable">
                         <thead>
                             <tr>
-                                <th>S.No.</th>
-                                <th>PARTICULARS</th>
-                                <th>Qty.</th>
-                                <th>Rate</th>
+                                <th>Name</th>
+                                <th>Job Types</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="Transactions" class="tab-content">
+                <h2>Transactions Log</h2>
+                <div class="table-container">
+                    <table id="transactionTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Challan</th>
+                                <th>SKU</th>
+                                <th>Type</th>
+                                <th>Color</th>
+                                <th>Stage</th>
+                                <th>Size</th>
+                                <th>Qty</th>
+                                <th>Vendor</th>
                                 <th>Remarks</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>${recordToPrint.sku} (${recordToPrint.color})</td>
-                                <td>${recordToPrint.qty}</td>
-                                <td>${recordToPrint.rate}</td>
-                                <td>${recordToPrint.remarks || ''}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" style="text-align: right;">Total:</td>
-                                <td>${recordToPrint.qty}</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="signatures">
-                        <tr>
-                            <td>Receiver Signature</td>
-                            <td style="text-align: right;">For Cheshtaa Apparels India Pvt. Ltd.</td>
-                        </tr>
-                        <tr>
-                            <td style="border-top: 1px solid #000;"></td>
-                            <td style="border-top: 1px solid #000; text-align: right;">Auth. Sign.</td>
-                        </tr>
+                        <tbody></tbody>
                     </table>
                 </div>
-            `;
-            printWindow.document.write(challanContent);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign In or Sign Up</h2>
+            </div>
+            <form id="auth-form">
+                <div class="form-group">
+                    <label for="auth-email">Email</label>
+                    <input type="email" id="auth-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">Password</label>
+                    <input type="password" id="auth-password" required>
+                </div>
+                <button type="submit" id="sign-in-btn">Sign In</button>
+                <button type="button" id="sign-up-btn">Sign Up</button>
+                <p id="auth-error-message" style="color: red;"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Vendor Edit Modal -->
+    <div id="vendorEditModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Vendor</h2>
+                <button class="close-button" id="close-vendor-edit-modal">&times;</button>
+            </div>
+            <form id="editVendorForm">
+                <input type="hidden" id="editVendorId">
+                <div class="form-group">
+                    <label for="editVendorName">Vendor Name</label>
+                    <input type="text" id="editVendorName" required>
+                </div>
+                <div class="form-group">
+                    <label>Job Types</label>
+                    <div id="editJobTypesContainer"
+                        style="display:flex; flex-wrap:wrap; gap: 15px; padding: 10px; border: 1px solid #ced4da;">
+                    </div>
+                </div>
+                <button type="submit" style="margin-top: 20px;">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Material Edit Modal -->
+    <div id="materialEditModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Material Details</h2>
+                <button class="close-button" id="close-material-edit-modal">&times;</button>
+            </div>
+            <form id="editMaterialForm">
+                <input type="hidden" id="editMaterialId">
+                <div class="form-grid">
+                    <div class="form-group"><label for="editSku">SKU</label><input type="text" id="editSku" required>
+                    </div>
+                    <div class="form-group"><label for="editItemType">Item Type</label><select id="editItemType"
+                            required>
+                            <option value="">Select Type</option>
+                            <option value="Co-ord">Co-ord</option>
+                            <option value="SKD">SKD</option>
+                            <option value="Dress">Dress</option>
+                            <option value="Dupatta">Dupatta</option>
+                        </select><input type="text" id="editCustomItemType" placeholder="Specify custom type"
+                            style="display:none; margin-top:10px;"></div>
+                    <div class="form-group"><label for="editColor">Color</label><input type="text" id="editColor"
+                            required></div>
+                    <div class="form-group"><label for="editRate">Rate (per item)</label><input type="number"
+                            id="editRate" step="0.01" required></div>
+                    <div class="size-quantity-section" style="grid-column: 1 / -1;">
+                        <h3>Size-wise Initial Quantities</h3>
+                        <div id="edit-size-quantity-container" class="size-quantity-container"></div>
+                        <div style="margin-top: 15px; display:flex; align-items:center; gap:20px;">
+                            <button type="button" class="add-size-btn" id="add-edit-size-btn"><i
+                                    class="fas fa-plus"></i> Add Size</button>
+                            <strong id="edit-total-qty-display">Total Quantity: 0</strong>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit"
+                    style="grid-column: 1 / -1; padding: 15px; font-size: 1.1rem; margin-top: 20px;">Save
+                    Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="skuModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>SKU: <span id="modal-title-sku"></span></h2>
+                <button class="close-button" id="close-sku-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-card">
+                    <h3><i class="fas fa-info-circle"></i> SKU Details</h3>
+                    <p><strong>SKU:</strong> <span id="modal-sku"></span></p>
+                    <p><strong>Type:</strong> <span id="modal-type"></span></p>
+                    <p><strong>Colors:</strong> <span id="modal-colors"></span></p>
+                </div>
+                <div class="modal-card">
+                    <h3><i class="fas fa-boxes"></i> Stock Summary</h3>
+                    <p><strong>Total Output:</strong> <span id="modal-total-output"></span></p>
+                    <p><strong>Total Received:</strong> <span id="modal-total-received"></span></p>
+                    <p><strong>Total WIP:</strong> <span id="modal-total-wip"></span></p>
+                </div>
+                <div class="progress-section">
+                    <h3><i class="fas fa-tasks"></i> Overall Progress (% Received)</h3>
+                    <div class="progress-bar-container">
+                        <div id="modal-progress-bar" class="progress-bar-fill" style="width: 0%;">0%</div>
+                    </div>
+                </div>
+                <div class="stages-section" style="grid-column: 1 / -1;">
+                    <h3><i class="fas fa-industry"></i> Challan Progress</h3>
+                    <div class="table-container" style="max-height: 400px;">
+                        <table id="challanProgressTable">
+                            <thead>
+                                <tr>
+                                    <th>Challan No</th>
+                                    <th>Color</th>
+                                    <th>Qty</th>
+                                    <th>Stage</th>
+                                    <th>Vendor</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-alert" class="modal">
+        <div class="modal-content" style="max-width: 300px; text-align: center; padding: 20px;">
+            <p id="alert-message" style="margin: 0;"></p>
+            <button id="alert-ok-btn" style="margin-top: 20px;">OK</button>
+        </div>
+    </div>
+
+    <div id="custom-confirm" class="modal">
+        <div class="modal-content" style="max-width: 300px; text-align: center; padding: 20px;">
+            <p id="confirm-message" style="margin: 0;"></p>
+            <div style="margin-top: 20px;">
+                <button id="confirm-yes-btn" style="background-color: #2ecc71; margin-right: 10px;">Yes</button>
+                <button id="confirm-no-btn" style="background-color: #e74c3c;">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        // Global variables provided by the environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // This variable is now correctly loaded from the environment
+        const firebaseConfig = {
+            apiKey: "AIzaSyCa9ujZAkO8d7_QLv1KWOOEJ3ww8rFddh0",
+            authDomain: "banistock-57f35.firebaseapp.com",
+            projectId: "banistock-57f35",
+            storageBucket: "banistock-57f35.firebasestorage.app",
+            messagingSenderId: "921264942139",
+            appId: "1:921264942139:web:7e53870dc9a48cd406401e",
+            measurementId: "G-3FVJTK0MX0"
         };
 
-        window.printChallanFromRecord = (recordId) => {
-            const recordToPrint = allRecords.find(record => record.id === recordId);
-            if (recordToPrint) {
-                printChallan(recordToPrint);
-            } else {
-                showMessage('Record not found for printing.', 'error');
-            }
+
+        let db;
+        let auth;
+        let userId = null;
+        let isAuthReady = false;
+
+        let materials = [];
+        let vendors = [];
+        let transactions = [];
+        let myChart;
+
+        const STAGES = ["Cutting", "Embroidery", "Printing", "Stitching", "Button Work", "Finishing"];
+        const FINAL_STAGE = STAGES[STAGES.length - 1];
+        const DEFAULT_SIZES = ["S", "M", "L", "XL"];
+        const collections = {
+            materials: "materials",
+            vendors: "vendors",
+            transactions: "transactions"
         };
 
-        window.editRecord = (recordId) => {
-            const recordToEdit = allRecords.find(record => record.id === recordId);
-            if (recordToEdit) {
-                editRecordIdInput.value = recordToEdit.id;
-                editDateInput.value = recordToEdit.date;
-                editChallanNoInput.value = recordToEdit.challanNo;
-                editSkuInput.value = recordToEdit.sku;
-                editColorInput.value = recordToEdit.color;
-                editQtyInput.value = recordToEdit.qty;
-                editRateInput.value = recordToEdit.rate;
-                editVendorNameInput.value = recordToEdit.vendorName;
-                editRemarksInput.value = recordToEdit.remarks;
-                editModal.classList.remove('hidden');
-                editModal.classList.add('flex');
-            } else {
-                showMessage('Record not found for editing.', 'error');
-            }
-        };
+        // Custom Alert/Confirmation
+        function showAlert(message) {
+            document.getElementById('alert-message').textContent = message;
+            document.getElementById('custom-alert').style.display = 'block';
+        }
 
-        const closeEditModal = () => {
-            editModal.classList.add('hidden');
-            editModal.classList.remove('flex');
-        };
-
-        inputBtn.addEventListener('click', () => {
-            currentEntryType = 'Input';
-            formTitle.innerHTML = '<i class="fas fa-plus mr-2"></i>Record Output Material';
-            inputBtn.classList.add('active');
-            inputBtn.classList.remove('inactive');
-            outputBtn.classList.remove('active');
-            outputBtn.classList.add('inactive');
-            updateFormFieldsForEntryType();
-        });
-
-        outputBtn.addEventListener('click', () => {
-            currentEntryType = 'Output';
-            formTitle.innerHTML = '<i class="fas fa-minus mr-2"></i>Record Issued Material';
-            outputBtn.classList.add('active');
-            outputBtn.classList.remove('inactive');
-            inputBtn.classList.remove('active');
-            inputBtn.classList.add('inactive');
-            updateFormFieldsForEntryType();
-        });
-
-        materialForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!db || !userId) {
-                showMessage('Database is not initialized or user ID is missing. Please refresh and try again.', 'error');
-                return;
-            }
-            let record = {};
-            record.date = dateInput.value;
-            record.challanNo = challanNoInput.value.trim();
-            record.color = colorInput.value.trim();
-            record.qty = parseInt(qtyInput.value);
-            record.rate = parseFloat(rateInput.value);
-            record.remarks = remarksInput.value.trim();
-            record.type = currentEntryType;
-            record.timestamp = new Date().toISOString();
-
-            let finalVendorName = '';
-            let finalSku = '';
-
-            if (currentEntryType === 'Input') {
-                const vendorElement = document.getElementById('vendorSelect') || document.getElementById('vendorName');
-                const skuInput = document.getElementById('sku');
-                if (!skuInput || !vendorElement) { showMessage('SKU or Vendor Name input field not found.', 'error'); return; }
-                if(vendorSelectDropdown && vendorSelectDropdown.value === 'Add New Vendor...') {
-                    finalVendorName = document.getElementById('vendorName').value.trim();
-                } else if(vendorSelectDropdown) {
-                    finalVendorName = vendorSelectDropdown.value;
-                } else {
-                    finalVendorName = vendorElement.value.trim();
-                }
-                finalSku = skuInput.value.trim();
-            } else { // 'Output'
-                const skuSelect = document.getElementById('skuSelect');
-                const vendorSelect = document.getElementById('vendorSelect');
-                const challanSelect = document.getElementById('challanSelect');
-                if (!skuSelect || !vendorSelect || !challanSelect) { showMessage('Required form fields not found.', 'error'); return; }
-                finalSku = skuSelect.value;
-                finalVendorName = vendorSelect.value;
-                record.challanNo = challanSelect.value;
-            }
-            
-            record.vendorName = finalVendorName;
-            record.sku = finalSku;
-
-            if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName ||
-                record.vendorName === 'Select Vendor...' || (currentEntryType === 'Output' && record.challanNo === 'Select Challan...') || record.sku === 'Select SKU...') {
-                showMessage('Please fill in all required fields and make valid selections.', 'error');
-                return;
-            }
-            if (record.qty <= 0 || record.rate < 0) {
-                showMessage('Quantity must be positive and Rate cannot be negative.', 'error');
-                return;
-            }
-            if (currentEntryType === 'Output') {
-                const selectedChallan = document.getElementById('challanSelect').value;
-                const relevantInputRecord = allRecords.find(r => r.type === 'Input' && r.sku === record.sku && r.color === record.color && r.vendorName === record.vendorName && r.challanNo === selectedChallan);
-                if (!relevantInputRecord) {
-                    showMessage('Could not find a matching input record for the selected Challan, SKU, Vendor, and Color.', 'error');
-                    return;
-                }
-                let inputQtyForChallan = relevantInputRecord.qty;
-                let outputQtyFromThisChallan = allRecords.filter(r => (r.type === 'Output') && r.sku === record.sku && r.color === record.color && r.challanNo === selectedChallan).reduce((sum, r) => sum + r.qty, 0);
-                const availableQty = inputQtyForChallan - outputQtyFromThisChallan;
-                if (record.qty > availableQty) {
-                    showMessage(`Output quantity (${record.qty}) exceeds available stock (${availableQty}) from Challan ${selectedChallan} for ${record.sku} (${record.color}).`, 'error');
-                    return;
-                }
-            }
-            try {
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const appId = firebaseConfig.appId || 'default-app-id';
-                const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
-                await addDoc(recordsCollectionRef, record);
-                showMessage('Record added successfully!', 'success');
-                clearForm();
-            } catch (error) {
-                console.error('Error adding record:', error);
-                showMessage('Error adding record. Please try again.', 'error');
-            }
-        });
-
-        editForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const recordId = editRecordIdInput.value;
-            if (!recordId) { showMessage('Record ID missing.', 'error', 'editMessage'); return; }
-            const updatedRecord = {
-                date: editDateInput.value,
-                challanNo: editChallanNoInput.value.trim(),
-                sku: editSkuInput.value.trim(),
-                color: editColorInput.value.trim(),
-                qty: parseInt(editQtyInput.value),
-                rate: parseFloat(editRateInput.value),
-                vendorName: editVendorNameInput.value.trim(),
-                remarks: editRemarksInput.value.trim(),
+        // Custom confirm function with a callback
+        function showConfirm(message, onConfirm) {
+            document.getElementById('confirm-message').textContent = message;
+            document.getElementById('custom-confirm').style.display = 'block';
+            document.getElementById('confirm-yes-btn').onclick = (e) => {
+                e.stopPropagation();
+                onConfirm(true);
+                closeModal('custom-confirm');
             };
-            if (updatedRecord.qty <= 0 || updatedRecord.rate < 0) {
-                showMessage('Quantity must be positive and Rate cannot be negative.', 'error', 'editMessage');
-                return;
-            }
-            try {
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const appId = firebaseConfig.appId || 'default-app-id';
-                const recordRef = doc(db, `artifacts/${appId}/users/${userId}/material_records`, recordId);
-                await updateDoc(recordRef, updatedRecord);
-                showMessage('Record updated successfully!', 'success', 'editMessage');
-                closeEditModal();
-            } catch (error) {
-                console.error('Error updating record:', error);
-                showMessage('Error updating record. Please try again.', 'error', 'editMessage');
-            }
-        });
-
-        vendorFilter.addEventListener('change', filterRecords);
-        searchInput.addEventListener('input', filterRecords);
-        startDateInput.addEventListener('change', filterRecords);
-        endDateInput.addEventListener('change', filterRecords);
-        exportBtn.addEventListener('click', exportToCSV);
-        logoutBtn.addEventListener('click', logout);
-        printChallanBtn.addEventListener('click', () => {
-            const record = {
-                date: dateInput.value,
-                challanNo: challanNoInput.value,
-                sku: currentEntryType === 'Input' ? skuInputText?.value : skuSelectDropdown?.value,
-                color: colorInput.value,
-                qty: parseInt(qtyInput.value),
-                rate: parseFloat(rateInput.value),
-                vendorName: currentEntryType === 'Input' ? (vendorSelectDropdown?.value === 'Add New Vendor...' ? vendorInputText?.value : vendorSelectDropdown?.value) : (vendorSelectDropdown?.value || vendorInputText?.value),
-                remarks: remarksInput.value
+            document.getElementById('confirm-no-btn').onclick = (e) => {
+                e.stopPropagation();
+                onConfirm(false);
+                closeModal('custom-confirm');
             };
-            if (!record.date || !record.challanNo || !record.sku || isNaN(record.qty) || isNaN(record.rate) || !record.vendorName) {
-                showMessage('Please fill in all required fields before printing a challan.', 'error');
-                return;
+        }
+
+        function openTab(evt, tabName) {
+            document.querySelectorAll(".tab-content").forEach(tc => tc.style.display = "none");
+            document.querySelectorAll(".tab-link").forEach(tl => tl.classList.remove("active"));
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList.add("active");
+            renderAll();
+        }
+
+        function sumQuantities(obj) {
+            return Object.values(obj || {}).reduce((s, q) => s + q, 0);
+        }
+
+        function getQuantitiesFromContainer(containerId) {
+            const quantities = {};
+            let total = 0;
+            document.querySelectorAll(`#${containerId} input[data-size]`).forEach(input => {
+                const qty = parseInt(input.value) || 0;
+                if (qty > 0) {
+                    quantities[input.dataset.size] = qty;
+                    total += qty;
+                }
+            });
+            return { quantities, total };
+        }
+
+        async function addTransaction(data, remarks) {
+            try {
+                if (!isAuthReady) return;
+                const materialDoc = materials.find(m => m.data.challans.some(c => c.challanNo === data.challanNo));
+                const material = materialDoc ? materialDoc.data : null;
+                if (!material) return;
+
+                const transactionCollection = collection(db, `artifacts/${appId}/users/${userId}/${collections.transactions}`);
+
+                Object.keys(data.quantities).forEach(size => {
+                    addDoc(transactionCollection, {
+                        date: data.date,
+                        challanNo: data.challanNo,
+                        sku: material.sku,
+                        type: material.type,
+                        color: data.color || material.color,
+                        stage: data.stage,
+                        size: size,
+                        qty: data.quantities[size],
+                        vendor: data.vendor,
+                        remarks
+                    });
+                });
+            } catch (e) {
+                console.error("Error adding transaction: ", e);
             }
-            printChallan(record);
-        });
+        }
 
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = usernameInput.value;
-            const password = passwordInput.value;
-            const success = handleLogin(username, password);
-            if (!success) {
-                showMessage('Invalid username or password.', 'error', 'loginMessage');
-            }
-        });
+        // --- UI Rendering ---
+        function renderHomePage() {
+            let stockOnHand = 0,
+                workInProgress = 0,
+                finishedAwaiting = 0,
+                totalReceived = 0;
+            const stockTbody = document.querySelector("#stockTable tbody");
+            stockTbody.innerHTML = '';
 
-        demoLoginBtn.addEventListener('click', () => {
-            const username = 'demo';
-            const password = 'demo';
-            const success = handleLogin(username, password);
-            if (!success) {
-                showMessage('Demo account login failed. Please check the hardcoded credentials.', 'error', 'loginMessage');
-            }
-        });
+            const skus = {};
+            materials.forEach(materialDoc => {
+                const material = materialDoc.data;
+                const docId = materialDoc.id;
 
-        closeEditModalBtn.addEventListener('click', closeEditModal);
-        cancelEditBtn.addEventListener('click', closeEditModal);
+                if (!skus[material.sku]) {
+                    skus[material.sku] = {
+                        materials: [],
+                        totalInitial: 0,
+                        totalWIP: 0,
+                        totalFinished: 0,
+                        totalReceived: 0,
+                        earliestDate: null,
+                    };
+                }
 
-        document.addEventListener('DOMContentLoaded', initializeFirebase);
+                const skuData = skus[material.sku];
+                skuData.materials.push(materialDoc);
+                skuData.totalInitial += sumQuantities(material.initialQuantities);
+                skuData.totalReceived += sumQuantities(material.receivedQuantities);
 
-        const addDemoData = async () => {
-            if (currentUser && db && userId) {
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const appId = firebaseConfig.appId || 'default-app-id';
-                const recordsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/material_records`);
-                try {
-                    const existingDocs = await getDocs(query(recordsCollectionRef));
-                    if (existingDocs.empty) {
-                        const sampleRecords = [
-                            { date: '2025-07-01', challanNo: 'IN-001', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 100, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: new Date('2025-07-01T10:00:00Z').toISOString(), remarks: 'Initial stock input' },
-                            { date: '2025-07-05', challanNo: 'IN-002', sku: 'BW6085BLUE_DRS-L', color: 'Blue', qty: 50, rate: 1200.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: new Date('2025-07-05T11:00:00Z').toISOString(), remarks: 'New variant added' },
-                            { date: '2025-07-10', challanNo: 'IN-003', sku: 'BW8034GREY_COD-M', color: 'Grey', qty: 75, rate: 800.00, vendorName: 'Amazon - Fashion', type: 'Input', timestamp: new Date('2025-07-10T12:00:00Z').toISOString(), remarks: 'Regular supply' },
-                            { date: '2025-07-15', challanNo: 'OUT-001', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 20, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Output', timestamp: new Date('2025-07-15T13:00:00Z').toISOString(), remarks: 'Shipped to warehouse' },
-                            { date: '2025-07-20', challanNo: 'IN-004', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 30, rate: 1050.00, vendorName: 'Myntra - SJIT', type: 'Input', timestamp: new Date('2025-07-20T14:00:00Z').toISOString(), remarks: 'Special restock' },
-                            { date: '2025-07-25', challanNo: 'OUT-002', sku: 'BW8034GREY_COD-M', color: 'Grey', qty: 10, rate: 800.00, vendorName: 'Amazon - Fashion', type: 'Output', timestamp: new Date('2025-07-25T15:00:00Z').toISOString(), remarks: 'Sent for client inspection' },
-                            { date: '2025-07-25', challanNo: 'OUT-003', sku: 'BW6085BLUE_DRS-S', color: 'Blue', qty: 10, rate: 1000.00, vendorName: 'Myntra - SJIT', type: 'Output', timestamp: new Date('2025-07-25T16:00:00Z').toISOString(), remarks: 'Urgent order' },
-                            { date: '2025-07-28', challanNo: 'IN-005', sku: 'BW6083BLUE_DRS-L', color: 'Light Blue', qty: 40, rate: 950.00, vendorName: 'Flipkart - Retail', type: 'Input', timestamp: new Date('2025-07-28T09:00:00Z').toISOString(), remarks: 'New supplier batch' }
-                        ];
-                        for (const record of sampleRecords) { await addDoc(recordsCollectionRef, record); }
-                        console.log("Demo data added.");
+                let latestStageIndex = -1;
+                material.challans.forEach(c => {
+                    const challanQty = sumQuantities(c.quantities);
+                    const stageIndex = STAGES.indexOf(c.stage);
+                    if (stageIndex > latestStageIndex) latestStageIndex = stageIndex;
+                    if (c.stage === FINAL_STAGE) skuData.totalFinished += challanQty;
+                    else skuData.totalWIP += challanQty;
+
+                    const challanDate = new Date(c.date);
+                    if (!skuData.earliestDate || challanDate < new Date(skuData.earliestDate)) {
+                        skuData.earliestDate = c.date;
                     }
-                } catch (error) {
-                    console.error("Error checking or adding demo data:", error);
+                });
+
+                skuData.currentStage = latestStageIndex > -1 ? STAGES[latestStageIndex] : 'Not Started';
+            });
+
+            Object.keys(skus).forEach(sku => {
+                const skuData = skus[sku];
+                const totalStock = skuData.totalInitial - skuData.totalWIP - skuData.totalFinished - skuData.totalReceived;
+                stockOnHand += totalStock;
+                workInProgress += skuData.totalWIP;
+                finishedAwaiting += skuData.totalFinished;
+                totalReceived += skuData.totalReceived;
+
+                const row = stockTbody.insertRow();
+                row.style.cursor = 'pointer';
+                row.addEventListener('click', () => showSkuModal(sku));
+                row.innerHTML = `<td>${sku}</td><td>${skuData.totalInitial}</td>
+                                 <td>${skuData.currentStage}</td><td>${skuData.totalWIP}</td><td>${skuData.totalFinished}</td><td>${skuData.totalReceived}</td>
+                                 <td>${skuData.earliestDate}</td>
+                                 <td>
+                                     <button class="edit-btn" data-sku="${sku}">Edit</button>
+                                     <button class="delete-btn" data-sku="${sku}">Delete</button>
+                                 </td>`;
+            });
+
+            document.getElementById('stockOnHand').textContent = stockOnHand;
+            document.getElementById('workInProgress').textContent = workInProgress;
+            document.getElementById('finishedAwaiting').textContent = finishedAwaiting;
+            document.getElementById('totalReceived').textContent = totalReceived;
+
+            document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // To be implemented: an edit modal that handles all material documents for a given SKU
+                showAlert("Editing all records for this SKU is not yet implemented.");
+            }));
+
+            document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showConfirm("Are you sure you want to delete this material record? All associated WIP and transaction history will also be deleted.", async (confirmed) => {
+                    if (confirmed) {
+                        const sku = e.target.dataset.sku;
+                        const materialDocsToDelete = materials.filter(m => m.data.sku === sku);
+                        for (const doc of materialDocsToDelete) {
+                            await deleteMaterial(doc.id);
+                        }
+                    }
+                });
+            }));
+
+            // Render default chart
+            if (Object.keys(skus).length > 0) {
+                const firstSku = Object.keys(skus)[0];
+                document.getElementById('sku-search-input').value = firstSku;
+                visualizeSkuProgress(firstSku);
+            }
+        }
+
+        function renderVendorTable() {
+            const tbody = document.querySelector("#vendorTable tbody");
+            tbody.innerHTML = '';
+            vendors.forEach((vendorDoc) => {
+                const vendor = vendorDoc.data;
+                const docId = vendorDoc.id;
+                const row = tbody.insertRow();
+                row.innerHTML = `<td>${vendor.name}</td><td>${vendor.jobTypes.join(', ')}</td><td>
+                    <button class="edit-btn" data-id="${docId}">Edit</button>
+                    <button class="delete-btn" data-id="${docId}">Delete</button>
+                    </td>`;
+            });
+            document.querySelectorAll('#vendorTable .edit-btn').forEach(btn => btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openEditVendorModal(e.target.dataset.id);
+            }));
+            document.querySelectorAll('#vendorTable .delete-btn').forEach(btn => btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showConfirm("Are you sure you want to delete this vendor?", async (confirmed) => {
+                    if (confirmed) {
+                        await deleteVendor(e.target.dataset.id);
+                    }
+                });
+            }));
+        }
+
+        function renderTransactionsTable() {
+            const tbody = document.querySelector("#transactionTable tbody");
+            tbody.innerHTML = '';
+            transactions.forEach(tDoc => {
+                const t = tDoc.data;
+                const row = tbody.insertRow();
+                row.innerHTML = `<td>${t.date}</td><td>${t.challanNo}</td><td>${t.sku}</td><td>${t.type}</td><td>${t.color}</td><td>${t.stage}</td>
+                                 <td>${t.size}</td><td>${t.qty}</td><td>${t.vendor}</td><td>${t.remarks || ''}</td>`;
+            });
+        }
+
+        // --- Firestore Functions ---
+        async function addMaterial(data) {
+            try {
+                if (!isAuthReady) {
+                    console.error("Auth not ready.");
+                    return;
+                }
+                const materialCollection = collection(db, `artifacts/${appId}/users/${userId}/${collections.materials}`);
+                await addDoc(materialCollection, data);
+                console.log("Material added successfully!");
+                return true;
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                showAlert("Error adding material. Please try again.");
+                return false;
+            }
+        }
+
+        async function updateMaterial(docId, data) {
+            try {
+                if (!isAuthReady) {
+                    console.error("Auth not ready.");
+                    return;
+                }
+                const materialDocRef = doc(db, `artifacts/${appId}/users/${userId}/${collections.materials}`, docId);
+                await updateDoc(materialDocRef, data);
+                console.log("Material updated successfully!");
+                return true;
+            } catch (e) {
+                console.error("Error updating document: ", e);
+                showAlert("Error updating material. Please try again.");
+                return false;
+            }
+        }
+
+        async function deleteMaterial(docId) {
+            try {
+                if (!isAuthReady) {
+                    console.error("Auth not ready.");
+                    return;
+                }
+                const materialDocRef = doc(db, `artifacts/${appId}/users/${userId}/${collections.materials}`, docId);
+                await deleteDoc(materialDocRef);
+                showAlert("Material deleted successfully!");
+                console.log('Material deleted successfully!');
+            } catch (e) {
+                console.error("Error deleting document: ", e);
+                showAlert("Error deleting material. Please try again.");
+            }
+        }
+
+        async function addVendor(data) {
+            try {
+                if (!isAuthReady) return;
+                const vendorCollection = collection(db, `artifacts/${appId}/users/${userId}/${collections.vendors}`);
+                await addDoc(vendorCollection, data);
+                console.log("Vendor added successfully!");
+                return true;
+            } catch (e) {
+                console.error("Error adding vendor: ", e);
+                showAlert("Error adding vendor. Please try again.");
+                return false;
+            }
+        }
+
+        async function updateVendor(docId, data) {
+            try {
+                if (!isAuthReady) return;
+                const vendorDocRef = doc(db, `artifacts/${appId}/users/${userId}/${collections.vendors}`, docId);
+                await updateDoc(vendorDocRef, data);
+                console.log("Vendor updated successfully!");
+                return true;
+            } catch (e) {
+                console.error("Error updating vendor: ", e);
+                showAlert("Error updating vendor. Please try again.");
+                return false;
+            }
+        }
+
+        async function deleteVendor(docId) {
+            try {
+                if (!isAuthReady) return;
+                const vendorDocRef = doc(db, `artifacts/${appId}/users/${userId}/${collections.vendors}`, docId);
+                await deleteDoc(vendorDocRef);
+                showAlert("Vendor deleted successfully!");
+                console.log('Vendor deleted successfully!');
+            } catch (e) {
+                console.error("Error deleting vendor: ", e);
+                showAlert("Error deleting vendor. Please try again.");
+            }
+        }
+
+        // --- Form Population & Event Handlers ---
+        document.getElementById('vendorForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const name = document.getElementById('vendorName').value;
+            const jobTypes = Array.from(document.querySelectorAll('#jobTypesContainer input:checked')).map(cb => cb.value);
+            if (!name || jobTypes.length === 0) {
+                showAlert("Vendor name and at least one job type are required.");
+                return;
+            }
+            if (vendors.some(v => v.data.name.toLowerCase() === name.toLowerCase())) {
+                showAlert('A vendor with this name already exists.');
+                return;
+            }
+            if (await addVendor({ name, jobTypes })) {
+                this.reset();
+                populateJobTypes('jobTypesContainer');
+                showAlert('Vendor registered successfully!');
+                console.log("Vendor registered successfully!");
+            }
+        });
+
+        function populateJobTypes(containerId, selectedJobs = []) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            STAGES.forEach(stage => {
+                const checked = selectedJobs.includes(stage) ? 'checked' : '';
+                container.innerHTML += `<label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" value="${stage}" ${checked}> ${stage}</label>`;
+            });
+        }
+
+        function populateColorDropdown(dropdownId) {
+            const select = document.getElementById(dropdownId);
+            select.innerHTML = '<option value="">Select Color</option><option value="Custom">Add New Color...</option>';
+            const uniqueColors = new Set(materials.map(m => m.data.color).filter(Boolean));
+            uniqueColors.forEach(color => {
+                const option = document.createElement('option');
+                option.value = color;
+                option.textContent = color;
+                select.appendChild(option);
+            });
+        }
+
+        document.getElementById('color').addEventListener('change', function () {
+            document.getElementById('customColor').style.display = (this.value === 'Custom') ? 'block' : 'none';
+        });
+
+        function openEditVendorModal(docId) {
+            const vendorDoc = vendors.find(v => v.id === docId);
+            const vendor = vendorDoc.data;
+            document.getElementById('editVendorId').value = docId;
+            document.getElementById('editVendorName').value = vendor.name;
+            populateJobTypes('editJobTypesContainer', vendor.jobTypes);
+            document.getElementById('vendorEditModal').style.display = 'block';
+        }
+
+        document.getElementById('editVendorForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const docId = document.getElementById('editVendorId').value;
+            const newName = document.getElementById('editVendorName').value;
+            const newJobTypes = Array.from(document.querySelectorAll('#editJobTypesContainer input:checked')).map(cb => cb.value);
+            if (!newName || newJobTypes.length === 0) {
+                showAlert("Vendor name and at least one job type are required.");
+                return;
+            }
+            if (vendors.some(v => v.data.name.toLowerCase() === newName.toLowerCase() && v.id !== docId)) {
+                showAlert('A vendor with this name already exists.');
+                return;
+            }
+            if (await updateVendor(docId, { name: newName, jobTypes: newJobTypes })) {
+                closeModal('vendorEditModal');
+                console.log("Vendor updated successfully!");
+            }
+        });
+
+        document.getElementById('itemType').addEventListener('change', function () {
+            document.getElementById('customItemType').style.display = (this.value === 'Custom') ? 'block' : 'none';
+        });
+
+        document.getElementById('editItemType').addEventListener('change', function () {
+            document.getElementById('editCustomItemType').style.display = (this.value === 'Custom') ? 'block' : 'none';
+        });
+
+        function createSizeInputField(size, containerId, quantity = 0) {
+            const container = document.getElementById(containerId);
+            const group = document.createElement('div');
+            group.className = 'size-input-group';
+            group.innerHTML = `<label class="size-label">${size}</label><input type="number" min="0" value="${quantity}" data-size="${size}">`;
+            container.appendChild(group);
+            const input = group.querySelector('input');
+            if (containerId.includes('quantity')) {
+                input.addEventListener('input', () => {
+                    const { total } = getQuantitiesFromContainer(containerId);
+                    document.getElementById(containerId.startsWith('edit') ? 'edit-total-qty-display' : 'total-qty-display').textContent = `Total Quantity: ${total}`;
+                });
+            }
+            return input;
+        }
+
+        function addSizeField(containerId) {
+            const size = prompt("Enter new size name (e.g., XXL):");
+            if (size && !document.querySelector(`#${containerId} input[data-size="${size.toUpperCase()}"]`)) {
+                createSizeInputField(size.toUpperCase(), containerId);
+            }
+        }
+
+        document.getElementById('outputForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const { quantities, total } = getQuantitiesFromContainer('size-quantity-container');
+            if (total === 0) {
+                showAlert('Please enter quantities for at least one size.');
+                return;
+            }
+            let itemType = document.getElementById('itemType').value;
+            if (itemType === 'Custom') itemType = document.getElementById('customItemType').value.trim();
+            if (!itemType) {
+                showAlert('Please select or specify an item type.');
+                return;
+            }
+            const sku = document.getElementById('sku').value;
+            let color = document.getElementById('color').value;
+            if (color === 'Custom') color = document.getElementById('customColor').value.trim();
+            if (!color) {
+                showAlert('Please select or specify a color.');
+                return;
+            }
+            const challanNo = document.getElementById('challanNo').value;
+            const dateIssued = document.getElementById('date-issued').value;
+
+            // Find existing material with the same SKU and color
+            const existingMaterialDoc = materials.find(m => m.data.sku === sku && m.data.color === color);
+
+            if (existingMaterialDoc) {
+                // Check if a challan with this number already exists for this material
+                if (existingMaterialDoc.data.challans.some(c => c.challanNo === challanNo)) {
+                    showAlert('A challan with this number already exists for this SKU and color combination.');
+                    return;
+                }
+
+                // Add new challan to existing material
+                const newChallanData = {
+                    challanNo,
+                    vendor: document.getElementById('outputVendor').value,
+                    stage: STAGES[0],
+                    quantities: quantities,
+                    date: dateIssued
+                };
+                const updatedChallans = [...existingMaterialDoc.data.challans, newChallanData];
+                const newInitialQuantities = { ...existingMaterialDoc.data.initialQuantities };
+                Object.keys(quantities).forEach(size => {
+                    newInitialQuantities[size] = (newInitialQuantities[size] || 0) + quantities[size];
+                });
+                const updateData = {
+                    challans: updatedChallans,
+                    initialQuantities: newInitialQuantities,
+                };
+
+                if (await updateMaterial(existingMaterialDoc.id, updateData)) {
+                    await addTransaction({ ...newChallanData, sku, color }, `Initial output`);
+                    this.reset();
+                    document.getElementById('size-quantity-container').innerHTML = '';
+                    DEFAULT_SIZES.forEach(s => createSizeInputField(s, 'size-quantity-container'));
+                    document.getElementById('total-qty-display').textContent = `Total Quantity: 0`;
+                    openTab({ currentTarget: document.getElementById('home-tab') }, 'Home');
+                    console.log('New challan added to existing material and page refreshed.');
+                }
+            } else {
+                // No material found, create a new material record
+                const challanData = {
+                    challanNo,
+                    vendor: document.getElementById('outputVendor').value,
+                    stage: STAGES[0],
+                    quantities: quantities,
+                    date: dateIssued
+                };
+                const newMaterial = {
+                    sku,
+                    type: itemType,
+                    color,
+                    rate: parseFloat(document.getElementById('rate').value),
+                    initialQuantities: { ...quantities },
+                    receivedQuantities: {},
+                    challans: [challanData]
+                };
+                if (await addMaterial(newMaterial)) {
+                    await addTransaction({ ...challanData, sku, color }, `Initial output`);
+                    this.reset();
+                    document.getElementById('size-quantity-container').innerHTML = '';
+                    DEFAULT_SIZES.forEach(s => createSizeInputField(s, 'size-quantity-container'));
+                    document.getElementById('total-qty-display').textContent = `Total Quantity: 0`;
+                    openTab({ currentTarget: document.getElementById('home-tab') }, 'Home');
+                    console.log('Material added and page refreshed.');
                 }
             }
+        });
+
+        document.getElementById('editMaterialForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const docId = document.getElementById('editMaterialId').value;
+            const { quantities, total } = getQuantitiesFromContainer('edit-size-quantity-container');
+            if (total === 0) {
+                showAlert('Total quantity cannot be zero.');
+                return;
+            }
+            let itemType = document.getElementById('editItemType').value;
+            if (itemType === 'Custom') itemType = document.getElementById('editCustomItemType').value.trim();
+            if (!itemType) {
+                showAlert('Please select or specify an item type.');
+                return;
+            }
+            const updatedMaterial = {
+                sku: document.getElementById('editSku').value,
+                type: itemType,
+                color: document.getElementById('editColor').value,
+                rate: parseFloat(document.getElementById('editRate').value),
+                initialQuantities: quantities,
+            };
+
+            const existingMaterial = materials.find(m => m.id === docId).data;
+            const challans = existingMaterial.challans.map(c => {
+                c.quantities = JSON.parse(JSON.stringify(quantities));
+                return c;
+            });
+            const received = existingMaterial.receivedQuantities;
+
+            const totalInitial = sumQuantities(quantities);
+            const totalReceived = sumQuantities(received);
+
+            if (totalReceived > totalInitial) {
+                showAlert('The number of received items cannot exceed the new total initial quantity.');
+                return;
+            }
+
+            const updateData = {
+                ...updatedMaterial,
+                challans,
+                receivedQuantities: received
+            };
+
+            if (await updateMaterial(docId, updateData)) {
+                closeModal('materialEditModal');
+                openTab({ currentTarget: document.getElementById('home-tab') }, 'Home');
+                console.log('Material updated and page refreshed.');
+            }
+        });
+
+        function openEditMaterialModal(docId) {
+            const materialDoc = materials.find(m => m.id === docId);
+            const material = materialDoc.data;
+            document.getElementById('editMaterialId').value = docId;
+            document.getElementById('editSku').value = material.sku;
+            document.getElementById('editColor').value = material.color;
+            document.getElementById('editRate').value = material.rate;
+            document.getElementById('editItemType').value = material.type;
+            document.getElementById('editCustomItemType').style.display = 'none';
+
+            const sizeContainer = document.getElementById('edit-size-quantity-container');
+            sizeContainer.innerHTML = '';
+            let totalQty = 0;
+            Object.entries(material.initialQuantities).forEach(([size, qty]) => {
+                createSizeInputField(size, 'edit-size-quantity-container', qty);
+                totalQty += qty;
+            });
+            document.getElementById('edit-total-qty-display').textContent = `Total Quantity: ${totalQty}`;
+
+            document.getElementById('materialEditModal').style.display = 'block';
+        }
+
+        function populateWipChallanDropdown() {
+            const select = document.getElementById('wipChallan');
+            select.innerHTML = '<option value="">-- Select a Challan --</option>';
+            materials.forEach(mDoc => {
+                const m = mDoc.data;
+                m.challans.filter(c => sumQuantities(c.quantities) > 0)
+                    .forEach(c => select.add(new Option(`Challan ${c.challanNo} (${m.color}, Stage: ${c.stage})`, `${mDoc.id}|${c.challanNo}`)));
+            });
+        }
+
+        document.getElementById('wipChallan').addEventListener('change', function () {
+            const detailsBox = document.getElementById('wip-details-box');
+            const sizeSection = document.getElementById('wip-size-section');
+            if (!this.value) {
+                detailsBox.style.display = 'none';
+                sizeSection.style.display = 'none';
+                return;
+            }
+            detailsBox.style.display = 'block';
+            sizeSection.style.display = 'block';
+            const [docId, challanNo] = this.value.split('|');
+            const material = materials.find(m => m.id === docId).data;
+            const challan = material.challans.find(c => c.challanNo === challanNo);
+            document.getElementById('wipCurrentStage').textContent = challan.stage;
+            document.getElementById('wipAvailableQty').textContent = sumQuantities(challan.quantities);
+            const nextStageSelect = document.getElementById('wipNextStage');
+            nextStageSelect.innerHTML = '<option value="">-- Select Next Stage --</option>';
+            STAGES.slice(STAGES.indexOf(challan.stage) + 1).forEach(stage => nextStageSelect.add(new Option(stage, stage)));
+            document.getElementById('wipVendor').innerHTML = '<option value="">-- Select Stage First --</option>';
+            const sizeContainer = document.getElementById('wip-size-container');
+            sizeContainer.innerHTML = '';
+            Object.entries(challan.quantities).forEach(([size, qty]) => {
+                const input = createSizeInputField(size, 'wip-size-container', qty);
+                input.setAttribute('max', qty);
+            });
+            const firstInput = sizeContainer.querySelector('input');
+            if (firstInput) {
+                firstInput.focus();
+                firstInput.select();
+            }
+        });
+
+        document.getElementById('wipNextStage').addEventListener('change', function () {
+            if (!this.value) {
+                document.getElementById('wipVendor').innerHTML = '<option value="">-- Select Stage First --</option>';
+                return;
+            }
+            populateVendorDropdown('wipVendor', this.value);
+        });
+
+        document.getElementById('wipForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const selectedId = document.getElementById('wipChallan').value;
+            if (!selectedId) {
+                showAlert('Please select a challan.');
+                return;
+            }
+            const { quantities: quantitiesToUpdate, total } = getQuantitiesFromContainer('wip-size-container');
+            if (total === 0) {
+                showAlert('Please specify quantity for at least one size.');
+                return;
+            }
+            const [docId, challanNo] = selectedId.split('|');
+            const materialDocRef = doc(db, `artifacts/${appId}/users/${userId}/${collections.materials}`, docId);
+            const materialData = (await getDoc(materialDocRef)).data();
+            const sourceChallan = materialData.challans.find(c => c.challanNo === challanNo);
+
+            Object.keys(quantitiesToUpdate).forEach(size => {
+                sourceChallan.quantities[size] -= quantitiesToUpdate[size];
+                if (sourceChallan.quantities[size] === 0) delete sourceChallan.quantities[size];
+            });
+            if (Object.keys(sourceChallan.quantities).length === 0) materialData.challans = materialData.challans.filter(c => c !== sourceChallan);
+            const newChallanData = {
+                challanNo: document.getElementById('wipNewChallan').value.trim() || sourceChallan.challanNo,
+                vendor: document.getElementById('wipVendor').value,
+                stage: document.getElementById('wipNextStage').value,
+                quantities: quantitiesToUpdate,
+                date: document.getElementById('date-updated').value
+            };
+            materialData.challans.push(newChallanData);
+            if (await updateMaterial(docId, materialData)) {
+                await addTransaction({ ...newChallanData, sku: materialData.sku, color: materialData.color }, `Moved from ${sourceChallan.stage}`);
+                this.reset();
+                document.getElementById('wip-details-box').style.display = 'none';
+                document.getElementById('wip-size-section').style.display = 'none';
+                console.log('WIP updated successfully!');
+            }
+        });
+
+        function populateRecChallanDropdown() {
+            const select = document.getElementById('recChallan');
+            select.innerHTML = '<option value="">-- Select a Challan --</option>';
+            materials.forEach(mDoc => {
+                const m = mDoc.data;
+                m.challans.filter(c => sumQuantities(c.quantities) > 0)
+                    .sort((a, b) => (b.stage === FINAL_STAGE) - (a.stage === FINAL_STAGE))
+                    .forEach(c => select.add(new Option(`Challan ${c.challanNo} (${m.color}, Stage: ${c.stage})`, `${mDoc.id}|${c.challanNo}`)));
+            });
+        }
+
+        document.getElementById('recChallan').addEventListener('change', function () {
+            const detailsBox = document.getElementById('rec-details-box');
+            const sizeSection = document.getElementById('rec-size-section');
+            if (!this.value) {
+                detailsBox.style.display = 'none';
+                sizeSection.style.display = 'none';
+                return;
+            }
+            detailsBox.style.display = 'block';
+            sizeSection.style.display = 'block';
+            const [docId, challanNo] = this.value.split('|');
+            const material = materials.find(m => m.id === docId).data;
+            const challan = material.challans.find(c => c.challanNo === challanNo);
+            document.getElementById('recSku').textContent = material.sku;
+            document.getElementById('recColor').textContent = material.color;
+            document.getElementById('recVendor').textContent = challan.vendor;
+            const sizeContainer = document.getElementById('rec-size-container');
+            sizeContainer.innerHTML = '';
+            Object.entries(challan.quantities).forEach(([size, qty]) => {
+                if (qty > 0) {
+                    const group = document.createElement('div');
+                    group.className = 'size-input-group';
+                    group.innerHTML = `<label class="size-label">${size} (Av: ${qty})</label><input type="number" min="0" max="${qty}" value="${qty}" data-size="${size}">`;
+                    sizeContainer.appendChild(group);
+                }
+            });
+        });
+
+        document.getElementById('receivingForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const selectedId = document.getElementById('recChallan').value;
+            if (!selectedId) {
+                showAlert('Please select a challan.');
+                return;
+            }
+            const { quantities: quantitiesToReceive, total } = getQuantitiesFromContainer('rec-size-container');
+            if (total === 0) {
+                showAlert('Please specify quantity to receive.');
+                return;
+            }
+            const [docId, challanNo] = selectedId.split('|');
+            const materialDocRef = doc(db, `artifacts/${appId}/users/${userId}/${collections.materials}`, docId);
+            const materialData = (await getDoc(materialDocRef)).data();
+            const sourceChallan = materialData.challans.find(c => c.challanNo === challanNo);
+            const dateReceived = document.getElementById('date-received').value;
+
+
+            Object.entries(quantitiesToReceive).forEach(([size, qty]) => {
+                materialData.receivedQuantities[size] = (materialData.receivedQuantities[size] || 0) + qty;
+                sourceChallan.quantities[size] -= qty;
+                if (sourceChallan.quantities[size] === 0) delete sourceChallan.quantities[size];
+            });
+            if (Object.keys(sourceChallan.quantities).length === 0) materialData.challans = materialData.challans.filter(c => c !== sourceChallan);
+
+            if (await updateMaterial(docId, materialData)) {
+                await addTransaction({ ...sourceChallan, date: dateReceived, sku: materialData.sku, color: materialData.color, quantities: quantitiesToReceive }, `Received`);
+                this.reset();
+                document.getElementById('rec-details-box').style.display = 'none';
+                document.getElementById('rec-size-section').style.display = 'none';
+                console.log('Items received successfully!');
+            }
+        });
+
+        function populateVendorDropdown(dropdownId, jobType) {
+            const select = document.getElementById(dropdownId);
+            select.innerHTML = '<option value="">-- Select Vendor --</option>';
+            vendors.filter(v => v.data.jobTypes.includes(jobType)).forEach(vendor => {
+                select.add(new Option(vendor.data.name, vendor.data.name));
+            });
+        }
+
+        function showSkuModal(sku) {
+            const skuMaterials = materials.filter(m => m.data.sku === sku);
+            if (skuMaterials.length === 0) return;
+
+            let totalOutput = 0;
+            let totalReceived = 0;
+            let totalWIP = 0;
+            let totalFinished = 0;
+            let allChallans = [];
+            const uniqueColors = new Set();
+
+            skuMaterials.forEach(mDoc => {
+                const material = mDoc.data;
+                totalOutput += sumQuantities(material.initialQuantities);
+                totalReceived += sumQuantities(material.receivedQuantities);
+
+                if (material.color) {
+                    uniqueColors.add(material.color);
+                }
+
+                material.challans.forEach(c => {
+                    const challanQty = sumQuantities(c.quantities);
+                    if (c.stage === FINAL_STAGE) totalFinished += challanQty;
+                    else totalWIP += challanQty;
+                    allChallans.push({
+                        ...c,
+                        color: material.color,
+                        sku: material.sku
+                    });
+                });
+            });
+
+            const progressPercent = totalOutput > 0 ? (totalReceived / totalOutput) * 100 : 0;
+
+            document.getElementById('modal-title-sku').textContent = sku;
+            document.getElementById('modal-sku').textContent = sku;
+            document.getElementById('modal-type').textContent = skuMaterials[0].data.type;
+            document.getElementById('modal-colors').textContent = Array.from(uniqueColors).join(', ');
+            document.getElementById('modal-total-output').textContent = totalOutput;
+            document.getElementById('modal-total-received').textContent = totalReceived;
+            document.getElementById('modal-total-wip').textContent = totalWIP + totalFinished;
+
+            const progressBar = document.getElementById('modal-progress-bar');
+            progressBar.style.width = `${progressPercent}%`;
+            progressBar.textContent = `${Math.round(progressPercent)}%`;
+
+            const challanTableBody = document.querySelector('#challanProgressTable tbody');
+            challanTableBody.innerHTML = '';
+
+            allChallans.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            allChallans.forEach(c => {
+                const row = challanTableBody.insertRow();
+                const totalQty = sumQuantities(c.quantities);
+                row.innerHTML = `
+                    <td>${c.challanNo}</td>
+                    <td>${c.color}</td>
+                    <td>${totalQty}</td>
+                    <td>${c.stage}</td>
+                    <td>${c.vendor}</td>
+                    <td>${c.date}</td>
+                `;
+            });
+
+            document.getElementById('skuModal').style.display = 'block';
+        }
+
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        window.onclick = e => {
+            // Check if the click is outside any modal content to close it
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
         };
+
+        document.getElementById('alert-ok-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeModal('custom-alert');
+        });
+
+        // --- Visualization Functions ---
+        function visualizeSkuProgress(sku) {
+            const materialDocs = materials.filter(m => m.data.sku === sku);
+            const visContainer = document.getElementById('visualization-container');
+            const title = document.getElementById('visualization-sku-title');
+
+            if (materialDocs.length === 0) {
+                visContainer.style.display = 'none';
+                showAlert('No data found for this SKU.');
+                return;
+            }
+
+            title.textContent = sku;
+            visContainer.style.display = 'block';
+
+            let allChallans = [];
+            materialDocs.forEach(mDoc => {
+                const material = mDoc.data;
+                material.challans.forEach(c => {
+                    allChallans.push({
+                        ...c,
+                        color: material.color
+                    });
+                });
+            });
+
+            const challanLabels = allChallans.map(c => `Challan ${c.challanNo}`);
+            const wipQuantities = allChallans.map(c => c.stage !== FINAL_STAGE ? sumQuantities(c.quantities) : 0);
+            const finishedQuantities = allChallans.map(c => c.stage === FINAL_STAGE ? sumQuantities(c.quantities) : 0);
+            const challanDetailsBody = document.querySelector("#challanDetailsTable tbody");
+            challanDetailsBody.innerHTML = '';
+
+            // Populate the detailed challan table
+            allChallans.forEach(challan => {
+                const row = challanDetailsBody.insertRow();
+                const totalQty = sumQuantities(challan.quantities);
+                row.innerHTML = `
+                    <td>${challan.challanNo}</td>
+                    <td>${totalQty}</td>
+                    <td>${challan.stage}</td>
+                    <td>${challan.vendor}</td>
+                `;
+            });
+
+            const ctx = document.getElementById('challanProgressChart').getContext('2d');
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: challanLabels,
+                    datasets: [{
+                        label: 'In Progress',
+                        data: wipQuantities,
+                        backgroundColor: '#3498db',
+                    }, {
+                        label: 'Finished',
+                        data: finishedQuantities,
+                        backgroundColor: '#2ecc71',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Quantity'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Firebase Setup ---
+        async function setupFirebase() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        isAuthReady = true;
+                        console.log(`User authenticated with UID: ${userId}`);
+                        document.getElementById('auth-modal').style.display = 'none';
+                        document.getElementById('main-app-content').style.display = 'block';
+                        document.getElementById('sign-out-btn').style.display = 'block';
+                        setupFirestoreListeners();
+                    } else {
+                        userId = null;
+                        isAuthReady = false;
+                        document.getElementById('auth-modal').style.display = 'block';
+                        document.getElementById('main-app-content').style.display = 'none';
+                        document.getElementById('sign-out-btn').style.display = 'none';
+                        console.log("No user signed in.");
+                    }
+                });
+            } catch (e) {
+                console.error("Error setting up Firebase: ", e);
+            }
+        }
+
+        // Handle auth form submission
+        document.getElementById('auth-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const errorMessage = document.getElementById('auth-error-message');
+            errorMessage.textContent = '';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                console.error("Sign-in failed: ", error);
+                errorMessage.textContent = 'Invalid email or password. Please try again.';
+            }
+        });
+
+        // Handle sign up button click
+        document.getElementById('sign-up-btn').addEventListener('click', async function (e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const errorMessage = document.getElementById('auth-error-message');
+            errorMessage.textContent = '';
+
+            if (password.length < 6) {
+                errorMessage.textContent = 'Password should be at least 6 characters.';
+                return;
+            }
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                showAlert('Account created successfully! You are now signed in.');
+            } catch (error) {
+                console.error("Sign-up failed: ", error);
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage.textContent = 'This email is already in use. Please sign in instead.';
+                } else {
+                    errorMessage.textContent = 'An error occurred during sign-up. Please try again.';
+                }
+            }
+        });
+
+        // Handle sign out button click
+        document.getElementById('sign-out-btn').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showAlert('You have been signed out.');
+            } catch (error) {
+                console.error("Sign out failed: ", error);
+                showAlert('An error occurred during sign out. Please try again.');
+            }
+        });
+
+
+        function setupFirestoreListeners() {
+            if (!isAuthReady) {
+                console.error("Firestore listeners not started, authentication not complete.");
+                return;
+            }
+            // Materials
+            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/${collections.materials}`), (querySnapshot) => {
+                materials = querySnapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+                renderAll();
+            }, (error) => {
+                console.error("Error fetching materials: ", error);
+            });
+
+            // Vendors
+            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/${collections.vendors}`), async (querySnapshot) => {
+                vendors = querySnapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+                const warehouseExists = vendors.some(v => v.data.name === 'WAREHOUSE');
+                if (!warehouseExists) {
+                    // Check again before adding to avoid race conditions
+                    const updatedVendors = (await getDocs(collection(db, `artifacts/${appId}/users/${userId}/${collections.vendors}`))).docs.map(doc => ({ id: doc.id, data: doc.data() }));
+                    if (!updatedVendors.some(v => v.data.name === 'WAREHOUSE')) {
+                        await addVendor({ name: 'WAREHOUSE', jobTypes: ['Cutting'] });
+                    }
+                }
+                renderAll();
+            }, (error) => {
+                console.error("Error fetching vendors: ", error);
+            });
+
+            // Transactions
+            onSnapshot(collection(db, `artifacts/${appId}/users/${userId}/${collections.transactions}`), (querySnapshot) => {
+                transactions = querySnapshot.docs.map(doc => ({ id: doc.id, data: doc.data() })).sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
+                renderAll();
+            }, (error) => {
+                console.error("Error fetching transactions: ", error);
+            });
+        }
+
+        function renderAll() {
+            if (!isAuthReady) {
+                return;
+            }
+            renderHomePage();
+            renderVendorTable();
+            populateWipChallanDropdown();
+            populateRecChallanDropdown();
+            populateVendorDropdown('outputVendor', 'Cutting');
+            populateColorDropdown('color');
+            renderTransactionsTable();
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            setupFirebase();
+            document.getElementById('home-tab').addEventListener('click', (e) => openTab(e, 'Home'));
+            document.getElementById('record-output-tab').addEventListener('click', (e) => openTab(e, 'RecordOutput'));
+            document.getElementById('wip-tab').addEventListener('click', (e) => openTab(e, 'WIP'));
+            document.getElementById('record-receiving-tab').addEventListener('click', (e) => openTab(e, 'RecordReceiving'));
+            document.getElementById('manage-vendors-tab').addEventListener('click', (e) => openTab(e, 'ManageVendors'));
+            document.getElementById('transactions-tab').addEventListener('click', (e) => openTab(e, 'Transactions'));
+            document.getElementById('add-output-size-btn').addEventListener('click', () => addSizeField('size-quantity-container'));
+            document.getElementById('add-edit-size-btn').addEventListener('click', () => addSizeField('edit-size-quantity-container'));
+            document.getElementById('sku-search-btn').addEventListener('click', () => {
+                const sku = document.getElementById('sku-search-input').value;
+                if (sku) {
+                    visualizeSkuProgress(sku);
+                }
+            });
+            openTab({ currentTarget: document.getElementById('home-tab') }, 'Home');
+            populateJobTypes('jobTypesContainer');
+            const sizeContainer = document.getElementById('size-quantity-container');
+            DEFAULT_SIZES.forEach(s => createSizeInputField(s, 'size-quantity-container'));
+
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date-issued').value = today;
+            document.getElementById('date-updated').value = today;
+            document.getElementById('date-received').value = today;
+        });
     </script>
 </body>
-</html>
 
+</html>
