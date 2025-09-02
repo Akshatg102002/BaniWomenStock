@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BANI Professional Manufacturing & Inventory System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="icon" type="image/png" href="//baniwomen.com/cdn/shop/files/baniwomen-icon.png?crop=center&height=32&v=1706881484&width=32">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
         :root {
             --primary-color: #3498db;
@@ -429,6 +431,26 @@
             text-align: center;
             margin-top: 15px;
         }
+
+        /* Styles for the PDF Receipt table */
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 10px;
+        }
+        .receipt-table th, .receipt-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        .receipt-table th {
+            background-color: #f2f2f2;
+        }
+
+         #challanProgressTable th{
+            min-width: 120px;
+        }
     </style>
 </head>
 
@@ -693,6 +715,27 @@
         </div>
     </div>
     
+    <!-- SKU Edit Modal -->
+    <div id="editSkuModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2>Edit SKU: <span id="edit-modal-title-sku"></span></h2>
+                <button class="close-button" id="close-edit-sku-modal">&times;</button>
+            </div>
+            <form id="editSkuForm">
+                <input type="hidden" id="editSkuOriginal">
+                <div class="form-group">
+                    <label for="edit-sku">SKU</label>
+                    <input type="text" id="edit-sku" required>
+                </div>
+                <div id="sku-materials-container">
+                    <!-- Dynamic material forms will be inserted here -->
+                </div>
+                <button type="submit" style="margin-top: 20px;">Save All Changes</button>
+            </form>
+        </div>
+    </div>
+    
     <!-- Vendor Edit Modal -->
     <div id="vendorEditModal" class="modal">
         <div class="modal-content">
@@ -715,8 +758,7 @@
             </form>
         </div>
     </div>
-
-    <!-- Material Edit Modal -->
+    
     <div id="materialEditModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -724,7 +766,7 @@
                 <button class="close-button" id="close-material-edit-modal">&times;</button>
             </div>
             <form id="editMaterialForm">
-                <input type="hidden" id="editMaterialId">
+                <input type="hidden" id="editMaterialDocId">
                 <div class="form-grid">
                     <div class="form-group"><label for="editSku">SKU</label><input type="text" id="editSku" required></div>
                     <div class="form-group"><label for="editItemType">Item Type</label><select id="editItemType" required>
@@ -782,13 +824,17 @@
                             <thead>
                                 <tr>
                                     <th>Challan No</th>
+                                    <th>Initial Challan No</th>
+                                    <th>Previous Stage</th>
                                     <th>Color</th>
                                     <th>Qty</th>
+                                    <th>Size Qty</th>
                                     <th>Stage</th>
                                     <th>Vendor</th>
                                     <th>Status</th>
                                     <th>Date Issued</th>
                                     <th>Date Received</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -817,10 +863,41 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // NOTE: Functions that need to be globally accessible must be outside the module script.
+        function createSizeInputField(size, containerId, quantity = 0) {
+            const container = document.getElementById(containerId);
+            const group = document.createElement('div');
+            group.className = 'size-input-group';
+            group.innerHTML = `<label class="size-label">${size}</label><input type="number" min="0" value="${quantity}" data-size="${size}">`;
+            container.appendChild(group);
+            const input = group.querySelector('input');
+            if (containerId.includes('quantity')) {
+                input.addEventListener('input', () => {
+                    const { total } = getQuantitiesFromContainer(containerId);
+                    document.getElementById(containerId.startsWith('edit') ? 'edit-total-qty-display' : 'total-qty-display').textContent = `Total Quantity: ${total}`;
+                });
+            }
+            return input;
+        }
+
+        function getQuantitiesFromContainer(containerId) {
+            const quantities = {};
+            let total = 0;
+            document.querySelectorAll(`#${containerId} input[data-size]`).forEach(input => {
+                const qty = parseInt(input.value) || 0;
+                if (qty > 0) {
+                    quantities[input.dataset.size] = qty;
+                    total += qty;
+                }
+            });
+            return { quantities, total };
+        }
+    </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs, runTransaction } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
         // Global variables provided by the environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -890,19 +967,6 @@
 
         function sumQuantities(obj) {
             return Object.values(obj || {}).reduce((s, q) => s + q, 0);
-        }
-
-        function getQuantitiesFromContainer(containerId) {
-            const quantities = {};
-            let total = 0;
-            document.querySelectorAll(`#${containerId} input[data-size]`).forEach(input => {
-                const qty = parseInt(input.value) || 0;
-                if (qty > 0) {
-                    quantities[input.dataset.size] = qty;
-                    total += qty;
-                }
-            });
-            return { quantities, total };
         }
 
         async function addTransaction(data, remarks) {
@@ -1011,8 +1075,7 @@
             
             document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                // To be implemented: an edit modal that handles all material documents for a given SKU
-                showAlert("Editing all records for this SKU is not yet implemented.");
+                openEditMaterialModal(materials.find(m => m.data.sku === e.target.dataset.sku).id);
             }));
             
             document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', (e) => {
@@ -1243,130 +1306,30 @@
             document.getElementById('customItemType').style.display = (this.value === 'Custom') ? 'block' : 'none';
         });
 
-        document.getElementById('editItemType').addEventListener('change', function() {
-            document.getElementById('editCustomItemType').style.display = (this.value === 'Custom') ? 'block' : 'none';
-        });
+        function openEditMaterialModal(docId) {
+            const materialDoc = materials.find(m => m.id === docId);
+            const material = materialDoc.data;
+            document.getElementById('editMaterialDocId').value = docId;
+            document.getElementById('editSku').value = material.sku;
+            document.getElementById('editColor').value = material.color;
+            document.getElementById('editRate').value = material.rate;
+            document.getElementById('editItemType').value = material.type;
+            document.getElementById('editCustomItemType').style.display = 'none';
 
-        function createSizeInputField(size, containerId, quantity = 0) {
-            const container = document.getElementById(containerId);
-            const group = document.createElement('div');
-            group.className = 'size-input-group';
-            group.innerHTML = `<label class="size-label">${size}</label><input type="number" min="0" value="${quantity}" data-size="${size}">`;
-            container.appendChild(group);
-            const input = group.querySelector('input');
-            if (containerId.includes('quantity')) {
-                input.addEventListener('input', () => {
-                    const { total } = getQuantitiesFromContainer(containerId);
-                    document.getElementById(containerId.startsWith('edit') ? 'edit-total-qty-display' : 'total-qty-display').textContent = `Total Quantity: ${total}`;
-                });
-            }
-            return input;
+            const sizeContainer = document.getElementById('edit-size-quantity-container');
+            sizeContainer.innerHTML = '';
+            let totalQty = 0;
+            Object.entries(material.initialQuantities).forEach(([size, qty]) => {
+                createSizeInputField(size, 'edit-size-quantity-container', qty);
+                totalQty += qty;
+            });
+            document.getElementById('edit-total-qty-display').textContent = `Total Quantity: ${totalQty}`;
+            document.getElementById('materialEditModal').style.display = 'block';
         }
-
-        function addSizeField(containerId) {
-            const size = prompt("Enter new size name (e.g., XXL):");
-            if (size && !document.querySelector(`#${containerId} input[data-size="${size.toUpperCase()}"]`)) {
-                createSizeInputField(size.toUpperCase(), containerId);
-            }
-        }
-
-        document.getElementById('outputForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const { quantities, total } = getQuantitiesFromContainer('size-quantity-container');
-            if (total === 0) {
-                showAlert('Please enter quantities for at least one size.');
-                return;
-            }
-            let itemType = document.getElementById('itemType').value;
-            if (itemType === 'Custom') itemType = document.getElementById('customItemType').value.trim();
-            if (!itemType) {
-                showAlert('Please select or specify an item type.');
-                return;
-            }
-            const sku = document.getElementById('sku').value;
-            let color = document.getElementById('color').value;
-            if (color === 'Custom') color = document.getElementById('customColor').value.trim();
-            if (!color) {
-                showAlert('Please select or specify a color.');
-                return;
-            }
-            const challanNo = document.getElementById('challanNo').value;
-            const dateIssued = document.getElementById('date-issued').value;
-
-            // Find existing material with the same SKU and color
-            const existingMaterialDoc = materials.find(m => m.data.sku === sku && m.data.color === color);
-
-            if (existingMaterialDoc) {
-                // Check if a challan with this number already exists for this material
-                if (existingMaterialDoc.data.challans.some(c => c.challanNo === challanNo)) {
-                    showAlert('A challan with this number already exists for this SKU and color combination.');
-                    return;
-                }
-
-                // Add new challan to existing material
-                const newChallanData = {
-                    challanNo,
-                    vendor: document.getElementById('outputVendor').value,
-                    stage: STAGES[0],
-                    status: 'received',
-                    quantities: quantities,
-                    date_issued: dateIssued,
-                    date_received: dateIssued
-                };
-                const updatedChallans = [...existingMaterialDoc.data.challans, newChallanData];
-                const newInitialQuantities = { ...existingMaterialDoc.data.initialQuantities };
-                Object.keys(quantities).forEach(size => {
-                    newInitialQuantities[size] = (newInitialQuantities[size] || 0) + quantities[size];
-                });
-                const updateData = { 
-                    challans: updatedChallans,
-                    initialQuantities: newInitialQuantities,
-                };
-
-                if (await updateMaterial(existingMaterialDoc.id, updateData)) {
-                    await addTransaction({ ...newChallanData, sku, color }, `Initial output`);
-                    this.reset();
-                    document.getElementById('size-quantity-container').innerHTML = '';
-                    DEFAULT_SIZES.forEach(s => createSizeInputField(s, 'size-quantity-container'));
-                    document.getElementById('total-qty-display').textContent = `Total Quantity: 0`;
-                    openTab({ currentTarget: document.getElementById('home-tab') }, 'Home');
-                    console.log('New challan added to existing material and page refreshed.');
-                }
-            } else {
-                // No material found, create a new material record
-                const challanData = {
-                    challanNo,
-                    vendor: document.getElementById('outputVendor').value,
-                    stage: STAGES[0],
-                    status: 'received',
-                    quantities: quantities,
-                    date_issued: dateIssued,
-                    date_received: dateIssued
-                };
-                const newMaterial = {
-                    sku,
-                    type: itemType,
-                    color,
-                    rate: parseFloat(document.getElementById('rate').value),
-                    initialQuantities: { ...quantities },
-                    receivedQuantities: {},
-                    challans: [challanData]
-                };
-                if (await addMaterial(newMaterial)) {
-                    await addTransaction({ ...challanData, sku, color }, `Initial output`);
-                    this.reset();
-                    document.getElementById('size-quantity-container').innerHTML = '';
-                    DEFAULT_SIZES.forEach(s => createSizeInputField(s, 'size-quantity-container'));
-                    document.getElementById('total-qty-display').textContent = `Total Quantity: 0`;
-                    openTab({ currentTarget: document.getElementById('home-tab') }, 'Home');
-                    console.log('Material added and page refreshed.');
-                }
-            }
-        });
-
+        
         document.getElementById('editMaterialForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const docId = document.getElementById('editMaterialId').value;
+            const docId = document.getElementById('editMaterialDocId').value;
             const { quantities, total } = getQuantitiesFromContainer('edit-size-quantity-container');
             if (total === 0) {
                 showAlert('Total quantity cannot be zero.');
@@ -1414,28 +1377,6 @@
             }
         });
 
-        function openEditMaterialModal(docId) {
-            const materialDoc = materials.find(m => m.id === docId);
-            const material = materialDoc.data;
-            document.getElementById('editMaterialId').value = docId;
-            document.getElementById('editSku').value = material.sku;
-            document.getElementById('editColor').value = material.color;
-            document.getElementById('editRate').value = material.rate;
-            document.getElementById('editItemType').value = material.type;
-            document.getElementById('editCustomItemType').style.display = 'none';
-
-            const sizeContainer = document.getElementById('edit-size-quantity-container');
-            sizeContainer.innerHTML = '';
-            let totalQty = 0;
-            Object.entries(material.initialQuantities).forEach(([size, qty]) => {
-                createSizeInputField(size, 'edit-size-quantity-container', qty);
-                totalQty += qty;
-            });
-            document.getElementById('edit-total-qty-display').textContent = `Total Quantity: ${totalQty}`;
-
-            document.getElementById('materialEditModal').style.display = 'block';
-        }
-
         function populateIssueChallanDropdown() {
             const select = document.getElementById('issueChallan');
             select.innerHTML = '<option value="">-- Select a Challan --</option>';
@@ -1451,7 +1392,7 @@
             const select = document.getElementById('receiveChallan');
             select.innerHTML = '<option value="">-- Select a Challan --</option>';
             materials.forEach(mDoc => {
-                const m = mDoc.data;
+                const m = m.data;
                 m.challans.filter(c => sumQuantities(c.quantities) > 0 && c.status === 'sent').forEach(c => {
                     select.add(new Option(`Challan ${c.challanNo} (${m.color}, Stage: ${c.stage})`, `${mDoc.id}|${c.challanNo}`));
                 });
@@ -1548,6 +1489,8 @@
             // Create new challan for the issued items
             const newChallanData = {
                 challanNo: document.getElementById('issueNewChallan').value.trim() || `${challanNo}-${nextStage.toLowerCase()}`,
+                initial_challan_no: sourceChallan.initial_challan_no || sourceChallan.challanNo,
+                previous_stage: sourceChallan.stage,
                 vendor: issueVendor,
                 stage: nextStage,
                 status: 'sent',
@@ -1580,6 +1523,7 @@
             const challan = material.challans.find(c => c.challanNo === challanNo);
             document.getElementById('receiveCurrentStage').textContent = challan.stage;
             document.getElementById('receiveVendor').textContent = challan.vendor;
+            document.getElementById('receiveNewChallan').value = challan.challanNo; // Pre-populate with existing challan number
             const sizeContainer = document.getElementById('receive-size-container');
             sizeContainer.innerHTML = '';
             Object.entries(challan.quantities).forEach(([size, qty]) => {
@@ -1702,7 +1646,8 @@
                     allChallans.push({
                         ...c,
                         color: material.color,
-                        sku: material.sku
+                        sku: material.sku,
+                        materialDocId: mDoc.id
                     });
                 });
             });
@@ -1729,19 +1674,127 @@
             allChallans.forEach(c => {
                 const row = challanTableBody.insertRow();
                 const totalQty = sumQuantities(c.quantities);
+                
+                // Get size-wise quantities
+                const sizeDistribution = Object.entries(c.quantities).map(([size, qty]) => `${size}: ${qty}`).join(', ');
+                
                 row.innerHTML = `
                     <td>${c.challanNo}</td>
+                    <td>${c.initial_challan_no || 'N/A'}</td>
+                    <td>${c.previous_stage || 'N/A'}</td>
                     <td>${c.color}</td>
                     <td>${totalQty}</td>
+                    <td>${sizeDistribution}</td>
                     <td>${c.stage}</td>
                     <td>${c.vendor}</td>
                     <td>${c.status}</td>
                     <td>${c.date_issued || 'N/A'}</td>
                     <td>${c.date_received || 'N/A'}</td>
+                    <td><button class="download-receipt-btn" data-challan-no="${c.challanNo}" data-material-id="${c.materialDocId}">Download</button></td>
                 `;
             });
+            
+            // Add event listeners for new buttons
+            document.querySelectorAll('.download-receipt-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const challanNo = e.target.dataset.challanNo;
+                    const materialId = e.target.dataset.materialId;
+                    downloadChallanReceipt(materialId, challanNo);
+                });
+            });
+
 
             document.getElementById('skuModal').style.display = 'block';
+        }
+
+        async function downloadChallanReceipt(materialId, challanNo) {
+            const materialDoc = materials.find(m => m.id === materialId);
+            if (!materialDoc) {
+                showAlert('Material record not found.');
+                return;
+            }
+
+            const materialData = materialDoc.data;
+            const challan = materialData.challans.find(c => c.challanNo === challanNo);
+            if (!challan) {
+                showAlert('Challan record not found.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const margin = 15;
+            const lineHeight = 7;
+            let y = margin;
+            const pageWidth = doc.internal.pageSize.getWidth();
+
+            // Header
+            doc.setFontSize(22);
+            doc.text("Cheshaa Apparels India Pvt. Ltd.", pageWidth / 2, y, { align: 'center' });
+            y += lineHeight;
+            doc.setFontSize(10);
+            doc.text("Manufacture & Exporter of Fashion Garments", pageWidth / 2, y, { align: 'center' });
+            y += lineHeight;
+            doc.text("Plot no 78, Bijwasan Rd, near Sarovar Portico Hotel,", pageWidth / 2, y, { align: 'center' });
+            y += lineHeight;
+            doc.text("Kapas Hera Extension, Kapas Hera, New Delhi, Delhi 110037", pageWidth / 2, y, { align: 'center' });
+            y += lineHeight * 2;
+            doc.setLineWidth(0.5);
+            doc.line(margin, y, pageWidth - margin, y);
+            y += lineHeight;
+
+            // Challan & Date
+            doc.setFontSize(14);
+            doc.text(`CHALLAN`, pageWidth / 2, y, { align: 'center' });
+            y += lineHeight;
+            doc.setFontSize(12);
+            doc.text(`No.: ${challan.challanNo}`, margin, y);
+            doc.text(`Dated: ${new Date().toLocaleDateString()}`, pageWidth - margin, y, { align: 'right' });
+            y += lineHeight;
+            doc.text(`M/s: ${challan.vendor}`, margin, y);
+            y += lineHeight * 2;
+
+            // Table Header
+            const tableHeaders = ['S.No.', 'Particulars', 'Qty.', 'Rate', 'Remarks'];
+            const tableData = [];
+            let serialNo = 1;
+            Object.entries(challan.quantities).forEach(([size, qty]) => {
+                tableData.push([
+                    serialNo++,
+                    `SKU: ${materialData.sku}, Color: ${materialData.color}, Type: ${materialData.type}, Size: ${size}`,
+                    qty,
+                    materialData.rate || 'N/A',
+                    ''
+                ]);
+            });
+
+            const startY = y;
+            doc.autoTable({
+                startY: startY,
+                head: [tableHeaders],
+                body: tableData,
+                styles: {
+                    fontSize: 10,
+                    cellPadding: 3,
+                    halign: 'left',
+                    valign: 'middle'
+                },
+                headStyles: {
+                    fillColor: [44, 62, 80],
+                    textColor: [255, 255, 255]
+                }
+            });
+
+            // Footer
+            y = doc.autoTable.previous.finalY + 10;
+            doc.text(`Receiver Signature`, margin, y);
+            doc.text(`For Cheshaa Apparels India Pvt. Ltd.`, pageWidth - margin, y, { align: 'right' });
+            y += lineHeight * 2;
+            doc.text(`E. & O.E.`, margin, y);
+            doc.text(`Auth. Sign.`, pageWidth - margin, y, { align: 'right' });
+            
+            doc.save(`Challan_${challan.challanNo}_Receipt.pdf`);
         }
 
 
@@ -1764,6 +1817,16 @@
             closeModal('custom-alert');
         });
 
+        document.getElementById('close-material-edit-modal').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeModal('materialEditModal');
+        });
+
+        document.getElementById('close-edit-sku-modal').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeModal('editSkuModal');
+        });
+        
         // --- Visualization Functions ---
         function visualizeSkuProgress(sku) {
             const materialDocs = materials.filter(m => m.data.sku === sku);
@@ -1875,7 +1938,7 @@
             } catch (e) {
                 console.error("Error setting up Firebase: ", e);
             }
-        }
+        };
         
         // Handle auth form submission
         document.getElementById('auth-form').addEventListener('submit', async function(e) {
